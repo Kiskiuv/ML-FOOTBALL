@@ -1,0 +1,94 @@
+{
+  "league": "SWE",
+  "generated_at": "2026-02-21T13:19:22.047065",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_SWE.xls",
+  "new_season_source": "SWE_20252026.xlsx",
+  "cutoff_date": "2024-12-08",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 3110,
+    "new_file_matches": 3384,
+    "combined_unique": 4472,
+    "state_building_matches": 4232,
+    "new_output_matches": 240
+  },
+  "overview": {
+    "total_new_matches": 240,
+    "played_matches": 240,
+    "future_fixtures": 0,
+    "total_teams": 16,
+    "date_range": {
+      "start": "2025-03-29",
+      "end": "2025-11-09"
+    },
+    "seasons": {
+      "2024/2025": 106,
+      "2025/2026": 134
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 96,
+    "home_win_pct": 40.0,
+    "draws": 53,
+    "draw_pct": 22.1,
+    "away_wins": 91,
+    "away_win_pct": 37.9
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Mjallby",
+        "elo": 1818.1
+      },
+      {
+        "team": "Hammarby",
+        "elo": 1768.3
+      },
+      {
+        "team": "Malmo FF",
+        "elo": 1723.9
+      },
+      {
+        "team": "Djurgarden",
+        "elo": 1702.5
+      },
+      {
+        "team": "Sirius",
+        "elo": 1643.1
+      },
+      {
+        "team": "GAIS",
+        "elo": 1637.6
+      },
+      {
+        "team": "Goteborg",
+        "elo": 1626.7
+      },
+      {
+        "team": "AIK",
+        "elo": 1625.4
+      },
+      {
+        "team": "Hacken",
+        "elo": 1597.8
+      },
+      {
+        "team": "Elfsborg",
+        "elo": 1566.7
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 4472,
+    "teams_in_state": 35,
+    "hfa": 38.6
+  }
+}

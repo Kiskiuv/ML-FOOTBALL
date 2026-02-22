@@ -1,0 +1,94 @@
+{
+  "league": "MEXICO",
+  "generated_at": "2026-02-21T13:18:45.054173",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_MEXICO.xls",
+  "new_season_source": "MEX_20252026.xlsx",
+  "cutoff_date": "2024-12-05",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 4080,
+    "new_file_matches": 4515,
+    "combined_unique": 6557,
+    "state_building_matches": 6186,
+    "new_output_matches": 371
+  },
+  "overview": {
+    "total_new_matches": 371,
+    "played_matches": 371,
+    "future_fixtures": 0,
+    "total_teams": 18,
+    "date_range": {
+      "start": "2024-12-06",
+      "end": "2026-01-19"
+    },
+    "seasons": {
+      "2024/2025": 175,
+      "2025/2026": 196
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 177,
+    "home_win_pct": 47.7,
+    "draws": 88,
+    "draw_pct": 23.7,
+    "away_wins": 106,
+    "away_win_pct": 28.6
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Toluca",
+        "elo": 1745.8
+      },
+      {
+        "team": "Cruz Azul",
+        "elo": 1694.4
+      },
+      {
+        "team": "Club America",
+        "elo": 1673.9
+      },
+      {
+        "team": "Monterrey",
+        "elo": 1665.1
+      },
+      {
+        "team": "Tigres UANL",
+        "elo": 1661.0
+      },
+      {
+        "team": "U.A.N.L.- Tigres",
+        "elo": 1654.4
+      },
+      {
+        "team": "Guadalajara Chivas",
+        "elo": 1598.5
+      },
+      {
+        "team": "U.N.A.M.- Pumas",
+        "elo": 1574.2
+      },
+      {
+        "team": "Monarcas",
+        "elo": 1557.5
+      },
+      {
+        "team": "Club Tijuana",
+        "elo": 1550.9
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 6557,
+    "teams_in_state": 27,
+    "hfa": 89.0
+  }
+}

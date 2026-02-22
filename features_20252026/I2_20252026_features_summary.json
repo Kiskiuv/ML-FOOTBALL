@@ -1,0 +1,93 @@
+{
+  "league": "I2",
+  "generated_at": "2026-02-21T13:18:39.202357",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_I2.xls",
+  "new_season_source": "I2_20252026.xlsx",
+  "cutoff_date": "2025-05-13",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 9921,
+    "new_file_matches": 230,
+    "combined_unique": 10151,
+    "state_building_matches": 9921,
+    "new_output_matches": 230
+  },
+  "overview": {
+    "total_new_matches": 230,
+    "played_matches": 230,
+    "future_fixtures": 0,
+    "total_teams": 20,
+    "date_range": {
+      "start": "2025-08-22",
+      "end": "2026-02-08"
+    },
+    "seasons": {
+      "2025/2026": 230
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 100,
+    "home_win_pct": 43.5,
+    "draws": 74,
+    "draw_pct": 32.2,
+    "away_wins": 56,
+    "away_win_pct": 24.3
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Venezia",
+        "elo": 1703.3
+      },
+      {
+        "team": "Sassuolo",
+        "elo": 1695.4
+      },
+      {
+        "team": "Genoa",
+        "elo": 1683.1
+      },
+      {
+        "team": "Juventus",
+        "elo": 1674.3
+      },
+      {
+        "team": "Lecce",
+        "elo": 1663.5
+      },
+      {
+        "team": "Parma",
+        "elo": 1656.0
+      },
+      {
+        "team": "Cagliari",
+        "elo": 1651.7
+      },
+      {
+        "team": "Monza",
+        "elo": 1650.9
+      },
+      {
+        "team": "Atalanta",
+        "elo": 1639.0
+      },
+      {
+        "team": "Torino",
+        "elo": 1635.5
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 10151,
+    "teams_in_state": 79,
+    "hfa": 65.0
+  }
+}

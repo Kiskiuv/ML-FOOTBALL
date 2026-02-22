@@ -1,0 +1,93 @@
+{
+  "league": "SP1",
+  "generated_at": "2026-02-21T13:19:14.672907",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_SP1.xls",
+  "new_season_source": "SP1_20252026.xlsx",
+  "cutoff_date": "2025-05-25",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 9008,
+    "new_file_matches": 228,
+    "combined_unique": 9236,
+    "state_building_matches": 9008,
+    "new_output_matches": 228
+  },
+  "overview": {
+    "total_new_matches": 228,
+    "played_matches": 228,
+    "future_fixtures": 0,
+    "total_teams": 20,
+    "date_range": {
+      "start": "2025-08-15",
+      "end": "2026-02-09"
+    },
+    "seasons": {
+      "2025/2026": 228
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 108,
+    "home_win_pct": 47.4,
+    "draws": 57,
+    "draw_pct": 25.0,
+    "away_wins": 63,
+    "away_win_pct": 27.6
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Barcelona",
+        "elo": 1891.8
+      },
+      {
+        "team": "Real Madrid",
+        "elo": 1868.0
+      },
+      {
+        "team": "Ath Madrid",
+        "elo": 1757.4
+      },
+      {
+        "team": "Villarreal",
+        "elo": 1724.7
+      },
+      {
+        "team": "Betis",
+        "elo": 1668.4
+      },
+      {
+        "team": "Ath Bilbao",
+        "elo": 1609.1
+      },
+      {
+        "team": "Celta",
+        "elo": 1600.8
+      },
+      {
+        "team": "Sociedad",
+        "elo": 1588.2
+      },
+      {
+        "team": "Osasuna",
+        "elo": 1580.8
+      },
+      {
+        "team": "Valencia",
+        "elo": 1536.3
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 9236,
+    "teams_in_state": 41,
+    "hfa": 75.3
+  }
+}

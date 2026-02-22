@@ -1,0 +1,93 @@
+{
+  "league": "P1",
+  "generated_at": "2026-02-21T13:18:54.602039",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_P1.xls",
+  "new_season_source": "P1_20252026.xlsx",
+  "cutoff_date": "2025-05-17",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 6626,
+    "new_file_matches": 189,
+    "combined_unique": 6815,
+    "state_building_matches": 6626,
+    "new_output_matches": 189
+  },
+  "overview": {
+    "total_new_matches": 189,
+    "played_matches": 189,
+    "future_fixtures": 0,
+    "total_teams": 18,
+    "date_range": {
+      "start": "2025-08-08",
+      "end": "2026-02-09"
+    },
+    "seasons": {
+      "2025/2026": 189
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 77,
+    "home_win_pct": 40.7,
+    "draws": 48,
+    "draw_pct": 25.4,
+    "away_wins": 64,
+    "away_win_pct": 33.9
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Sp Lisbon",
+        "elo": 1961.4
+      },
+      {
+        "team": "Benfica",
+        "elo": 1912.2
+      },
+      {
+        "team": "Porto",
+        "elo": 1889.2
+      },
+      {
+        "team": "Sp Braga",
+        "elo": 1765.4
+      },
+      {
+        "team": "Gil Vicente",
+        "elo": 1614.6
+      },
+      {
+        "team": "Guimaraes",
+        "elo": 1612.5
+      },
+      {
+        "team": "Estoril",
+        "elo": 1608.0
+      },
+      {
+        "team": "Famalicao",
+        "elo": 1605.4
+      },
+      {
+        "team": "Moreirense",
+        "elo": 1560.9
+      },
+      {
+        "team": "Arouca",
+        "elo": 1530.0
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 6815,
+    "teams_in_state": 42,
+    "hfa": 55.5
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "league": "IRL",
+  "generated_at": "2026-02-21T13:18:40.181333",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_IRL.xls",
+  "new_season_source": "IRL_20252026.csv",
+  "cutoff_date": "2024-12-07",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 2367,
+    "new_file_matches": 2563,
+    "combined_unique": 3384,
+    "state_building_matches": 3204,
+    "new_output_matches": 180
+  },
+  "overview": {
+    "total_new_matches": 180,
+    "played_matches": 180,
+    "future_fixtures": 0,
+    "total_teams": 10,
+    "date_range": {
+      "start": "2025-02-14",
+      "end": "2025-11-01"
+    },
+    "seasons": {
+      "2024/2025": 114,
+      "2025/2026": 66
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 77,
+    "home_win_pct": 42.8,
+    "draws": 52,
+    "draw_pct": 28.9,
+    "away_wins": 51,
+    "away_win_pct": 28.3
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Shamrock Rovers",
+        "elo": 1730.4
+      },
+      {
+        "team": "Derry City",
+        "elo": 1717.6
+      },
+      {
+        "team": "Shelbourne",
+        "elo": 1705.5
+      },
+      {
+        "team": "St. Patricks",
+        "elo": 1683.1
+      },
+      {
+        "team": "Bohemians",
+        "elo": 1634.8
+      },
+      {
+        "team": "Drogheda",
+        "elo": 1592.3
+      },
+      {
+        "team": "Sligo Rovers",
+        "elo": 1587.2
+      },
+      {
+        "team": "Galway",
+        "elo": 1565.4
+      },
+      {
+        "team": "Waterford",
+        "elo": 1534.3
+      },
+      {
+        "team": "Mervue",
+        "elo": 1498.0
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 3384,
+    "teams_in_state": 23,
+    "hfa": 63.7
+  }
+}

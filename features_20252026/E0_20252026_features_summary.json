@@ -1,0 +1,93 @@
+{
+  "league": "E0",
+  "generated_at": "2026-02-21T13:17:47.439798",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches__E0.xls",
+  "new_season_source": "E0_20252026.xlsx",
+  "cutoff_date": "2025-05-25",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 9410,
+    "new_file_matches": 250,
+    "combined_unique": 9660,
+    "state_building_matches": 9410,
+    "new_output_matches": 250
+  },
+  "overview": {
+    "total_new_matches": 250,
+    "played_matches": 250,
+    "future_fixtures": 0,
+    "total_teams": 20,
+    "date_range": {
+      "start": "2025-08-15",
+      "end": "2026-02-08"
+    },
+    "seasons": {
+      "2025/2026": 250
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 110,
+    "home_win_pct": 44.0,
+    "draws": 65,
+    "draw_pct": 26.0,
+    "away_wins": 75,
+    "away_win_pct": 30.0
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Arsenal",
+        "elo": 1847.5
+      },
+      {
+        "team": "Man City",
+        "elo": 1816.8
+      },
+      {
+        "team": "Liverpool",
+        "elo": 1749.4
+      },
+      {
+        "team": "Aston Villa",
+        "elo": 1724.3
+      },
+      {
+        "team": "Chelsea",
+        "elo": 1719.6
+      },
+      {
+        "team": "Man United",
+        "elo": 1657.6
+      },
+      {
+        "team": "Brentford",
+        "elo": 1647.1
+      },
+      {
+        "team": "Newcastle",
+        "elo": 1637.5
+      },
+      {
+        "team": "Bournemouth",
+        "elo": 1625.0
+      },
+      {
+        "team": "Everton",
+        "elo": 1620.5
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 9660,
+    "teams_in_state": 47,
+    "hfa": 53.9
+  }
+}

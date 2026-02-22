@@ -1,0 +1,94 @@
+{
+  "league": "NOR",
+  "generated_at": "2026-02-21T13:18:50.916243",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_NOR.xls",
+  "new_season_source": "NOR_20252026.xlsx",
+  "cutoff_date": "2024-12-07",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 3092,
+    "new_file_matches": 3382,
+    "combined_unique": 4486,
+    "state_building_matches": 4245,
+    "new_output_matches": 241
+  },
+  "overview": {
+    "total_new_matches": 241,
+    "played_matches": 241,
+    "future_fixtures": 0,
+    "total_teams": 17,
+    "date_range": {
+      "start": "2024-12-08",
+      "end": "2025-11-30"
+    },
+    "seasons": {
+      "2024/2025": 95,
+      "2025/2026": 146
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 118,
+    "home_win_pct": 49.0,
+    "draws": 46,
+    "draw_pct": 19.1,
+    "away_wins": 77,
+    "away_win_pct": 32.0
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Bodo/Glimt",
+        "elo": 1841.9
+      },
+      {
+        "team": "Viking",
+        "elo": 1792.0
+      },
+      {
+        "team": "Brann",
+        "elo": 1682.4
+      },
+      {
+        "team": "Tromso",
+        "elo": 1639.3
+      },
+      {
+        "team": "Molde",
+        "elo": 1621.1
+      },
+      {
+        "team": "Fredrikstad",
+        "elo": 1594.7
+      },
+      {
+        "team": "Sandefjord",
+        "elo": 1592.6
+      },
+      {
+        "team": "Rosenborg",
+        "elo": 1579.3
+      },
+      {
+        "team": "Sarpsborg 08",
+        "elo": 1552.0
+      },
+      {
+        "team": "Valerenga",
+        "elo": 1542.6
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 4486,
+    "teams_in_state": 31,
+    "hfa": 68.6
+  }
+}

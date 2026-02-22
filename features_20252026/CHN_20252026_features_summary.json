@@ -1,0 +1,94 @@
+{
+  "league": "CHN",
+  "generated_at": "2026-02-21T13:17:32.805759",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_CHN.xls",
+  "new_season_source": "CHN_20252026.csv",
+  "cutoff_date": "2024-12-07",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 2544,
+    "new_file_matches": 2808,
+    "combined_unique": 3651,
+    "state_building_matches": 3411,
+    "new_output_matches": 240
+  },
+  "overview": {
+    "total_new_matches": 240,
+    "played_matches": 240,
+    "future_fixtures": 0,
+    "total_teams": 16,
+    "date_range": {
+      "start": "2025-02-22",
+      "end": "2025-11-22"
+    },
+    "seasons": {
+      "2024/2025": 128,
+      "2025/2026": 112
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 112,
+    "home_win_pct": 46.7,
+    "draws": 62,
+    "draw_pct": 25.8,
+    "away_wins": 66,
+    "away_win_pct": 27.5
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Shanghai Port",
+        "elo": 1851.2
+      },
+      {
+        "team": "Shanghai Shenhua",
+        "elo": 1822.2
+      },
+      {
+        "team": "Guangzhou Evergrande",
+        "elo": 1817.7
+      },
+      {
+        "team": "Chengdu Rongcheng",
+        "elo": 1783.0
+      },
+      {
+        "team": "Jiangsu Suning",
+        "elo": 1736.1
+      },
+      {
+        "team": "Shanghai SIPG",
+        "elo": 1729.7
+      },
+      {
+        "team": "Shandong Taishan",
+        "elo": 1719.0
+      },
+      {
+        "team": "Beijing Guoan",
+        "elo": 1688.7
+      },
+      {
+        "team": "Shandong Luneng",
+        "elo": 1633.8
+      },
+      {
+        "team": "Zhejiang Professional",
+        "elo": 1629.5
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 3651,
+    "teams_in_state": 43,
+    "hfa": 80.3
+  }
+}

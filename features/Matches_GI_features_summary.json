@@ -1,0 +1,287 @@
+{
+  "league": "G1",
+  "generated_at": "2026-02-14T10:25:28.543301",
+  "protocol_version": "3.4.3",
+  "source_file": "Matches_GI.csv",
+  "overview": {
+    "total_matches": 4848,
+    "total_teams": 38,
+    "date_range": {
+      "start": "2005-08-27",
+      "end": "2025-05-18"
+    },
+    "seasons": 20
+  },
+  "outcome_distribution": {
+    "home_wins": 2290,
+    "home_win_pct": 47.2,
+    "draws": 1246,
+    "draw_pct": 25.7,
+    "away_wins": 1310,
+    "away_win_pct": 27.0
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 98.2,
+    "stats_coverage_pct": 37.8,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Olympiakos",
+        "elo": 1953.7
+      },
+      {
+        "team": "PAOK",
+        "elo": 1849.9
+      },
+      {
+        "team": "Panathinaikos",
+        "elo": 1827.2
+      },
+      {
+        "team": "AEK",
+        "elo": 1817.1
+      },
+      {
+        "team": "Aris",
+        "elo": 1695.1
+      },
+      {
+        "team": "Olympiakos Volou",
+        "elo": 1602.9
+      },
+      {
+        "team": "Atromitos",
+        "elo": 1558.4
+      },
+      {
+        "team": "Kavala",
+        "elo": 1554.9
+      },
+      {
+        "team": "Levadeiakos",
+        "elo": 1548.8
+      },
+      {
+        "team": "Iraklis",
+        "elo": 1537.5
+      }
+    ],
+    "league_hfa": 55.3
+  },
+  "seasons": {
+    "2005/2006": {
+      "matches": 240,
+      "home_win_pct": 55.0,
+      "draw_pct": 23.3,
+      "away_win_pct": 21.7
+    },
+    "2006/2007": {
+      "matches": 240,
+      "home_win_pct": 47.5,
+      "draw_pct": 26.2,
+      "away_win_pct": 26.2
+    },
+    "2007/2008": {
+      "matches": 240,
+      "home_win_pct": 52.1,
+      "draw_pct": 23.3,
+      "away_win_pct": 24.6
+    },
+    "2008/2009": {
+      "matches": 240,
+      "home_win_pct": 42.1,
+      "draw_pct": 29.2,
+      "away_win_pct": 28.7
+    },
+    "2009/2010": {
+      "matches": 240,
+      "home_win_pct": 50.4,
+      "draw_pct": 23.3,
+      "away_win_pct": 26.2
+    },
+    "2010/2011": {
+      "matches": 240,
+      "home_win_pct": 45.8,
+      "draw_pct": 27.1,
+      "away_win_pct": 27.1
+    },
+    "2011/2012": {
+      "matches": 240,
+      "home_win_pct": 48.8,
+      "draw_pct": 23.3,
+      "away_win_pct": 27.9
+    },
+    "2012/2013": {
+      "matches": 240,
+      "home_win_pct": 47.5,
+      "draw_pct": 26.2,
+      "away_win_pct": 26.2
+    },
+    "2013/2014": {
+      "matches": 306,
+      "home_win_pct": 55.9,
+      "draw_pct": 22.5,
+      "away_win_pct": 21.6
+    },
+    "2014/2015": {
+      "matches": 306,
+      "home_win_pct": 53.6,
+      "draw_pct": 23.5,
+      "away_win_pct": 22.5
+    },
+    "2015/2016": {
+      "matches": 240,
+      "home_win_pct": 44.6,
+      "draw_pct": 26.7,
+      "away_win_pct": 28.7
+    },
+    "2016/2017": {
+      "matches": 240,
+      "home_win_pct": 48.3,
+      "draw_pct": 27.5,
+      "away_win_pct": 24.2
+    },
+    "2017/2018": {
+      "matches": 240,
+      "home_win_pct": 45.4,
+      "draw_pct": 30.0,
+      "away_win_pct": 24.6
+    },
+    "2018/2019": {
+      "matches": 240,
+      "home_win_pct": 48.3,
+      "draw_pct": 22.9,
+      "away_win_pct": 28.3
+    },
+    "2019/2020": {
+      "matches": 210,
+      "home_win_pct": 47.6,
+      "draw_pct": 27.6,
+      "away_win_pct": 24.8
+    },
+    "2020/2021": {
+      "matches": 270,
+      "home_win_pct": 36.3,
+      "draw_pct": 30.4,
+      "away_win_pct": 33.3
+    },
+    "2021/2022": {
+      "matches": 240,
+      "home_win_pct": 42.5,
+      "draw_pct": 25.0,
+      "away_win_pct": 32.5
+    },
+    "2022/2023": {
+      "matches": 240,
+      "home_win_pct": 40.4,
+      "draw_pct": 30.0,
+      "away_win_pct": 29.6
+    },
+    "2023/2024": {
+      "matches": 240,
+      "home_win_pct": 44.6,
+      "draw_pct": 25.8,
+      "away_win_pct": 29.6
+    },
+    "2024/2025": {
+      "matches": 156,
+      "home_win_pct": 44.2,
+      "draw_pct": 18.6,
+      "away_win_pct": 37.2
+    }
+  },
+  "features": {
+    "basic_15": [
+      "HomeElo",
+      "AwayElo",
+      "elo_diff",
+      "elo_sum",
+      "elo_mismatch",
+      "Form3Home_ratio",
+      "Form5Home_ratio",
+      "Form3Away_ratio",
+      "Form5Away_ratio",
+      "form_diff_3",
+      "form_diff_5",
+      "rest_diff",
+      "rest_diff_nonlinear",
+      "winter_period",
+      "season_phase"
+    ],
+    "basic_plus_26": [
+      "form_momentum_home",
+      "form_momentum_away",
+      "overround",
+      "odds_disagreement",
+      "sharp_money_home",
+      "sharp_money_away",
+      "elo_vs_odds_home",
+      "h2h_home_wins",
+      "h2h_away_wins",
+      "h2h_draws",
+      "h2h_home_goals_diff"
+    ],
+    "all_computed": [
+      "HomeElo",
+      "AwayElo",
+      "elo_diff",
+      "elo_sum",
+      "elo_mismatch",
+      "elo_mismatch_flag",
+      "Form3Home",
+      "Form5Home",
+      "Form3Away",
+      "Form5Away",
+      "Form3Home_ratio",
+      "Form5Home_ratio",
+      "Form3Away_ratio",
+      "Form5Away_ratio",
+      "form_diff_3",
+      "form_diff_5",
+      "form_momentum_home",
+      "form_momentum_away",
+      "form_momentum",
+      "home_rest_days",
+      "away_rest_days",
+      "rest_diff",
+      "rest_diff_nonlinear",
+      "home_congestion_14d",
+      "away_congestion_14d",
+      "is_midweek",
+      "is_early_kickoff",
+      "is_evening_match",
+      "winter_period",
+      "season_phase",
+      "match_week",
+      "h2h_home_wins",
+      "h2h_away_wins",
+      "h2h_draws",
+      "h2h_home_goals_diff",
+      "h2h_home_venue_record",
+      "h2h_matches_count",
+      "home_team_home_ppg",
+      "home_team_goals_scored_avg",
+      "home_team_goals_conceded_avg",
+      "away_team_away_ppg",
+      "away_team_goals_scored_avg",
+      "away_team_goals_conceded_avg",
+      "venue_ppg_diff",
+      "overround",
+      "odds_disagreement",
+      "sharp_money_home",
+      "sharp_money_away",
+      "elo_vs_odds_home",
+      "home_shots_avg",
+      "home_shots_against_avg",
+      "away_shots_avg",
+      "away_shots_against_avg",
+      "shots_dominance_home",
+      "shots_dominance_away",
+      "corners_diff",
+      "discipline_diff"
+    ]
+  }
+}

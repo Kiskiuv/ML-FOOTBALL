@@ -1,0 +1,93 @@
+{
+  "league": "SC3",
+  "generated_at": "2026-02-21T13:19:09.779416",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_SC3.xls",
+  "new_season_source": "SC3_20252026.xlsx",
+  "cutoff_date": "2025-05-03",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 4010,
+    "new_file_matches": 110,
+    "combined_unique": 4120,
+    "state_building_matches": 4010,
+    "new_output_matches": 110
+  },
+  "overview": {
+    "total_new_matches": 110,
+    "played_matches": 110,
+    "future_fixtures": 0,
+    "total_teams": 10,
+    "date_range": {
+      "start": "2025-08-02",
+      "end": "2026-02-07"
+    },
+    "seasons": {
+      "2025/2026": 110
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 33,
+    "home_win_pct": 30.0,
+    "draws": 35,
+    "draw_pct": 31.8,
+    "away_wins": 42,
+    "away_win_pct": 38.2
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Gretna",
+        "elo": 1751.4
+      },
+      {
+        "team": "Rangers",
+        "elo": 1642.0
+      },
+      {
+        "team": "Cove Rangers",
+        "elo": 1629.6
+      },
+      {
+        "team": "Kelty Hearts",
+        "elo": 1613.5
+      },
+      {
+        "team": "Livingston",
+        "elo": 1596.0
+      },
+      {
+        "team": "Queens Park",
+        "elo": 1588.7
+      },
+      {
+        "team": "Alloa",
+        "elo": 1578.4
+      },
+      {
+        "team": "Montrose",
+        "elo": 1571.9
+      },
+      {
+        "team": "Spartans",
+        "elo": 1563.2
+      },
+      {
+        "team": "East Fife",
+        "elo": 1561.9
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 4120,
+    "teams_in_state": 29,
+    "hfa": 38.0
+  }
+}

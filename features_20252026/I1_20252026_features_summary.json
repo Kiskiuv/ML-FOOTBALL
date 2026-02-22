@@ -1,0 +1,93 @@
+{
+  "league": "I1",
+  "generated_at": "2026-02-21T13:18:33.747374",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_I1.xls",
+  "new_season_source": "I1_20252026.xlsx",
+  "cutoff_date": "2025-05-25",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 9012,
+    "new_file_matches": 239,
+    "combined_unique": 9251,
+    "state_building_matches": 9012,
+    "new_output_matches": 239
+  },
+  "overview": {
+    "total_new_matches": 239,
+    "played_matches": 239,
+    "future_fixtures": 0,
+    "total_teams": 20,
+    "date_range": {
+      "start": "2025-08-23",
+      "end": "2026-02-09"
+    },
+    "seasons": {
+      "2025/2026": 239
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 91,
+    "home_win_pct": 38.1,
+    "draws": 68,
+    "draw_pct": 28.5,
+    "away_wins": 80,
+    "away_win_pct": 33.5
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Inter",
+        "elo": 1900.1
+      },
+      {
+        "team": "Milan",
+        "elo": 1799.2
+      },
+      {
+        "team": "Napoli",
+        "elo": 1792.4
+      },
+      {
+        "team": "Juventus",
+        "elo": 1776.5
+      },
+      {
+        "team": "Roma",
+        "elo": 1749.2
+      },
+      {
+        "team": "Atalanta",
+        "elo": 1740.4
+      },
+      {
+        "team": "Como",
+        "elo": 1685.2
+      },
+      {
+        "team": "Lazio",
+        "elo": 1660.8
+      },
+      {
+        "team": "Bologna",
+        "elo": 1624.0
+      },
+      {
+        "team": "Fiorentina",
+        "elo": 1598.8
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 9251,
+    "teams_in_state": 50,
+    "hfa": 35.7
+  }
+}

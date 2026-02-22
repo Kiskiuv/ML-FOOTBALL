@@ -1,0 +1,94 @@
+{
+  "league": "ROM",
+  "generated_at": "2026-02-21T13:18:58.658530",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_ROM.xls",
+  "new_season_source": "ROU_20252026.xlsx",
+  "cutoff_date": "2024-12-08",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 3640,
+    "new_file_matches": 4037,
+    "combined_unique": 5330,
+    "state_building_matches": 4989,
+    "new_output_matches": 341
+  },
+  "overview": {
+    "total_new_matches": 341,
+    "played_matches": 341,
+    "future_fixtures": 0,
+    "total_teams": 19,
+    "date_range": {
+      "start": "2024-12-09",
+      "end": "2026-01-19"
+    },
+    "seasons": {
+      "2024/2025": 165,
+      "2025/2026": 176
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 143,
+    "home_win_pct": 41.9,
+    "draws": 100,
+    "draw_pct": 29.3,
+    "away_wins": 98,
+    "away_win_pct": 28.7
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Univ. Craiova",
+        "elo": 1735.3
+      },
+      {
+        "team": "U Craiova",
+        "elo": 1734.8
+      },
+      {
+        "team": "FCSB",
+        "elo": 1725.3
+      },
+      {
+        "team": "CFR Cluj",
+        "elo": 1683.8
+      },
+      {
+        "team": "FC Rapid Bucuresti",
+        "elo": 1679.2
+      },
+      {
+        "team": "Din. Bucuresti",
+        "elo": 1666.4
+      },
+      {
+        "team": "U. Cluj",
+        "elo": 1648.9
+      },
+      {
+        "team": "Otelul",
+        "elo": 1633.1
+      },
+      {
+        "team": "FC Botosani",
+        "elo": 1606.5
+      },
+      {
+        "team": "UTA Arad",
+        "elo": 1594.0
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 5330,
+    "teams_in_state": 41,
+    "hfa": 56.2
+  }
+}

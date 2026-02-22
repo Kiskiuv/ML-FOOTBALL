@@ -1,0 +1,93 @@
+{
+  "league": "E1",
+  "generated_at": "2026-02-21T13:17:55.240266",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_E1.xls",
+  "new_season_source": "E1_20252026.xlsx",
+  "cutoff_date": "2025-05-03",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 13606,
+    "new_file_matches": 370,
+    "combined_unique": 13976,
+    "state_building_matches": 13606,
+    "new_output_matches": 370
+  },
+  "overview": {
+    "total_new_matches": 370,
+    "played_matches": 370,
+    "future_fixtures": 0,
+    "total_teams": 24,
+    "date_range": {
+      "start": "2025-08-08",
+      "end": "2026-02-09"
+    },
+    "seasons": {
+      "2025/2026": 370
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 159,
+    "home_win_pct": 43.0,
+    "draws": 97,
+    "draw_pct": 26.2,
+    "away_wins": 114,
+    "away_win_pct": 30.8
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Burnley",
+        "elo": 1803.7
+      },
+      {
+        "team": "Leeds",
+        "elo": 1767.8
+      },
+      {
+        "team": "Newcastle",
+        "elo": 1705.1
+      },
+      {
+        "team": "Man City",
+        "elo": 1688.4
+      },
+      {
+        "team": "Brentford",
+        "elo": 1685.3
+      },
+      {
+        "team": "Fulham",
+        "elo": 1672.2
+      },
+      {
+        "team": "Bournemouth",
+        "elo": 1671.7
+      },
+      {
+        "team": "Brighton",
+        "elo": 1661.6
+      },
+      {
+        "team": "Wolves",
+        "elo": 1660.5
+      },
+      {
+        "team": "Ipswich",
+        "elo": 1658.8
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 13976,
+    "teams_in_state": 65,
+    "hfa": 61.5
+  }
+}

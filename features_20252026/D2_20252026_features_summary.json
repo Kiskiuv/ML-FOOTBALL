@@ -1,0 +1,93 @@
+{
+  "league": "D2",
+  "generated_at": "2026-02-21T13:17:40.983271",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_D2.xls",
+  "new_season_source": "D2_20252026.xlsx",
+  "cutoff_date": "2025-05-18",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 7161,
+    "new_file_matches": 189,
+    "combined_unique": 7350,
+    "state_building_matches": 7161,
+    "new_output_matches": 189
+  },
+  "overview": {
+    "total_new_matches": 189,
+    "played_matches": 189,
+    "future_fixtures": 0,
+    "total_teams": 18,
+    "date_range": {
+      "start": "2025-08-01",
+      "end": "2026-02-08"
+    },
+    "seasons": {
+      "2025/2026": 189
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 85,
+    "home_win_pct": 45.0,
+    "draws": 45,
+    "draw_pct": 23.8,
+    "away_wins": 59,
+    "away_win_pct": 31.2
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Freiburg",
+        "elo": 1712.8
+      },
+      {
+        "team": "St Pauli",
+        "elo": 1679.7
+      },
+      {
+        "team": "MGladbach",
+        "elo": 1677.2
+      },
+      {
+        "team": "Hamburg",
+        "elo": 1668.8
+      },
+      {
+        "team": "Ein Frankfurt",
+        "elo": 1666.3
+      },
+      {
+        "team": "Augsburg",
+        "elo": 1660.8
+      },
+      {
+        "team": "Heidenheim",
+        "elo": 1649.9
+      },
+      {
+        "team": "FC Koln",
+        "elo": 1649.7
+      },
+      {
+        "team": "Darmstadt",
+        "elo": 1643.6
+      },
+      {
+        "team": "Mainz",
+        "elo": 1642.4
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 7350,
+    "teams_in_state": 68,
+    "hfa": 52.9
+  }
+}

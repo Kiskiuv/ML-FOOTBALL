@@ -1,0 +1,94 @@
+{
+  "league": "RUS",
+  "generated_at": "2026-02-21T13:18:59.898660",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_RUS.xls",
+  "new_season_source": "RUS_20252026.csv",
+  "cutoff_date": "2024-12-05",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 3008,
+    "new_file_matches": 3304,
+    "combined_unique": 4405,
+    "state_building_matches": 4157,
+    "new_output_matches": 248
+  },
+  "overview": {
+    "total_new_matches": 248,
+    "played_matches": 248,
+    "future_fixtures": 0,
+    "total_teams": 18,
+    "date_range": {
+      "start": "2024-12-07",
+      "end": "2025-12-07"
+    },
+    "seasons": {
+      "2024/2025": 104,
+      "2025/2026": 144
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 119,
+    "home_win_pct": 48.0,
+    "draws": 67,
+    "draw_pct": 27.0,
+    "away_wins": 62,
+    "away_win_pct": 25.0
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 67.7,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Zenit",
+        "elo": 1848.5
+      },
+      {
+        "team": "Krasnodar",
+        "elo": 1827.5
+      },
+      {
+        "team": "CSKA Moscow",
+        "elo": 1784.5
+      },
+      {
+        "team": "Lokomotiv Moscow",
+        "elo": 1765.8
+      },
+      {
+        "team": "Spartak Moscow",
+        "elo": 1721.9
+      },
+      {
+        "team": "Dynamo Moscow",
+        "elo": 1664.9
+      },
+      {
+        "team": "Baltika",
+        "elo": 1627.9
+      },
+      {
+        "team": "Rubin Kazan",
+        "elo": 1582.3
+      },
+      {
+        "team": "FK Rostov",
+        "elo": 1577.5
+      },
+      {
+        "team": "Akron Togliatti",
+        "elo": 1536.0
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 4405,
+    "teams_in_state": 38,
+    "hfa": 71.6
+  }
+}

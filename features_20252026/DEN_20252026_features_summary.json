@@ -1,0 +1,94 @@
+{
+  "league": "DEN",
+  "generated_at": "2026-02-21T13:17:42.077245",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_DEN.xls",
+  "new_season_source": "DNK_20252026.csv",
+  "cutoff_date": "2024-12-08",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 2634,
+    "new_file_matches": 2868,
+    "combined_unique": 3796,
+    "state_building_matches": 3598,
+    "new_output_matches": 198
+  },
+  "overview": {
+    "total_new_matches": 198,
+    "played_matches": 198,
+    "future_fixtures": 0,
+    "total_teams": 14,
+    "date_range": {
+      "start": "2025-02-14",
+      "end": "2025-12-08"
+    },
+    "seasons": {
+      "2024/2025": 90,
+      "2025/2026": 108
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 90,
+    "home_win_pct": 45.5,
+    "draws": 42,
+    "draw_pct": 21.2,
+    "away_wins": 66,
+    "away_win_pct": 33.3
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Midtjylland",
+        "elo": 1765.1
+      },
+      {
+        "team": "FC Copenhagen",
+        "elo": 1691.0
+      },
+      {
+        "team": "Aarhus",
+        "elo": 1681.3
+      },
+      {
+        "team": "Brondby",
+        "elo": 1654.4
+      },
+      {
+        "team": "Nordsjaelland",
+        "elo": 1599.1
+      },
+      {
+        "team": "Viborg",
+        "elo": 1565.3
+      },
+      {
+        "team": "Sonderjyske",
+        "elo": 1558.2
+      },
+      {
+        "team": "Randers FC",
+        "elo": 1548.7
+      },
+      {
+        "team": "Silkeborg",
+        "elo": 1518.8
+      },
+      {
+        "team": "Odense",
+        "elo": 1500.2
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 3796,
+    "teams_in_state": 21,
+    "hfa": 46.5
+  }
+}

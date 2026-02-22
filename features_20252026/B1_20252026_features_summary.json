@@ -1,0 +1,93 @@
+{
+  "league": "B1",
+  "generated_at": "2026-02-21T13:17:28.896545",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_BELGIUM.xls",
+  "new_season_source": "B1_20252026.xlsx",
+  "cutoff_date": "2025-05-25",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 6559,
+    "new_file_matches": 192,
+    "combined_unique": 6751,
+    "state_building_matches": 6559,
+    "new_output_matches": 192
+  },
+  "overview": {
+    "total_new_matches": 192,
+    "played_matches": 192,
+    "future_fixtures": 0,
+    "total_teams": 16,
+    "date_range": {
+      "start": "2025-07-25",
+      "end": "2026-02-08"
+    },
+    "seasons": {
+      "2025/2026": 192
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 79,
+    "home_win_pct": 41.1,
+    "draws": 52,
+    "draw_pct": 27.1,
+    "away_wins": 61,
+    "away_win_pct": 31.8
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "St. Gilloise",
+        "elo": 1869.8
+      },
+      {
+        "team": "Club Brugge",
+        "elo": 1818.9
+      },
+      {
+        "team": "Genk",
+        "elo": 1680.7
+      },
+      {
+        "team": "St Truiden",
+        "elo": 1650.9
+      },
+      {
+        "team": "Anderlecht",
+        "elo": 1649.3
+      },
+      {
+        "team": "Charleroi",
+        "elo": 1636.5
+      },
+      {
+        "team": "Antwerp",
+        "elo": 1627.6
+      },
+      {
+        "team": "Mechelen",
+        "elo": 1615.5
+      },
+      {
+        "team": "Gent",
+        "elo": 1602.1
+      },
+      {
+        "team": "Westerlo",
+        "elo": 1552.4
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 6751,
+    "teams_in_state": 39,
+    "hfa": 58.5
+  }
+}

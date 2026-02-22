@@ -1,0 +1,93 @@
+{
+  "league": "SC0",
+  "generated_at": "2026-02-21T13:19:02.862601",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_SC0.xls",
+  "new_season_source": "SC0_20252026.xlsx",
+  "cutoff_date": "2025-05-18",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 5124,
+    "new_file_matches": 147,
+    "combined_unique": 5271,
+    "state_building_matches": 5124,
+    "new_output_matches": 147
+  },
+  "overview": {
+    "total_new_matches": 147,
+    "played_matches": 147,
+    "future_fixtures": 0,
+    "total_teams": 12,
+    "date_range": {
+      "start": "2025-08-02",
+      "end": "2026-02-04"
+    },
+    "seasons": {
+      "2025/2026": 147
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 62,
+    "home_win_pct": 42.2,
+    "draws": 43,
+    "draw_pct": 29.3,
+    "away_wins": 42,
+    "away_win_pct": 28.6
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Celtic",
+        "elo": 1803.3
+      },
+      {
+        "team": "Rangers",
+        "elo": 1788.9
+      },
+      {
+        "team": "Hearts",
+        "elo": 1698.5
+      },
+      {
+        "team": "Hibernian",
+        "elo": 1626.5
+      },
+      {
+        "team": "Motherwell",
+        "elo": 1601.5
+      },
+      {
+        "team": "Falkirk",
+        "elo": 1518.2
+      },
+      {
+        "team": "Aberdeen",
+        "elo": 1487.4
+      },
+      {
+        "team": "St Mirren",
+        "elo": 1485.5
+      },
+      {
+        "team": "Dundee United",
+        "elo": 1478.9
+      },
+      {
+        "team": "Inverness C",
+        "elo": 1466.3
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 5271,
+    "teams_in_state": 19,
+    "hfa": 72.7
+  }
+}

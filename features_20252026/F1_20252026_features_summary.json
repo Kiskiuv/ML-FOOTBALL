@@ -1,0 +1,93 @@
+{
+  "league": "F1",
+  "generated_at": "2026-02-21T13:18:19.836898",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_F1.xls",
+  "new_season_source": "F1_20252026.xlsx",
+  "cutoff_date": "2025-05-17",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 8756,
+    "new_file_matches": 189,
+    "combined_unique": 8945,
+    "state_building_matches": 8756,
+    "new_output_matches": 189
+  },
+  "overview": {
+    "total_new_matches": 189,
+    "played_matches": 189,
+    "future_fixtures": 0,
+    "total_teams": 18,
+    "date_range": {
+      "start": "2025-08-15",
+      "end": "2026-02-08"
+    },
+    "seasons": {
+      "2025/2026": 189
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 93,
+    "home_win_pct": 49.2,
+    "draws": 42,
+    "draw_pct": 22.2,
+    "away_wins": 54,
+    "away_win_pct": 28.6
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Paris SG",
+        "elo": 1902.6
+      },
+      {
+        "team": "Lens",
+        "elo": 1725.3
+      },
+      {
+        "team": "Marseille",
+        "elo": 1711.4
+      },
+      {
+        "team": "Lyon",
+        "elo": 1705.5
+      },
+      {
+        "team": "Lille",
+        "elo": 1647.4
+      },
+      {
+        "team": "Monaco",
+        "elo": 1627.8
+      },
+      {
+        "team": "Strasbourg",
+        "elo": 1627.1
+      },
+      {
+        "team": "Rennes",
+        "elo": 1595.0
+      },
+      {
+        "team": "Toulouse",
+        "elo": 1594.5
+      },
+      {
+        "team": "Nice",
+        "elo": 1590.9
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 8945,
+    "teams_in_state": 42,
+    "hfa": 62.4
+  }
+}

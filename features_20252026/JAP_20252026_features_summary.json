@@ -1,0 +1,94 @@
+{
+  "league": "JAP",
+  "generated_at": "2026-02-21T13:18:42.553249",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_JAP.xls",
+  "new_season_source": "JPN_20252026.xlsx",
+  "cutoff_date": "2024-12-08",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 4089,
+    "new_file_matches": 4523,
+    "combined_unique": 6018,
+    "state_building_matches": 5638,
+    "new_output_matches": 380
+  },
+  "overview": {
+    "total_new_matches": 380,
+    "played_matches": 380,
+    "future_fixtures": 0,
+    "total_teams": 20,
+    "date_range": {
+      "start": "2025-02-14",
+      "end": "2025-12-06"
+    },
+    "seasons": {
+      "2024/2025": 218,
+      "2025/2026": 162
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 168,
+    "home_win_pct": 44.2,
+    "draws": 97,
+    "draw_pct": 25.5,
+    "away_wins": 115,
+    "away_win_pct": 30.3
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Kashima Antlers",
+        "elo": 1683.6
+      },
+      {
+        "team": "Sanfrecce Hiroshima",
+        "elo": 1659.9
+      },
+      {
+        "team": "Kashiwa Reysol",
+        "elo": 1654.2
+      },
+      {
+        "team": "Vissel Kobe",
+        "elo": 1641.8
+      },
+      {
+        "team": "Kyoto",
+        "elo": 1610.3
+      },
+      {
+        "team": "Machida",
+        "elo": 1597.1
+      },
+      {
+        "team": "Kawasaki Frontale",
+        "elo": 1576.5
+      },
+      {
+        "team": "Urawa Reds",
+        "elo": 1570.3
+      },
+      {
+        "team": "Gamba Osaka",
+        "elo": 1569.3
+      },
+      {
+        "team": "Yokohama F. Marinos",
+        "elo": 1564.9
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 6018,
+    "teams_in_state": 32,
+    "hfa": 49.8
+  }
+}

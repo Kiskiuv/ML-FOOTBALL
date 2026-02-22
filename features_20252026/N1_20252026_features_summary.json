@@ -1,0 +1,93 @@
+{
+  "league": "N1",
+  "generated_at": "2026-02-21T13:18:49.207071",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches__N1.xls",
+  "new_season_source": "N1_20252026.xlsx",
+  "cutoff_date": "2025-05-18",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 7288,
+    "new_file_matches": 196,
+    "combined_unique": 7484,
+    "state_building_matches": 7288,
+    "new_output_matches": 196
+  },
+  "overview": {
+    "total_new_matches": 196,
+    "played_matches": 196,
+    "future_fixtures": 0,
+    "total_teams": 18,
+    "date_range": {
+      "start": "2025-08-08",
+      "end": "2026-02-08"
+    },
+    "seasons": {
+      "2025/2026": 196
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 85,
+    "home_win_pct": 43.4,
+    "draws": 52,
+    "draw_pct": 26.5,
+    "away_wins": 59,
+    "away_win_pct": 30.1
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "PSV Eindhoven",
+        "elo": 1948.2
+      },
+      {
+        "team": "Feyenoord",
+        "elo": 1789.0
+      },
+      {
+        "team": "Ajax",
+        "elo": 1754.1
+      },
+      {
+        "team": "Twente",
+        "elo": 1678.6
+      },
+      {
+        "team": "Nijmegen",
+        "elo": 1677.4
+      },
+      {
+        "team": "AZ Alkmaar",
+        "elo": 1646.8
+      },
+      {
+        "team": "Utrecht",
+        "elo": 1614.4
+      },
+      {
+        "team": "Sparta Rotterdam",
+        "elo": 1590.9
+      },
+      {
+        "team": "Go Ahead Eagles",
+        "elo": 1548.9
+      },
+      {
+        "team": "Heerenveen",
+        "elo": 1542.4
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 7484,
+    "teams_in_state": 42,
+    "hfa": 70.2
+  }
+}

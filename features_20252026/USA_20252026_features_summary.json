@@ -1,0 +1,94 @@
+{
+  "league": "USA",
+  "generated_at": "2026-02-21T13:19:30.056467",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_USA.xls",
+  "new_season_source": "USA_20252026.xlsx",
+  "cutoff_date": "2024-12-05",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 5233,
+    "new_file_matches": 5816,
+    "combined_unique": 7651,
+    "state_building_matches": 7110,
+    "new_output_matches": 541
+  },
+  "overview": {
+    "total_new_matches": 541,
+    "played_matches": 541,
+    "future_fixtures": 0,
+    "total_teams": 30,
+    "date_range": {
+      "start": "2024-12-07",
+      "end": "2025-12-06"
+    },
+    "seasons": {
+      "2024/2025": 292,
+      "2025/2026": 249
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 240,
+    "home_win_pct": 44.4,
+    "draws": 135,
+    "draw_pct": 25.0,
+    "away_wins": 166,
+    "away_win_pct": 30.7
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Inter Miami",
+        "elo": 1689.0
+      },
+      {
+        "team": "Los Angeles FC",
+        "elo": 1651.6
+      },
+      {
+        "team": "Seattle Sounders",
+        "elo": 1620.9
+      },
+      {
+        "team": "Vancouver Whitecaps",
+        "elo": 1615.6
+      },
+      {
+        "team": "San Diego FC",
+        "elo": 1603.5
+      },
+      {
+        "team": "Philadelphia Union",
+        "elo": 1587.4
+      },
+      {
+        "team": "FC Cincinnati",
+        "elo": 1573.2
+      },
+      {
+        "team": "Columbus Crew",
+        "elo": 1570.0
+      },
+      {
+        "team": "New York City",
+        "elo": 1569.0
+      },
+      {
+        "team": "Minnesota United",
+        "elo": 1552.5
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 7651,
+    "teams_in_state": 31,
+    "hfa": 62.7
+  }
+}

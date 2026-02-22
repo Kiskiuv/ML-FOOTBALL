@@ -1,0 +1,93 @@
+{
+  "league": "E2",
+  "generated_at": "2026-02-21T13:18:03.010049",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_E2.xls",
+  "new_season_source": "E2_20252026.xlsx",
+  "cutoff_date": "2025-05-03",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 13220,
+    "new_file_matches": 354,
+    "combined_unique": 13574,
+    "state_building_matches": 13220,
+    "new_output_matches": 354
+  },
+  "overview": {
+    "total_new_matches": 354,
+    "played_matches": 354,
+    "future_fixtures": 0,
+    "total_teams": 24,
+    "date_range": {
+      "start": "2025-08-01",
+      "end": "2026-02-07"
+    },
+    "seasons": {
+      "2025/2026": 354
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 169,
+    "home_win_pct": 47.7,
+    "draws": 84,
+    "draw_pct": 23.7,
+    "away_wins": 101,
+    "away_win_pct": 28.5
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Ipswich",
+        "elo": 1729.8
+      },
+      {
+        "team": "Southampton",
+        "elo": 1706.6
+      },
+      {
+        "team": "Wolves",
+        "elo": 1697.2
+      },
+      {
+        "team": "Birmingham",
+        "elo": 1696.6
+      },
+      {
+        "team": "Bristol City",
+        "elo": 1693.9
+      },
+      {
+        "team": "Sheffield Weds",
+        "elo": 1683.5
+      },
+      {
+        "team": "Sheffield United",
+        "elo": 1679.3
+      },
+      {
+        "team": "Hull",
+        "elo": 1673.2
+      },
+      {
+        "team": "Cardiff",
+        "elo": 1665.0
+      },
+      {
+        "team": "Portsmouth",
+        "elo": 1663.0
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 13574,
+    "teams_in_state": 83,
+    "hfa": 65.1
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "league": "POL",
+  "generated_at": "2026-02-21T13:18:56.611070",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_POL.xls",
+  "new_season_source": "POL_20252026.xlsx",
+  "cutoff_date": "2024-12-08",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 3567,
+    "new_file_matches": 3936,
+    "combined_unique": 5179,
+    "state_building_matches": 4873,
+    "new_output_matches": 306
+  },
+  "overview": {
+    "total_new_matches": 306,
+    "played_matches": 306,
+    "future_fixtures": 0,
+    "total_teams": 21,
+    "date_range": {
+      "start": "2024-12-09",
+      "end": "2025-12-14"
+    },
+    "seasons": {
+      "2024/2025": 146,
+      "2025/2026": 160
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 141,
+    "home_win_pct": 46.1,
+    "draws": 82,
+    "draw_pct": 26.8,
+    "away_wins": 83,
+    "away_win_pct": 27.1
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Lech Poznan",
+        "elo": 1661.9
+      },
+      {
+        "team": "Rakow",
+        "elo": 1661.8
+      },
+      {
+        "team": "Jagiellonia",
+        "elo": 1658.4
+      },
+      {
+        "team": "Cracovia",
+        "elo": 1586.6
+      },
+      {
+        "team": "Gornik Zabrze",
+        "elo": 1586.4
+      },
+      {
+        "team": "Pogon Szczecin",
+        "elo": 1584.8
+      },
+      {
+        "team": "Legia",
+        "elo": 1573.3
+      },
+      {
+        "team": "Radomiak Radom",
+        "elo": 1567.1
+      },
+      {
+        "team": "Zaglebie",
+        "elo": 1566.5
+      },
+      {
+        "team": "Piast Gliwice",
+        "elo": 1561.1
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 5179,
+    "teams_in_state": 35,
+    "hfa": 80.4
+  }
+}

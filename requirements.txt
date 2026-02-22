@@ -1,0 +1,11 @@
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.6,<1.8
+joblib>=1.3
+tqdm>=4.65
+openpyxl>=3.1
+xlrd>=2.0
+# Optional - V3.4 protocol only
+# xgboost>=2.0
+# lightgbm>=4.0
+# catboost>=1.2

@@ -1,0 +1,94 @@
+{
+  "league": "AUT",
+  "generated_at": "2026-02-21T13:17:25.110260",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_AUT.xls",
+  "new_season_source": "AUT_20252026.xlsx",
+  "cutoff_date": "2024-12-05",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 2306,
+    "new_file_matches": 2548,
+    "combined_unique": 3370,
+    "state_building_matches": 3165,
+    "new_output_matches": 205
+  },
+  "overview": {
+    "total_new_matches": 205,
+    "played_matches": 205,
+    "future_fixtures": 0,
+    "total_teams": 13,
+    "date_range": {
+      "start": "2024-12-07",
+      "end": "2025-12-14"
+    },
+    "seasons": {
+      "2024/2025": 103,
+      "2025/2026": 102
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 82,
+    "home_win_pct": 40.0,
+    "draws": 50,
+    "draw_pct": 24.4,
+    "away_wins": 73,
+    "away_win_pct": 35.6
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Salzburg",
+        "elo": 1747.3
+      },
+      {
+        "team": "Sturm Graz",
+        "elo": 1700.1
+      },
+      {
+        "team": "LASK",
+        "elo": 1652.1
+      },
+      {
+        "team": "Austria Vienna",
+        "elo": 1630.6
+      },
+      {
+        "team": "Wolfsberger AC",
+        "elo": 1629.2
+      },
+      {
+        "team": "Hartberg",
+        "elo": 1585.9
+      },
+      {
+        "team": "SK Rapid",
+        "elo": 1581.8
+      },
+      {
+        "team": "A. Lustenau",
+        "elo": 1476.8
+      },
+      {
+        "team": "Altach",
+        "elo": 1471.7
+      },
+      {
+        "team": "Tirol",
+        "elo": 1470.8
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 3370,
+    "teams_in_state": 20,
+    "hfa": 36.8
+  }
+}

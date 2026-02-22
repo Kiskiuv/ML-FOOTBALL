@@ -1,0 +1,251 @@
+{
+  "league": "IRL",
+  "generated_at": "2026-02-14T10:25:45.608256",
+  "protocol_version": "3.4.3",
+  "source_file": "Matches_IRL.xls",
+  "overview": {
+    "total_matches": 2367,
+    "total_teams": 23,
+    "date_range": {
+      "start": "2012-01-06",
+      "end": "2024-12-07"
+    },
+    "seasons": 14
+  },
+  "outcome_distribution": {
+    "home_wins": 1023,
+    "home_win_pct": 43.2,
+    "draws": 568,
+    "draw_pct": 24.0,
+    "away_wins": 776,
+    "away_win_pct": 32.8
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "stats_coverage_pct": 0.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Shamrock Rovers",
+        "elo": 1705.0
+      },
+      {
+        "team": "Derry City",
+        "elo": 1685.7
+      },
+      {
+        "team": "St. Patricks",
+        "elo": 1683.3
+      },
+      {
+        "team": "Shelbourne",
+        "elo": 1646.5
+      },
+      {
+        "team": "Galway",
+        "elo": 1598.2
+      },
+      {
+        "team": "Sligo Rovers",
+        "elo": 1590.6
+      },
+      {
+        "team": "Bohemians",
+        "elo": 1562.3
+      },
+      {
+        "team": "Waterford",
+        "elo": 1555.8
+      },
+      {
+        "team": "Drogheda",
+        "elo": 1542.0
+      },
+      {
+        "team": "Dundalk",
+        "elo": 1519.7
+      }
+    ],
+    "league_hfa": 63.7
+  },
+  "seasons": {
+    "2011/2012": {
+      "matches": 97,
+      "home_win_pct": 40.2,
+      "draw_pct": 27.8,
+      "away_win_pct": 32.0
+    },
+    "2012/2013": {
+      "matches": 189,
+      "home_win_pct": 34.9,
+      "draw_pct": 28.0,
+      "away_win_pct": 37.0
+    },
+    "2013/2014": {
+      "matches": 202,
+      "home_win_pct": 45.5,
+      "draw_pct": 23.8,
+      "away_win_pct": 30.7
+    },
+    "2014/2015": {
+      "matches": 195,
+      "home_win_pct": 42.1,
+      "draw_pct": 24.1,
+      "away_win_pct": 33.8
+    },
+    "2015/2016": {
+      "matches": 200,
+      "home_win_pct": 41.5,
+      "draw_pct": 23.0,
+      "away_win_pct": 35.5
+    },
+    "2016/2017": {
+      "matches": 221,
+      "home_win_pct": 46.6,
+      "draw_pct": 21.3,
+      "away_win_pct": 32.1
+    },
+    "2017/2018": {
+      "matches": 198,
+      "home_win_pct": 47.0,
+      "draw_pct": 20.7,
+      "away_win_pct": 32.3
+    },
+    "2018/2019": {
+      "matches": 187,
+      "home_win_pct": 44.9,
+      "draw_pct": 17.6,
+      "away_win_pct": 37.4
+    },
+    "2019/2020": {
+      "matches": 109,
+      "home_win_pct": 45.9,
+      "draw_pct": 20.2,
+      "away_win_pct": 33.9
+    },
+    "2020/2021": {
+      "matches": 156,
+      "home_win_pct": 37.8,
+      "draw_pct": 28.2,
+      "away_win_pct": 34.0
+    },
+    "2021/2022": {
+      "matches": 198,
+      "home_win_pct": 46.5,
+      "draw_pct": 23.2,
+      "away_win_pct": 30.3
+    },
+    "2022/2023": {
+      "matches": 176,
+      "home_win_pct": 46.0,
+      "draw_pct": 23.9,
+      "away_win_pct": 30.1
+    },
+    "2023/2024": {
+      "matches": 182,
+      "home_win_pct": 41.8,
+      "draw_pct": 28.0,
+      "away_win_pct": 30.2
+    },
+    "2024/2025": {
+      "matches": 57,
+      "home_win_pct": 40.4,
+      "draw_pct": 36.8,
+      "away_win_pct": 22.8
+    }
+  },
+  "features": {
+    "basic_15": [
+      "HomeElo",
+      "AwayElo",
+      "elo_diff",
+      "elo_sum",
+      "elo_mismatch",
+      "Form3Home_ratio",
+      "Form5Home_ratio",
+      "Form3Away_ratio",
+      "Form5Away_ratio",
+      "form_diff_3",
+      "form_diff_5",
+      "rest_diff",
+      "rest_diff_nonlinear",
+      "winter_period",
+      "season_phase"
+    ],
+    "basic_plus_26": [
+      "form_momentum_home",
+      "form_momentum_away",
+      "overround",
+      "odds_disagreement",
+      "sharp_money_home",
+      "sharp_money_away",
+      "elo_vs_odds_home",
+      "h2h_home_wins",
+      "h2h_away_wins",
+      "h2h_draws",
+      "h2h_home_goals_diff"
+    ],
+    "all_computed": [
+      "HomeElo",
+      "AwayElo",
+      "elo_diff",
+      "elo_sum",
+      "elo_mismatch",
+      "elo_mismatch_flag",
+      "Form3Home",
+      "Form5Home",
+      "Form3Away",
+      "Form5Away",
+      "Form3Home_ratio",
+      "Form5Home_ratio",
+      "Form3Away_ratio",
+      "Form5Away_ratio",
+      "form_diff_3",
+      "form_diff_5",
+      "form_momentum_home",
+      "form_momentum_away",
+      "form_momentum",
+      "home_rest_days",
+      "away_rest_days",
+      "rest_diff",
+      "rest_diff_nonlinear",
+      "home_congestion_14d",
+      "away_congestion_14d",
+      "is_midweek",
+      "is_early_kickoff",
+      "is_evening_match",
+      "winter_period",
+      "season_phase",
+      "match_week",
+      "h2h_home_wins",
+      "h2h_away_wins",
+      "h2h_draws",
+      "h2h_home_goals_diff",
+      "h2h_home_venue_record",
+      "h2h_matches_count",
+      "home_team_home_ppg",
+      "home_team_goals_scored_avg",
+      "home_team_goals_conceded_avg",
+      "away_team_away_ppg",
+      "away_team_goals_scored_avg",
+      "away_team_goals_conceded_avg",
+      "venue_ppg_diff",
+      "overround",
+      "odds_disagreement",
+      "sharp_money_home",
+      "sharp_money_away",
+      "elo_vs_odds_home",
+      "home_shots_avg",
+      "home_shots_against_avg",
+      "away_shots_avg",
+      "away_shots_against_avg",
+      "shots_dominance_home",
+      "shots_dominance_away",
+      "corners_diff",
+      "discipline_diff"
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "league": "SUI",
+  "generated_at": "2026-02-21T13:19:23.057033",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_SUI.xls",
+  "new_season_source": "SWZ_20252026.csv",
+  "cutoff_date": "2024-12-05",
+  "column_remapping_applied": true,
+  "closing_odds_only": true,
+  "data_combination": {
+    "historical_matches": 2273,
+    "new_file_matches": 2578,
+    "combined_unique": 3426,
+    "state_building_matches": 3163,
+    "new_output_matches": 263
+  },
+  "overview": {
+    "total_new_matches": 263,
+    "played_matches": 263,
+    "future_fixtures": 0,
+    "total_teams": 13,
+    "date_range": {
+      "start": "2024-12-07",
+      "end": "2026-02-01"
+    },
+    "seasons": {
+      "2024/2025": 132,
+      "2025/2026": 131
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 113,
+    "home_win_pct": 43.0,
+    "draws": 67,
+    "draw_pct": 25.5,
+    "away_wins": 83,
+    "away_win_pct": 31.6
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Basel",
+        "elo": 1652.4
+      },
+      {
+        "team": "Thun",
+        "elo": 1618.0
+      },
+      {
+        "team": "Lugano",
+        "elo": 1610.3
+      },
+      {
+        "team": "St. Gallen",
+        "elo": 1579.0
+      },
+      {
+        "team": "Young Boys",
+        "elo": 1570.9
+      },
+      {
+        "team": "Servette",
+        "elo": 1550.4
+      },
+      {
+        "team": "Lausanne",
+        "elo": 1539.9
+      },
+      {
+        "team": "Sion",
+        "elo": 1515.6
+      },
+      {
+        "team": "Luzern",
+        "elo": 1493.8
+      },
+      {
+        "team": "Schaffhausen",
+        "elo": 1488.8
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 3426,
+    "teams_in_state": 18,
+    "hfa": 62.1
+  }
+}

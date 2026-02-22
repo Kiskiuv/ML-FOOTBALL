@@ -1,0 +1,93 @@
+{
+  "league": "G1",
+  "generated_at": "2026-02-21T13:18:28.418041",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_GI.csv",
+  "new_season_source": "G1_20252026.xlsx",
+  "cutoff_date": "2025-05-18",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 4848,
+    "new_file_matches": 144,
+    "combined_unique": 4992,
+    "state_building_matches": 4848,
+    "new_output_matches": 144
+  },
+  "overview": {
+    "total_new_matches": 144,
+    "played_matches": 144,
+    "future_fixtures": 0,
+    "total_teams": 26,
+    "date_range": {
+      "start": "2025-08-23",
+      "end": "2026-02-08"
+    },
+    "seasons": {
+      "2025/2026": 144
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 61,
+    "home_win_pct": 42.4,
+    "draws": 34,
+    "draw_pct": 23.6,
+    "away_wins": 49,
+    "away_win_pct": 34.0
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Olympiakos",
+        "elo": 1940.6
+      },
+      {
+        "team": "PAOK",
+        "elo": 1869.9
+      },
+      {
+        "team": "AEK",
+        "elo": 1857.5
+      },
+      {
+        "team": "Panathinaikos",
+        "elo": 1791.5
+      },
+      {
+        "team": "Aris",
+        "elo": 1661.7
+      },
+      {
+        "team": "Levadeiakos",
+        "elo": 1644.9
+      },
+      {
+        "team": "Olympiakos Volou",
+        "elo": 1602.9
+      },
+      {
+        "team": "Atromitos",
+        "elo": 1563.6
+      },
+      {
+        "team": "Kavala",
+        "elo": 1554.9
+      },
+      {
+        "team": "Iraklis",
+        "elo": 1537.6
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 4992,
+    "teams_in_state": 50,
+    "hfa": 53.9
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "league": "E3",
+  "generated_at": "2026-02-21T13:18:10.623447",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_E3.xls",
+  "new_season_source": "E3_20252026.xlsx",
+  "cutoff_date": "2025-05-03",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 12777,
+    "new_file_matches": 354,
+    "combined_unique": 13131,
+    "state_building_matches": 12777,
+    "new_output_matches": 354
+  },
+  "overview": {
+    "total_new_matches": 354,
+    "played_matches": 354,
+    "future_fixtures": 0,
+    "total_teams": 24,
+    "date_range": {
+      "start": "2025-08-02",
+      "end": "2026-02-07"
+    },
+    "seasons": {
+      "2025/2026": 354
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 147,
+    "home_win_pct": 41.5,
+    "draws": 89,
+    "draw_pct": 25.1,
+    "away_wins": 118,
+    "away_win_pct": 33.3
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Stockport",
+        "elo": 1659.7
+      },
+      {
+        "team": "Portsmouth",
+        "elo": 1646.3
+      },
+      {
+        "team": "Burton",
+        "elo": 1639.4
+      },
+      {
+        "team": "Luton",
+        "elo": 1637.9
+      },
+      {
+        "team": "Bromley",
+        "elo": 1634.5
+      },
+      {
+        "team": "Oxford",
+        "elo": 1633.9
+      },
+      {
+        "team": "Mansfield",
+        "elo": 1632.7
+      },
+      {
+        "team": "Peterboro",
+        "elo": 1623.6
+      },
+      {
+        "team": "Doncaster",
+        "elo": 1617.7
+      },
+      {
+        "team": "Plymouth",
+        "elo": 1615.0
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 13131,
+    "teams_in_state": 76,
+    "hfa": 43.5
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "league": "SP2",
+  "generated_at": "2026-02-21T13:19:20.343736",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_SP2 (1).xls",
+  "new_season_source": "SP2_20252026.xlsx",
+  "cutoff_date": "2025-06-01",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 10497,
+    "new_file_matches": 274,
+    "combined_unique": 10771,
+    "state_building_matches": 10497,
+    "new_output_matches": 274
+  },
+  "overview": {
+    "total_new_matches": 274,
+    "played_matches": 274,
+    "future_fixtures": 0,
+    "total_teams": 22,
+    "date_range": {
+      "start": "2025-08-15",
+      "end": "2026-02-09"
+    },
+    "seasons": {
+      "2025/2026": 274
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 117,
+    "home_win_pct": 42.7,
+    "draws": 73,
+    "draw_pct": 26.6,
+    "away_wins": 84,
+    "away_win_pct": 30.7
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Celta",
+        "elo": 1681.4
+      },
+      {
+        "team": "Osasuna",
+        "elo": 1679.5
+      },
+      {
+        "team": "Betis",
+        "elo": 1677.1
+      },
+      {
+        "team": "Levante",
+        "elo": 1673.1
+      },
+      {
+        "team": "Villarreal",
+        "elo": 1649.6
+      },
+      {
+        "team": "Espanol",
+        "elo": 1641.1
+      },
+      {
+        "team": "Elche",
+        "elo": 1640.5
+      },
+      {
+        "team": "Mallorca",
+        "elo": 1636.9
+      },
+      {
+        "team": "Santander",
+        "elo": 1635.8
+      },
+      {
+        "team": "Oviedo",
+        "elo": 1634.3
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 10771,
+    "teams_in_state": 86,
+    "hfa": 72.5
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "league": "SC2",
+  "generated_at": "2026-02-21T13:19:07.487224",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_SC2.xls",
+  "new_season_source": "SC2_20252026.xlsx",
+  "cutoff_date": "2025-05-03",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 4092,
+    "new_file_matches": 113,
+    "combined_unique": 4205,
+    "state_building_matches": 4092,
+    "new_output_matches": 113
+  },
+  "overview": {
+    "total_new_matches": 113,
+    "played_matches": 113,
+    "future_fixtures": 0,
+    "total_teams": 10,
+    "date_range": {
+      "start": "2025-08-02",
+      "end": "2026-02-07"
+    },
+    "seasons": {
+      "2025/2026": 113
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 49,
+    "home_win_pct": 43.4,
+    "draws": 26,
+    "draw_pct": 23.0,
+    "away_wins": 38,
+    "away_win_pct": 33.6
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Falkirk",
+        "elo": 1778.3
+      },
+      {
+        "team": "Rangers",
+        "elo": 1745.0
+      },
+      {
+        "team": "Dunfermline",
+        "elo": 1730.1
+      },
+      {
+        "team": "Gretna",
+        "elo": 1702.7
+      },
+      {
+        "team": "Livingston",
+        "elo": 1699.2
+      },
+      {
+        "team": "Airdrie Utd",
+        "elo": 1631.3
+      },
+      {
+        "team": "Hamilton",
+        "elo": 1627.3
+      },
+      {
+        "team": "Inverness C",
+        "elo": 1621.4
+      },
+      {
+        "team": "Morton",
+        "elo": 1613.8
+      },
+      {
+        "team": "Ayr",
+        "elo": 1610.1
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 4205,
+    "teams_in_state": 36,
+    "hfa": 38.5
+  }
+}

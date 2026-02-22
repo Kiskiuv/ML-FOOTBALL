@@ -1,0 +1,93 @@
+{
+  "league": "T1",
+  "generated_at": "2026-02-21T13:19:27.105346",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_T1.xls",
+  "new_season_source": "T1_20252026.xlsx",
+  "cutoff_date": "2025-06-01",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 7458,
+    "new_file_matches": 189,
+    "combined_unique": 7647,
+    "state_building_matches": 7458,
+    "new_output_matches": 189
+  },
+  "overview": {
+    "total_new_matches": 189,
+    "played_matches": 189,
+    "future_fixtures": 0,
+    "total_teams": 18,
+    "date_range": {
+      "start": "2025-08-08",
+      "end": "2026-02-09"
+    },
+    "seasons": {
+      "2025/2026": 189
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 68,
+    "home_win_pct": 36.0,
+    "draws": 60,
+    "draw_pct": 31.7,
+    "away_wins": 61,
+    "away_win_pct": 32.3
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Galatasaray",
+        "elo": 1975.2
+      },
+      {
+        "team": "Fenerbahce",
+        "elo": 1907.3
+      },
+      {
+        "team": "Trabzonspor",
+        "elo": 1746.7
+      },
+      {
+        "team": "Besiktas",
+        "elo": 1711.2
+      },
+      {
+        "team": "Buyuksehyr",
+        "elo": 1688.8
+      },
+      {
+        "team": "Goztep",
+        "elo": 1654.6
+      },
+      {
+        "team": "Samsunspor",
+        "elo": 1611.3
+      },
+      {
+        "team": "Alanyaspor",
+        "elo": 1582.1
+      },
+      {
+        "team": "Gaziantep",
+        "elo": 1563.6
+      },
+      {
+        "team": "Rizespor",
+        "elo": 1548.6
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 7647,
+    "teams_in_state": 55,
+    "hfa": 61.0
+  }
+}

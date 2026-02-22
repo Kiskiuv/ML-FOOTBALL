@@ -1,0 +1,93 @@
+{
+  "league": "D1",
+  "generated_at": "2026-02-21T13:17:37.007266",
+  "protocol_version": "3.4.3",
+  "mode": "incremental_v2_date_cutoff",
+  "historical_source": "Matches_D1.xls",
+  "new_season_source": "D1_20252026.xlsx",
+  "cutoff_date": "2025-05-17",
+  "column_remapping_applied": false,
+  "closing_odds_only": false,
+  "data_combination": {
+    "historical_matches": 7522,
+    "new_file_matches": 208,
+    "combined_unique": 7730,
+    "state_building_matches": 7522,
+    "new_output_matches": 208
+  },
+  "overview": {
+    "total_new_matches": 208,
+    "played_matches": 208,
+    "future_fixtures": 0,
+    "total_teams": 58,
+    "date_range": {
+      "start": "2025-08-22",
+      "end": "2026-02-09"
+    },
+    "seasons": {
+      "2025/2026": 208
+    }
+  },
+  "outcome_distribution": {
+    "home_wins": 95,
+    "home_win_pct": 45.7,
+    "draws": 50,
+    "draw_pct": 24.0,
+    "away_wins": 63,
+    "away_win_pct": 30.3
+  },
+  "data_coverage": {
+    "odds_coverage_pct": 100.0,
+    "features_computed": 57,
+    "null_values_remaining": 0
+  },
+  "elo_rankings": {
+    "top_10": [
+      {
+        "team": "Bayern Munich",
+        "elo": 1916.9
+      },
+      {
+        "team": "Dortmund",
+        "elo": 1780.7
+      },
+      {
+        "team": "Leverkusen",
+        "elo": 1759.1
+      },
+      {
+        "team": "Stuttgart",
+        "elo": 1691.2
+      },
+      {
+        "team": "RB Leipzig",
+        "elo": 1681.4
+      },
+      {
+        "team": "Hoffenheim",
+        "elo": 1653.1
+      },
+      {
+        "team": "Ein Frankfurt",
+        "elo": 1619.6
+      },
+      {
+        "team": "Freiburg",
+        "elo": 1604.7
+      },
+      {
+        "team": "MGladbach",
+        "elo": 1571.4
+      },
+      {
+        "team": "Mainz",
+        "elo": 1570.3
+      }
+    ]
+  },
+  "state_info": {
+    "combined_matches_processed": 7730,
+    "teams_in_state": 80,
+    "hfa": 52.6
+  }
+}
