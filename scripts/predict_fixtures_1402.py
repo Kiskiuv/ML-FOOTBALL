@@ -34,21 +34,24 @@ from datetime import datetime
 # =============================================================================
 
 V3_STRATEGIES = [
-    # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi)
-    ("MEX", "AWAY",  "CONSERVATIVE",    "LogisticRegression", 88,  0.00, 2.5,  0.0056, True,  34.1),
-    ("FIN", "AWAY",  "SELECTIVE",        "LogisticRegression", 85, -0.01, 2.3,  0.0078, True,  44.2),
-    ("D2",  "AWAY",  "CONSERVATIVE",    "RandomForest",       88,  0.00, 2.5,  0.0495, False, 34.1),
-    ("F1",  "HOME",  "UPSET",           "LogisticRegression", 85, -0.01, 2.0,  0.0587, False, 30.2),
-    ("I1",  "DRAW",  "CONSERVATIVE",    "RandomForest",       90,  0.00, 3.0,  0.0612, False, 22.0),
-    ("F2",  "HOME",  "ULTRA_CONS",      "RandomForest",       90,  0.02, 2.5,  0.0613, False, 77.8),
-    ("SP2", "DRAW",  "SELECTIVE",        "LogisticRegression", 88, -0.01, 3.0,  0.0637, False, 17.4),
-    ("NOR", "HOME",  "STANDARD",        "LogisticRegression", 80, -0.02, 1.9,  0.0640, False, 26.0),
-    ("G1",  "DRAW",  "LONGSHOT_STRICT", "LogisticRegression", 92,  0.00, 3.2,  0.0677, False, 30.4),
-    ("F2",  "AWAY",  "ULTRA_CONS",      "LogisticRegression", 90,  0.02, 2.8,  0.0697, False, 35.2),
-    ("D1",  "AWAY",  "SELECTIVE",        "LogisticRegression", 85, -0.01, 2.3,  0.0736, False, 27.1),
-    ("ARG", "HOME",  "ULTRA_CONS",      "LogisticRegression", 90,  0.02, 2.5,  0.0880, False, 71.8),
-    ("N1",  "AWAY",  "STANDARD_HIGH",   "LogisticRegression", 82,  0.00, 2.2,  0.0888, False, 31.1),
-    ("SWE", "HOME",  "SELECTIVE",        "LogisticRegression", 82, -0.01, 2.0,  0.0926, False, 27.6),
+    # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi, tier)
+    # DEPLOY — FDR-pass or strong p-value, real stakes
+    ("MEX", "AWAY",  "CONSERVATIVE",    "LogisticRegression", 88,  0.00, 2.5,  0.0056, True,  34.1, "DEPLOY"),
+    ("FIN", "AWAY",  "SELECTIVE",        "LogisticRegression", 85, -0.01, 2.3,  0.0078, True,  44.2, "DEPLOY"),
+    ("D2",  "AWAY",  "CONSERVATIVE",    "RandomForest",       88,  0.00, 2.5,  0.0495, False, 34.1, "DEPLOY"),
+    # PAPER_TRADE — p < 0.07, tracked at stake=0
+    ("F1",  "HOME",  "UPSET",           "LogisticRegression", 85, -0.01, 2.0,  0.0587, False, 30.2, "PAPER_TRADE"),
+    ("I1",  "DRAW",  "CONSERVATIVE",    "RandomForest",       90,  0.00, 3.0,  0.0612, False, 22.0, "PAPER_TRADE"),
+    ("F2",  "HOME",  "ULTRA_CONS",      "RandomForest",       90,  0.02, 2.5,  0.0613, False, 77.8, "PAPER_TRADE"),
+    ("SP2", "DRAW",  "SELECTIVE",        "LogisticRegression", 88, -0.01, 3.0,  0.0637, False, 17.4, "PAPER_TRADE"),
+    ("NOR", "HOME",  "STANDARD",        "LogisticRegression", 80, -0.02, 1.9,  0.0640, False, 26.0, "PAPER_TRADE"),
+    ("G1",  "DRAW",  "LONGSHOT_STRICT", "LogisticRegression", 92,  0.00, 3.2,  0.0677, False, 30.4, "PAPER_TRADE"),
+    ("F2",  "AWAY",  "ULTRA_CONS",      "LogisticRegression", 90,  0.02, 2.8,  0.0697, False, 35.2, "PAPER_TRADE"),
+    # MONITOR — p < 0.10, tracked at stake=0
+    ("D1",  "AWAY",  "SELECTIVE",        "LogisticRegression", 85, -0.01, 2.3,  0.0736, False, 27.1, "MONITOR"),
+    ("ARG", "HOME",  "ULTRA_CONS",      "LogisticRegression", 90,  0.02, 2.5,  0.0880, False, 71.8, "MONITOR"),
+    ("N1",  "AWAY",  "STANDARD_HIGH",   "LogisticRegression", 82,  0.00, 2.2,  0.0888, False, 31.1, "MONITOR"),
+    ("SWE", "HOME",  "SELECTIVE",        "LogisticRegression", 82, -0.01, 2.0,  0.0926, False, 27.6, "MONITOR"),
 ]
 
 # Quick lookup: (league, market) → strategy dict
@@ -58,7 +61,7 @@ for s in V3_STRATEGIES:
     STRATEGY_LOOKUP[key] = {
         "league": s[0], "market": s[1], "name": s[2], "model_type": s[3],
         "pct": s[4], "edge": s[5], "min_odds": s[6],
-        "p_value": s[7], "fdr": s[8], "hist_roi": s[9],
+        "p_value": s[7], "fdr": s[8], "hist_roi": s[9], "tier": s[10],
     }
 
 ACTIVE_LEAGUES = sorted(set(s[0] for s in V3_STRATEGIES))
@@ -375,14 +378,22 @@ def predict_market(league: str, market: str, strat: dict,
         result['Pass_Valid']
     )
 
-    # Staking
+    # Tier
+    strategy_tier = strat.get('tier', 'MONITOR')
+    result['Tier'] = strategy_tier
+
+    # Staking — only DEPLOY tier gets real stakes
     result['Stake'] = 0.0
     result['Stake_Tier'] = ''
     for idx in result.index:
         if result.loc[idx, 'BET']:
             stake, tier = get_stake(result.loc[idx, 'Edge'])
-            result.loc[idx, 'Stake'] = stake
-            result.loc[idx, 'Stake_Tier'] = tier
+            if strategy_tier == 'DEPLOY':
+                result.loc[idx, 'Stake'] = stake
+                result.loc[idx, 'Stake_Tier'] = tier
+            else:
+                result.loc[idx, 'Stake'] = 0.0
+                result.loc[idx, 'Stake_Tier'] = f'{tier}(PAPER)'
 
     # Strategy metadata
     result['p_value'] = strat['p_value']
@@ -411,12 +422,18 @@ Examples:
     parser.add_argument("--season-dir", required=True, help="Directory with <LEAGUE>_20252026_features.csv")
     parser.add_argument("--output", default="predictions_v3.csv", help="Output CSV path")
     parser.add_argument("--eu-format", action="store_true", help="EU format (;  separator, , decimals)")
+    parser.add_argument("--deploy-only", action="store_true", help="Only output DEPLOY tier strategies")
 
     args = parser.parse_args()
 
     print("=" * 70)
     print("PROTOCOL V4 — FIXTURE PREDICTOR (NO ODDS LEAKAGE)")
-    print(f"14 hybrid-selected strategies | 21 features | RF→LR fallback")
+    n_deploy = sum(1 for s in V3_STRATEGIES if s[10] == 'DEPLOY')
+    n_paper = sum(1 for s in V3_STRATEGIES if s[10] == 'PAPER_TRADE')
+    n_monitor = sum(1 for s in V3_STRATEGIES if s[10] == 'MONITOR')
+    print(f"{len(V3_STRATEGIES)} strategies: {n_deploy} DEPLOY | {n_paper} PAPER_TRADE | {n_monitor} MONITOR")
+    if args.deploy_only:
+        print(">> --deploy-only: only DEPLOY tier strategies will be output")
     print("=" * 70)
 
     # Load fixtures
@@ -487,11 +504,16 @@ Examples:
 
         for market in markets:
             strat = STRATEGY_LOOKUP[(league, market)]
+            tier = strat.get('tier', 'MONITOR')
+
+            # Skip non-DEPLOY if --deploy-only
+            if args.deploy_only and tier != 'DEPLOY':
+                continue
 
             # Load model
             model_data = load_model(args.models_dir, league, market)
             if not model_data:
-                print(f"   {league} {market}: ❌ No model file")
+                print(f"   {league} {market}: No model file")
                 continue
 
             try:
@@ -499,23 +521,25 @@ Examples:
                 n_bets = preds['BET'].sum()
                 n_total = len(preds)
 
-                marker = "🎯" if n_bets > 0 else "  "
-                print(f"   {marker} {league:>4} {market:<5} {strat['name']:<18} "
-                      f"→ {n_total} fixtures, {n_bets} BET(s)"
-                      f"  [p={strat['p_value']:.4f} {'FDR✅' if strat['fdr'] else ''} "
+                tier_tag = f"[{tier}]"
+                marker = ">>>" if (n_bets > 0 and tier == 'DEPLOY') else ("..." if n_bets > 0 else "   ")
+                print(f"   {marker} {league:>4} {market:<5} {strat['name']:<18} {tier_tag:<14} "
+                      f"-> {n_total} fixtures, {n_bets} BET(s)"
+                      f"  [p={strat['p_value']:.4f} {'FDR+' if strat['fdr'] else ''} "
                       f"hist={strat['hist_roi']:+.1f}%]")
 
                 if n_bets > 0:
                     bets = preds[preds['BET']]
                     for _, b in bets.iterrows():
-                        print(f"         → {b['HomeTeam']} vs {b['AwayTeam']}  "
+                        stake_str = f"{b['Stake']:.2f}u" if b['Stake'] > 0 else "PAPER"
+                        print(f"         -> {b['HomeTeam']} vs {b['AwayTeam']}  "
                               f"odds={b['Odds']:.2f}  prob={b['Prob']:.1%}  "
-                              f"edge={b['Edge']:+.1%}  stake={b['Stake']:.2f}u ({b['Stake_Tier']})")
+                              f"edge={b['Edge']:+.1%}  stake={stake_str}")
 
                 all_results.append(preds)
 
             except Exception as e:
-                print(f"   {league} {market}: ❌ ERROR — {e}")
+                print(f"   {league} {market}: ERROR -- {e}")
 
     if not all_results:
         print("\n❌ No predictions generated.")
@@ -532,7 +556,7 @@ Examples:
     # Output columns
     out_cols = [
         'MatchDate', 'MatchTime', 'League', 'HomeTeam', 'AwayTeam',
-        'Market', 'Strategy', 'Model',
+        'Market', 'Strategy', 'Model', 'Tier',
         'OddHome', 'OddDraw', 'OddAway', 'Odds',
         'Prob', 'Threshold', 'Implied_Prob', 'Edge',
         'Pass_Prob', 'Pass_Edge', 'Pass_Odds', 'Pass_Valid',
@@ -574,25 +598,28 @@ Examples:
 
     if n_bets > 0:
         bets_df = output[output['BET'] == True]
-        total_stake = bets_df['Stake'].sum()
+        deploy_bets = bets_df[bets_df['Tier'] == 'DEPLOY'] if 'Tier' in bets_df.columns else bets_df
+        total_stake = deploy_bets['Stake'].sum()
 
-        print(f"\n📊 BET SUMMARY:")
-        print(f"   Total bets: {n_bets}")
-        print(f"   Total stake: {total_stake:.2f}u")
-        print(f"   Avg odds: {bets_df['Odds'].mean():.2f}")
-        print(f"   Avg edge: {bets_df['Edge'].mean():+.1%}")
-        print(f"   Avg prob: {bets_df['Prob'].mean():.1%}")
+        print(f"\nBET SUMMARY:")
+        print(f"   Total bets: {n_bets} ({len(deploy_bets)} DEPLOY, {n_bets - len(deploy_bets)} PAPER)")
+        print(f"   DEPLOY stake: {total_stake:.2f}u")
+        if len(deploy_bets) > 0:
+            print(f"   DEPLOY avg odds: {deploy_bets['Odds'].mean():.2f}")
+            print(f"   DEPLOY avg edge: {deploy_bets['Edge'].mean():+.1%}")
 
-        print(f"\n   {'Date':<12} {'Lg':<4} {'Mkt':<5} {'Home':<16} {'Away':<16} {'Odds':>5} {'Prob':>6} {'Edge':>6} {'Stake':>6} {'Tier':<4}")
-        print(f"   {'─' * 95}")
+        print(f"\n   {'Date':<12} {'Lg':<4} {'Mkt':<5} {'Home':<16} {'Away':<16} {'Odds':>5} {'Prob':>6} {'Edge':>6} {'Stake':>6} {'Tier':<12}")
+        print(f"   {'-' * 100}")
         for _, b in bets_df.iterrows():
+            tier_label = b.get('Tier', '?')
+            stake_str = f"{b['Stake']:.2f}u" if b['Stake'] > 0 else "PAPER"
             print(f"   {str(b['MatchDate']):<12} {b['League']:<4} {b['Market']:<5} "
                   f"{str(b['HomeTeam'])[:15]:<16} {str(b['AwayTeam'])[:15]:<16} "
                   f"{b['Odds']:>5.2f} {b['Prob']:>5.1%} {b['Edge']:>+5.1%} "
-                  f"{b['Stake']:>5.2f}u {b['Stake_Tier']:<4}")
+                  f"{stake_str:>6} {tier_label:<12}")
     else:
         print("\n   No bets found for these fixtures.")
-        print("   This is normal — the protocol is highly selective (~8% of fixtures get bets).")
+        print("   This is normal -- the protocol is highly selective (~8% of fixtures get bets).")
 
     print(f"\n💾 Saved to: {out_path}")
     print("=" * 70)
