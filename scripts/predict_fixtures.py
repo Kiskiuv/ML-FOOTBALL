@@ -1,0 +1,667 @@
+#!/usr/bin/env python3
+"""
+PROTOCOL V4 — FIXTURE PREDICTOR
+================================
+Reads a fixtures CSV (all leagues together), applies the 16 hybrid-selected
+strategies (NO odds leakage — 21 features), and outputs a CSV with BET / NO BET.
+
+Usage:
+    python predict_fixtures.py --fixtures fixtures.csv --models-dir ./models --season-dir ./seasons
+
+    --fixtures    : CSV with upcoming matches (football-data.co.uk format)
+    --models-dir  : Directory containing model_<LEAGUE>_<MARKET>.joblib files
+    --season-dir  : Directory containing <LEAGUE>_20252026_features.csv files
+    --output      : Output CSV path (default: predictions.csv)
+    --eu-format   : Use ; separator and , decimals for Excel EU
+
+Author: Marc | Protocol V4 Lean | February 2026
+"""
+
+import pandas as pd
+import numpy as np
+import joblib
+import argparse
+import sys
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+from datetime import datetime
+
+
+# =============================================================================
+# V4 HYBRID-SELECTED STRATEGIES (16 active — NO odds leakage)
+# Trained with 21 features (ELO, form, schedule, momentum, H2H only)
+# Models: RF + LR + Ensemble (0.5/0.5 blend)
+# =============================================================================
+
+V3_STRATEGIES = [
+    # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi)
+    ("MEX", "AWAY",  "VALUE",            "Ensemble",             80, -0.02, 2.5,  0.0108, True,  24.8),
+    ("FIN", "AWAY",  "SELECTIVE",         "LogisticRegression",   85, -0.01, 2.3,  0.0078, True,  44.2),
+    ("G1",  "DRAW",  "MODERATE",          "Ensemble",             85, -0.02, 3.0,  0.0300, False, 19.2),
+    ("F2",  "AWAY",  "ULTRA_CONS",        "Ensemble",             90,  0.02, 2.8,  0.0431, False, 47.3),
+    ("RUS", "AWAY",  "ULTRA_CONS",        "Ensemble",             90,  0.02, 2.8,  0.0500, False, 75.0),
+    ("SP2", "DRAW",  "CONSERVATIVE",      "Ensemble",             90,  0.00, 3.0,  0.0507, False, 20.3),
+    ("N1",  "DRAW",  "MODERATE_HIGH",     "Ensemble",             85,  0.00, 2.8,  0.0520, False, 21.7),
+    ("F1",  "HOME",  "UPSET",            "LogisticRegression",   85, -0.01, 2.0,  0.0587, False, 30.2),
+    ("AUT", "DRAW",  "LONGSHOT_STRICT",   "Ensemble",             92,  0.00, 3.2,  0.0597, False, 31.1),
+    ("I1",  "DRAW",  "CONSERVATIVE",     "RandomForest",         90,  0.00, 3.0,  0.0612, False, 22.0),
+    ("F2",  "HOME",  "ULTRA_CONS",       "RandomForest",         90,  0.02, 2.5,  0.0613, False, 77.8),
+    ("NOR", "HOME",  "STANDARD",         "LogisticRegression",   80, -0.02, 1.9,  0.0640, False, 26.0),
+    ("D1",  "AWAY",  "SELECTIVE",         "LogisticRegression",   85, -0.01, 2.3,  0.0736, False, 27.1),
+    ("ARG", "HOME",  "ULTRA_CONS",       "LogisticRegression",   90,  0.02, 2.5,  0.0880, False, 71.8),
+    ("N1",  "AWAY",  "STANDARD_HIGH",    "LogisticRegression",   82,  0.00, 2.2,  0.0888, False, 31.1),
+    ("SWE", "HOME",  "SELECTIVE",         "LogisticRegression",   82, -0.01, 2.0,  0.0926, False, 27.6),
+]
+
+# Quick lookup: (league, market) -> strategy dict
+STRATEGY_LOOKUP = {}
+for s in V3_STRATEGIES:
+    key = (s[0], s[1])
+    STRATEGY_LOOKUP[key] = {
+        "league": s[0], "market": s[1], "name": s[2], "model_type": s[3],
+        "pct": s[4], "edge": s[5], "min_odds": s[6],
+        "p_value": s[7], "fdr": s[8], "hist_roi": s[9],
+    }
+
+ACTIVE_LEAGUES = sorted(set(s[0] for s in V3_STRATEGIES))
+
+ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway"}
+MAX_ODDS_COL = {"HOME": "MaxHome", "DRAW": "MaxDraw", "AWAY": "MaxAway"}
+
+
+# =============================================================================
+# STAKING (Protocol V3.4)
+# =============================================================================
+
+def get_stake(edge: float) -> Tuple[float, str]:
+    """Returns (stake, tier) based on edge."""
+    if edge < 0:
+        return 0.80, "LOW"
+    elif edge < 0.05:
+        return 1.25, "MED"
+    else:
+        return 1.85, "HIGH"
+
+
+# =============================================================================
+# FILE UTILITIES
+# =============================================================================
+
+def load_csv(path: str) -> pd.DataFrame:
+    for enc in ['utf-8-sig', 'utf-8', 'latin-1', 'cp1252']:
+        try:
+            return pd.read_csv(path, encoding=enc)
+        except Exception:
+            continue
+    raise ValueError(f"Cannot read: {path}")
+
+
+def find_season_file(season_dir: str, league: str) -> Optional[str]:
+    d = Path(season_dir)
+    if not d.exists():
+        return None
+    patterns = [
+        f"{league}_20252026_features.csv",
+        f"{league.upper()}_20252026_features.csv",
+        f"{league}_20252026.csv",
+        f"{league.upper()}_20252026.csv",
+        f"Matches_{league}_features.csv",
+        f"{league}_features.csv",
+    ]
+    for p in patterns:
+        if (d / p).exists():
+            return str(d / p)
+    for f in d.glob(f"*{league}*features*.csv"):
+        return str(f)
+    return None
+
+
+def load_model(models_dir: str, league: str, market: str) -> Optional[Dict]:
+    for p in [f"model_{league}_{market}.joblib", f"model_{league.upper()}_{market}.joblib"]:
+        path = Path(models_dir) / p
+        if path.exists():
+            return joblib.load(path)
+    return None
+
+
+# =============================================================================
+# FEATURE BUILDING (V4 Lean — 21 features)
+# =============================================================================
+
+def get_team_last_match(season_df: pd.DataFrame, team: str):
+    """Find a team's most recent match in season data."""
+    home = season_df[season_df['HomeTeam'] == team].copy()
+    away = season_df[season_df['AwayTeam'] == team].copy()
+    home['_home'] = True
+    away['_home'] = False
+    all_m = pd.concat([home, away])
+    if len(all_m) == 0:
+        return None, None
+    all_m['_date'] = pd.to_datetime(all_m['MatchDate'], errors='coerce')
+    all_m = all_m.sort_values('_date')
+    return all_m.iloc[-1], all_m.iloc[-1]['_home']
+
+
+def extract_team_features(row, played_home: bool) -> dict:
+    """Extract V4 Lean features from a team's last match row."""
+    if played_home:
+        form3_ratio = row.get('Form3Home_ratio', 0.44)
+        form5_ratio = row.get('Form5Home_ratio', 0.47)
+        form3_raw = row.get('Form3Home', round(form3_ratio * 9))
+        form5_raw = row.get('Form5Home', round(form5_ratio * 15))
+        momentum = row.get('form_momentum_home', 0)
+        return {
+            'elo': row.get('HomeElo', 1500),
+            'form3_ratio': form3_ratio,
+            'form5_ratio': form5_ratio,
+            'form3_raw': form3_raw,
+            'form5_raw': form5_raw,
+            'momentum': momentum,
+            'last_date': row.get('MatchDate', ''),
+        }
+    else:
+        form3_ratio = row.get('Form3Away_ratio', 0.44)
+        form5_ratio = row.get('Form5Away_ratio', 0.47)
+        form3_raw = row.get('Form3Away', round(form3_ratio * 9))
+        form5_raw = row.get('Form5Away', round(form5_ratio * 15))
+        momentum = row.get('form_momentum_away', 0)
+        return {
+            'elo': row.get('AwayElo', 1500),
+            'form3_ratio': form3_ratio,
+            'form5_ratio': form5_ratio,
+            'form3_raw': form3_raw,
+            'form5_raw': form5_raw,
+            'momentum': momentum,
+            'last_date': row.get('MatchDate', ''),
+        }
+
+
+def compute_rest_days(last_date: str, fixture_date: str) -> int:
+    try:
+        last = pd.to_datetime(last_date, errors='coerce')
+        fix = pd.to_datetime(fixture_date, format='%d/%m/%Y', errors='coerce')
+        if pd.isna(fix):
+            fix = pd.to_datetime(fixture_date, errors='coerce')
+        if pd.notna(last) and pd.notna(fix):
+            return max(1, (fix - last).days)
+    except Exception:
+        pass
+    return 7
+
+
+def compute_rest_diff_nonlinear(rest_diff: int) -> int:
+    """Binned rest difference: values in {-2, -1, 0, 1, 2}."""
+    if rest_diff <= -4:
+        return -2
+    elif rest_diff <= -2:
+        return -1
+    elif rest_diff <= 2:
+        return 0
+    elif rest_diff <= 4:
+        return 1
+    else:
+        return 2
+
+
+def get_h2h_features(season_df: pd.DataFrame, home_team: str, away_team: str) -> dict:
+    """
+    Look up H2H features from season data for this specific matchup.
+    Returns defaults (0, 0, 0, 0) if no prior meeting found.
+    """
+    defaults = {'h2h_home_wins': 0, 'h2h_away_wins': 0,
+                'h2h_draws': 0, 'h2h_home_goals_diff': 0}
+
+    # Find matches between these two teams (either direction)
+    mask_ab = (season_df['HomeTeam'] == home_team) & (season_df['AwayTeam'] == away_team)
+    mask_ba = (season_df['HomeTeam'] == away_team) & (season_df['AwayTeam'] == home_team)
+    h2h = season_df[mask_ab | mask_ba].copy()
+
+    if len(h2h) == 0:
+        return defaults
+
+    h2h['_date'] = pd.to_datetime(h2h['MatchDate'], errors='coerce')
+    h2h = h2h.sort_values('_date')
+    last = h2h.iloc[-1]
+
+    # Check if the last meeting had the same home/away arrangement
+    if last['HomeTeam'] == home_team:
+        # Same perspective — use features directly
+        return {
+            'h2h_home_wins': last.get('h2h_home_wins', 0),
+            'h2h_away_wins': last.get('h2h_away_wins', 0),
+            'h2h_draws': last.get('h2h_draws', 0),
+            'h2h_home_goals_diff': last.get('h2h_home_goals_diff', 0),
+        }
+    else:
+        # Reversed perspective — swap home/away
+        return {
+            'h2h_home_wins': last.get('h2h_away_wins', 0),
+            'h2h_away_wins': last.get('h2h_home_wins', 0),
+            'h2h_draws': last.get('h2h_draws', 0),
+            'h2h_home_goals_diff': -last.get('h2h_home_goals_diff', 0),
+        }
+
+
+def compute_temporal_features(fixture_date: str) -> dict:
+    """Compute winter_period and season_phase from fixture date."""
+    try:
+        fix = pd.to_datetime(fixture_date, format='%d/%m/%Y', errors='coerce')
+        if pd.isna(fix):
+            fix = pd.to_datetime(fixture_date, errors='coerce')
+        if pd.notna(fix):
+            month = fix.month
+            winter = 1 if month in [11, 12, 1, 2] else 0
+            phase = 1 if month in [8, 9, 10] else (2 if month in [11, 12, 1, 2] else 3)
+            return {'winter_period': winter, 'season_phase': phase}
+    except Exception:
+        pass
+    return {'winter_period': 1, 'season_phase': 2}
+
+
+def build_instance(fixture, season_df: pd.DataFrame, league: str) -> dict:
+    """Build prediction feature vector for a single fixture (21 V4 Lean features)."""
+    home_team = fixture['HomeTeam']
+    away_team = fixture['AwayTeam']
+    fix_date = fixture.get('Date', '')
+
+    home_last, home_was_home = get_team_last_match(season_df, home_team)
+    away_last, away_was_home = get_team_last_match(season_df, away_team)
+
+    defaults_home = {
+        'elo': 1500, 'form3_ratio': 0.44, 'form5_ratio': 0.47,
+        'form3_raw': 4, 'form5_raw': 7, 'momentum': 0, 'last_date': ''
+    }
+    defaults_away = {
+        'elo': 1500, 'form3_ratio': 0.44, 'form5_ratio': 0.47,
+        'form3_raw': 4, 'form5_raw': 7, 'momentum': 0, 'last_date': ''
+    }
+
+    hf = extract_team_features(home_last, home_was_home) if home_last is not None else defaults_home
+    af = extract_team_features(away_last, away_was_home) if away_last is not None else defaults_away
+
+    home_rest = compute_rest_days(hf['last_date'], fix_date)
+    away_rest = compute_rest_days(af['last_date'], fix_date)
+    rest_diff = home_rest - away_rest
+
+    # Odds (for edge calculation, NOT used as model features)
+    oh = float(fixture.get('AvgH') or fixture.get('B365H') or 2.5)
+    od = float(fixture.get('AvgD') or fixture.get('B365D') or 3.3)
+    oa = float(fixture.get('AvgA') or fixture.get('B365A') or 2.8)
+
+    elo_diff = hf['elo'] - af['elo']
+
+    # Temporal features from fixture date
+    temporal = compute_temporal_features(fix_date)
+
+    # H2H features from season data
+    h2h = get_h2h_features(season_df, home_team, away_team)
+
+    return {
+        'Division': league, 'MatchDate': fix_date,
+        'MatchTime': fixture.get('Time', ''),
+        'HomeTeam': home_team, 'AwayTeam': away_team,
+        # Odds (kept for edge calculation, NOT used as model features)
+        'OddHome': oh, 'OddDraw': od, 'OddAway': oa,
+        'MaxHome': float(fixture.get('MaxH') or oh),
+        'MaxDraw': float(fixture.get('MaxD') or od),
+        'MaxAway': float(fixture.get('MaxA') or oa),
+        # ELO (5)
+        'HomeElo': hf['elo'], 'AwayElo': af['elo'],
+        'elo_diff': elo_diff, 'elo_sum': hf['elo'] + af['elo'],
+        'elo_mismatch': abs(elo_diff) / (hf['elo'] + af['elo']) if (hf['elo'] + af['elo']) > 0 else 0,
+        # Form (6)
+        'Form3Home_ratio': hf['form3_ratio'], 'Form5Home_ratio': hf['form5_ratio'],
+        'Form3Away_ratio': af['form3_ratio'], 'Form5Away_ratio': af['form5_ratio'],
+        'form_diff_3': hf['form3_raw'] - af['form3_raw'],
+        'form_diff_5': hf['form5_raw'] - af['form5_raw'],
+        # Schedule/Temporal (4)
+        'rest_diff': rest_diff,
+        'rest_diff_nonlinear': compute_rest_diff_nonlinear(rest_diff),
+        'winter_period': temporal['winter_period'],
+        'season_phase': temporal['season_phase'],
+        # Form momentum (2)
+        'form_momentum_home': hf['momentum'],
+        'form_momentum_away': af['momentum'],
+        # H2H (4)
+        'h2h_home_wins': h2h['h2h_home_wins'],
+        'h2h_away_wins': h2h['h2h_away_wins'],
+        'h2h_draws': h2h['h2h_draws'],
+        'h2h_home_goals_diff': h2h['h2h_home_goals_diff'],
+    }
+
+
+# =============================================================================
+# PREDICTION ENGINE
+# =============================================================================
+
+def predict_market(league: str, market: str, strat: dict,
+                   fixtures_df: pd.DataFrame, season_df: pd.DataFrame,
+                   model_data: dict) -> pd.DataFrame:
+    """
+    Run prediction for one league-market using saved model.
+    Returns DataFrame with one row per fixture and bet decision.
+    """
+    model = model_data['model']
+    features = model_data.get('features', None)
+    scaler = model_data.get('scaler', None)
+    medians = model_data.get('imputation_medians', {})
+    pct_thresholds = model_data.get('pct_thresholds', {})
+
+    if features is None:
+        if hasattr(model, 'feature_names_in_'):
+            features = list(model.feature_names_in_)
+        else:
+            raise ValueError(f"No features found in model for {league} {market}")
+
+    # Build feature matrix
+    X_df = pd.DataFrame()
+    for f in features:
+        if f in fixtures_df.columns:
+            X_df[f] = fixtures_df[f].copy()
+        elif f in medians:
+            X_df[f] = medians[f]
+        else:
+            X_df[f] = 0
+
+    for f in features:
+        X_df[f] = X_df[f].fillna(medians.get(f, 0))
+
+    X = X_df.values
+
+    # Predict probabilities -- handle Ensemble and single-model artifacts
+    model_type = model_data.get('model_type', '')
+    if model_type == 'Ensemble':
+        lr_model = model_data['lr_model']
+        lr_scaler = model_data.get('lr_scaler')
+        w = model_data.get('ensemble_weight', 0.5)
+        rf_probs = model.predict_proba(X)[:, 1]
+        X_scaled = lr_scaler.transform(X) if lr_scaler is not None else X
+        lr_probs = lr_model.predict_proba(X_scaled)[:, 1]
+        probs = w * rf_probs + (1 - w) * lr_probs
+    else:
+        if scaler is not None:
+            X = scaler.transform(X)
+        probs = model.predict_proba(X)[:, 1]
+
+    # Get percentile threshold
+    pct = strat['pct']
+    if pct in pct_thresholds:
+        threshold = pct_thresholds[pct]
+        threshold_src = "saved"
+    else:
+        # Compute from historical season data
+        X_hist = pd.DataFrame()
+        for f in features:
+            if f in season_df.columns:
+                X_hist[f] = season_df[f].fillna(medians.get(f, 0))
+            else:
+                X_hist[f] = medians.get(f, 0)
+        X_hist_vals = X_hist.values
+        if model_type == 'Ensemble':
+            rf_hist = model.predict_proba(X_hist_vals)[:, 1]
+            X_hist_sc = lr_scaler.transform(X_hist_vals) if lr_scaler is not None else X_hist_vals
+            lr_hist = lr_model.predict_proba(X_hist_sc)[:, 1]
+            train_probs = w * rf_hist + (1 - w) * lr_hist
+        else:
+            if scaler is not None:
+                X_hist_vals = scaler.transform(X_hist_vals)
+            train_probs = model.predict_proba(X_hist_vals)[:, 1]
+        threshold = np.percentile(train_probs, pct)
+        threshold_src = "historical"
+
+    # Build results
+    odds_col = ODDS_COL[market]
+    result = fixtures_df[['Division', 'MatchDate', 'MatchTime', 'HomeTeam', 'AwayTeam',
+                           'OddHome', 'OddDraw', 'OddAway', 'HomeElo', 'AwayElo',
+                           'elo_diff', 'form_diff_5']].copy()
+
+    result['League'] = league
+    result['Market'] = market
+    result['Strategy'] = strat['name']
+    result['Model'] = model_type or strat['model_type']
+    result['Prob'] = probs
+    result['Threshold'] = threshold
+    result['Threshold_Src'] = threshold_src
+    result['Odds'] = fixtures_df[odds_col]
+    result['Implied_Prob'] = 1 / result['Odds']
+    result['Edge'] = result['Prob'] - result['Implied_Prob']
+
+    # Validity check
+    result['Prob_Valid'] = (probs > 0.01) & (probs < 0.99)
+
+    # BET criteria (all must pass)
+    result['Pass_Prob'] = result['Prob'] >= threshold
+    result['Pass_Edge'] = result['Edge'] >= strat['edge']
+    result['Pass_Odds'] = result['Odds'] >= strat['min_odds']
+    result['Pass_Valid'] = result['Prob_Valid']
+
+    result['BET'] = (
+        result['Pass_Prob'] &
+        result['Pass_Edge'] &
+        result['Pass_Odds'] &
+        result['Pass_Valid']
+    )
+
+    # Staking
+    result['Stake'] = 0.0
+    result['Stake_Tier'] = ''
+    for idx in result.index:
+        if result.loc[idx, 'BET']:
+            stake, tier = get_stake(result.loc[idx, 'Edge'])
+            result.loc[idx, 'Stake'] = stake
+            result.loc[idx, 'Stake_Tier'] = tier
+
+    # Strategy metadata
+    result['p_value'] = strat['p_value']
+    result['FDR'] = 'YES' if strat['fdr'] else 'NO'
+    result['Hist_ROI'] = strat['hist_roi']
+
+    return result
+
+
+# =============================================================================
+# MAIN
+# =============================================================================
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Protocol V4 -- Predict fixtures using 16 hybrid strategies",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python predict_fixtures.py --fixtures fixtures.csv --models-dir ./models --season-dir ./seasons
+  python predict_fixtures.py --fixtures fixtures.csv --models-dir ./models --season-dir ./seasons --eu-format
+        """
+    )
+    parser.add_argument("--fixtures", required=True, help="Fixtures CSV (football-data.co.uk format)")
+    parser.add_argument("--models-dir", required=True, help="Directory with model_<LEAGUE>_<MARKET>.joblib")
+    parser.add_argument("--season-dir", required=True, help="Directory with <LEAGUE>_20252026_features.csv")
+    parser.add_argument("--output", default="predictions.csv", help="Output CSV path")
+    parser.add_argument("--eu-format", action="store_true", help="EU format (;  separator, , decimals)")
+
+    args = parser.parse_args()
+
+    print("=" * 70)
+    print("PROTOCOL V4 -- FIXTURE PREDICTOR (NO ODDS LEAKAGE)")
+    print("16 hybrid-selected strategies | 21 features | RF+LR+Ensemble")
+    print("=" * 70)
+
+    # Load fixtures
+    raw = load_csv(args.fixtures)
+    print(f"\nLoaded {len(raw)} fixtures from {args.fixtures}")
+    print(f"   Leagues in file: {', '.join(sorted(raw['Div'].unique()))}")
+
+    # Find which leagues have active strategies
+    fixture_leagues = set(raw['Div'].unique())
+    active_in_file = []
+    inactive_leagues = []
+
+    for league in ACTIVE_LEAGUES:
+        if league in fixture_leagues:
+            markets = [s[1] for s in V3_STRATEGIES if s[0] == league]
+            active_in_file.append((league, markets))
+        else:
+            inactive_leagues.append(league)
+
+    no_strategy = sorted(fixture_leagues - set(ACTIVE_LEAGUES))
+
+    print(f"\n   Active V4 leagues in fixtures: {len(active_in_file)}")
+    for league, markets in active_in_file:
+        n_fix = len(raw[raw['Div'] == league])
+        print(f"      {league}: {n_fix} fixtures -> {', '.join(markets)}")
+
+    if inactive_leagues:
+        print(f"\n   V4 leagues NOT in fixtures: {', '.join(inactive_leagues)}")
+
+    if no_strategy:
+        print(f"\n   Fixture leagues with NO V4 strategy (skipped): {', '.join(no_strategy)}")
+
+    if not active_in_file:
+        print("\nNo overlap between fixture leagues and V4 strategies. Nothing to predict.")
+        print(f"   V4 needs: {', '.join(ACTIVE_LEAGUES)}")
+        print(f"   Fixtures have: {', '.join(sorted(fixture_leagues))}")
+        sys.exit(0)
+
+    # Load season data
+    print(f"\nLoading season data from {args.season_dir}")
+    season_data = {}
+    for league, _ in active_in_file:
+        sf = find_season_file(args.season_dir, league)
+        if sf:
+            season_data[league] = load_csv(sf)
+            print(f"   {league}: {len(season_data[league])} historical matches")
+        else:
+            print(f"   {league}: No season file found -- skipping")
+
+    # Process predictions
+    print(f"\nRunning predictions...")
+    all_results = []
+
+    for league, markets in active_in_file:
+        if league not in season_data:
+            continue
+
+        # Build feature instances for this league's fixtures
+        league_fixtures = raw[raw['Div'] == league]
+        season_df = season_data[league]
+
+        instances = []
+        for _, fix in league_fixtures.iterrows():
+            instances.append(build_instance(fix, season_df, league))
+        fixtures_df = pd.DataFrame(instances)
+
+        for market in markets:
+            strat = STRATEGY_LOOKUP[(league, market)]
+
+            # Load model
+            model_data = load_model(args.models_dir, league, market)
+            if not model_data:
+                print(f"   {league} {market}: No model file")
+                continue
+
+            try:
+                preds = predict_market(league, market, strat, fixtures_df, season_df, model_data)
+                n_bets = preds['BET'].sum()
+                n_total = len(preds)
+
+                marker = ">>>" if n_bets > 0 else "   "
+                print(f"   {marker} {league:>4} {market:<5} {strat['name']:<18} "
+                      f"-> {n_total} fixtures, {n_bets} BET(s)"
+                      f"  [p={strat['p_value']:.4f} {'FDR' if strat['fdr'] else ''} "
+                      f"hist={strat['hist_roi']:+.1f}%]")
+
+                if n_bets > 0:
+                    bets = preds[preds['BET']]
+                    for _, b in bets.iterrows():
+                        print(f"         -> {b['HomeTeam']} vs {b['AwayTeam']}  "
+                              f"odds={b['Odds']:.2f}  prob={b['Prob']:.1%}  "
+                              f"edge={b['Edge']:+.1%}  stake={b['Stake']:.2f}u ({b['Stake_Tier']})")
+
+                all_results.append(preds)
+
+            except Exception as e:
+                print(f"   {league} {market}: ERROR -- {e}")
+
+    if not all_results:
+        print("\nNo predictions generated.")
+        print("   Check that model files exist and season files match strategy leagues.")
+        sys.exit(0)
+
+    # Combine all results
+    df = pd.concat(all_results, ignore_index=True)
+
+    # Sort: BETs first, then by edge descending
+    df['_sort'] = df['BET'].astype(int) * -1
+    df = df.sort_values(['_sort', 'Edge'], ascending=[True, False]).drop(columns=['_sort'])
+
+    # Output columns
+    out_cols = [
+        'MatchDate', 'MatchTime', 'League', 'HomeTeam', 'AwayTeam',
+        'Market', 'Strategy', 'Model',
+        'OddHome', 'OddDraw', 'OddAway', 'Odds',
+        'Prob', 'Threshold', 'Implied_Prob', 'Edge',
+        'Pass_Prob', 'Pass_Edge', 'Pass_Odds', 'Pass_Valid',
+        'BET', 'Stake', 'Stake_Tier',
+        'HomeElo', 'AwayElo', 'elo_diff', 'form_diff_5',
+        'p_value', 'FDR', 'Hist_ROI',
+    ]
+    out_cols = [c for c in out_cols if c in df.columns]
+    output = df[out_cols].copy()
+
+    # Add human-readable decision
+    output.insert(output.columns.get_loc('BET') + 1, 'Decision',
+                  output['BET'].map({True: 'BET', False: 'SKIP'}))
+
+    # Save
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if args.eu_format:
+        eu = output.copy()
+        for col in eu.select_dtypes(include=[np.number]).columns:
+            eu[col] = eu[col].apply(
+                lambda x: str(round(x, 4)).replace('.', ',') if pd.notna(x) else ''
+            )
+        eu.to_csv(out_path, sep=';', index=False)
+        print(f"\n   CSV saved (EU format): {out_path}")
+    else:
+        output.to_csv(out_path, index=False)
+        print(f"\n   CSV saved: {out_path}")
+
+    print(f"   Rows: {len(output)} | Size: {out_path.stat().st_size / 1024:.1f} KB")
+
+    # Summary
+    n_bets = output['BET'].sum()
+    n_total = len(output)
+
+    print(f"\n{'=' * 70}")
+    print(f"RESULTS: {n_total} fixtures analyzed | {n_bets} BET | {n_total - n_bets} SKIP")
+    print(f"{'=' * 70}")
+
+    if n_bets > 0:
+        bets_df = output[output['BET'] == True]
+        total_stake = bets_df['Stake'].sum()
+
+        print(f"\nBET SUMMARY:")
+        print(f"   Total bets: {n_bets}")
+        print(f"   Total stake: {total_stake:.2f}u")
+        print(f"   Avg odds: {bets_df['Odds'].mean():.2f}")
+        print(f"   Avg edge: {bets_df['Edge'].mean():+.1%}")
+        print(f"   Avg prob: {bets_df['Prob'].mean():.1%}")
+
+        print(f"\n   {'Date':<12} {'Lg':<4} {'Mkt':<5} {'Home':<16} {'Away':<16} {'Odds':>5} {'Prob':>6} {'Edge':>6} {'Stake':>6} {'Tier':<4}")
+        print(f"   {'-' * 95}")
+        for _, b in bets_df.iterrows():
+            print(f"   {str(b['MatchDate']):<12} {b['League']:<4} {b['Market']:<5} "
+                  f"{str(b['HomeTeam'])[:15]:<16} {str(b['AwayTeam'])[:15]:<16} "
+                  f"{b['Odds']:>5.2f} {b['Prob']:>5.1%} {b['Edge']:>+5.1%} "
+                  f"{b['Stake']:>5.2f}u {b['Stake_Tier']:<4}")
+    else:
+        print("\n   No bets found for these fixtures.")
+        print("   This is normal -- the protocol is highly selective (~8% of fixtures get bets).")
+
+    print(f"\nSaved to: {out_path}")
+    print("=" * 70)
+
+
+if __name__ == "__main__":
+    main()
