@@ -1,6 +1,6 @@
 {
   "league": "D2",
-  "generated_at": "2026-02-21T13:17:40.983271",
+  "generated_at": "2026-02-25T19:15:38.094870",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_D2.xls",
@@ -45,49 +45,49 @@
     "top_10": [
       {
         "team": "Freiburg",
-        "elo": 1712.8
+        "elo": 1713.6
       },
       {
         "team": "St Pauli",
-        "elo": 1679.7
+        "elo": 1679.5
       },
       {
         "team": "MGladbach",
-        "elo": 1677.2
+        "elo": 1677.3
       },
       {
         "team": "Hamburg",
-        "elo": 1668.8
+        "elo": 1668.4
       },
       {
         "team": "Ein Frankfurt",
-        "elo": 1666.3
+        "elo": 1666.2
       },
       {
         "team": "Augsburg",
-        "elo": 1660.8
+        "elo": 1660.7
       },
       {
         "team": "Heidenheim",
-        "elo": 1649.9
+        "elo": 1649.8
       },
       {
         "team": "FC Koln",
-        "elo": 1649.7
-      },
-      {
-        "team": "Darmstadt",
-        "elo": 1643.6
+        "elo": 1649.2
       },
       {
         "team": "Mainz",
-        "elo": 1642.4
+        "elo": 1643.1
+      },
+      {
+        "team": "Darmstadt",
+        "elo": 1642.8
       }
     ]
   },
   "state_info": {
     "combined_matches_processed": 7350,
-    "teams_in_state": 68,
+    "teams_in_state": 67,
     "hfa": 52.9
   }
 }

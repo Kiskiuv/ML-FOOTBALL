@@ -1,40 +1,40 @@
 {
   "league": "N1",
-  "generated_at": "2026-02-21T13:18:49.207071",
+  "generated_at": "2026-02-25T19:17:23.371515",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
-  "historical_source": "Matches__N1.xls",
+  "historical_source": "Matches_N1.xls",
   "new_season_source": "N1_20252026.xlsx",
   "cutoff_date": "2025-05-18",
   "column_remapping_applied": false,
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 7288,
-    "new_file_matches": 196,
-    "combined_unique": 7484,
+    "new_file_matches": 197,
+    "combined_unique": 7485,
     "state_building_matches": 7288,
-    "new_output_matches": 196
+    "new_output_matches": 197
   },
   "overview": {
-    "total_new_matches": 196,
-    "played_matches": 196,
+    "total_new_matches": 197,
+    "played_matches": 197,
     "future_fixtures": 0,
     "total_teams": 18,
     "date_range": {
       "start": "2025-08-08",
-      "end": "2026-02-08"
+      "end": "2026-02-17"
     },
     "seasons": {
-      "2025/2026": 196
+      "2025/2026": 197
     }
   },
   "outcome_distribution": {
     "home_wins": 85,
-    "home_win_pct": 43.4,
-    "draws": 52,
-    "draw_pct": 26.5,
+    "home_win_pct": 43.1,
+    "draws": 53,
+    "draw_pct": 26.9,
     "away_wins": 59,
-    "away_win_pct": 30.1
+    "away_win_pct": 29.9
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,49 +45,49 @@
     "top_10": [
       {
         "team": "PSV Eindhoven",
-        "elo": 1948.2
+        "elo": 1949.8
       },
       {
         "team": "Feyenoord",
-        "elo": 1789.0
+        "elo": 1790.6
       },
       {
         "team": "Ajax",
-        "elo": 1754.1
+        "elo": 1755.5
       },
       {
         "team": "Twente",
-        "elo": 1678.6
+        "elo": 1680.0
       },
       {
         "team": "Nijmegen",
-        "elo": 1677.4
+        "elo": 1678.4
       },
       {
         "team": "AZ Alkmaar",
-        "elo": 1646.8
+        "elo": 1648.3
       },
       {
         "team": "Utrecht",
-        "elo": 1614.4
+        "elo": 1615.9
       },
       {
         "team": "Sparta Rotterdam",
-        "elo": 1590.9
+        "elo": 1592.8
       },
       {
         "team": "Go Ahead Eagles",
-        "elo": 1548.9
+        "elo": 1550.3
       },
       {
         "team": "Heerenveen",
-        "elo": 1542.4
+        "elo": 1543.9
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 7484,
-    "teams_in_state": 42,
+    "combined_matches_processed": 7485,
+    "teams_in_state": 33,
     "hfa": 70.2
   }
 }

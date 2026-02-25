@@ -1,9 +1,9 @@
 {
   "league": "SP2",
-  "generated_at": "2026-02-21T13:19:20.343736",
+  "generated_at": "2026-02-25T19:18:08.986472",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
-  "historical_source": "Matches_SP2 (1).xls",
+  "historical_source": "Matches_SP2.xls",
   "new_season_source": "SP2_20252026.xlsx",
   "cutoff_date": "2025-06-01",
   "column_remapping_applied": false,

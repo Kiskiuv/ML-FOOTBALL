@@ -1,6 +1,6 @@
 {
   "league": "E1",
-  "generated_at": "2026-02-21T13:17:55.240266",
+  "generated_at": "2026-02-25T19:15:58.903186",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_E1.xls",
@@ -10,31 +10,31 @@
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 13606,
-    "new_file_matches": 370,
-    "combined_unique": 13976,
+    "new_file_matches": 372,
+    "combined_unique": 13978,
     "state_building_matches": 13606,
-    "new_output_matches": 370
+    "new_output_matches": 372
   },
   "overview": {
-    "total_new_matches": 370,
-    "played_matches": 370,
+    "total_new_matches": 372,
+    "played_matches": 372,
     "future_fixtures": 0,
     "total_teams": 24,
     "date_range": {
       "start": "2025-08-08",
-      "end": "2026-02-09"
+      "end": "2026-02-17"
     },
     "seasons": {
-      "2025/2026": 370
+      "2025/2026": 372
     }
   },
   "outcome_distribution": {
     "home_wins": 159,
-    "home_win_pct": 43.0,
-    "draws": 97,
-    "draw_pct": 26.2,
-    "away_wins": 114,
-    "away_win_pct": 30.8
+    "home_win_pct": 42.7,
+    "draws": 98,
+    "draw_pct": 26.3,
+    "away_wins": 115,
+    "away_win_pct": 30.9
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -53,7 +53,7 @@
       },
       {
         "team": "Newcastle",
-        "elo": 1705.1
+        "elo": 1705.2
       },
       {
         "team": "Man City",
@@ -61,7 +61,7 @@
       },
       {
         "team": "Brentford",
-        "elo": 1685.3
+        "elo": 1685.4
       },
       {
         "team": "Fulham",
@@ -86,8 +86,8 @@
     ]
   },
   "state_info": {
-    "combined_matches_processed": 13976,
+    "combined_matches_processed": 13978,
     "teams_in_state": 65,
-    "hfa": 61.5
+    "hfa": 60.1
   }
 }

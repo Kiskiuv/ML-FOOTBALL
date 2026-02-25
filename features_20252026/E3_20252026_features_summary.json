@@ -1,6 +1,6 @@
 {
   "league": "E3",
-  "generated_at": "2026-02-21T13:18:10.623447",
+  "generated_at": "2026-02-25T19:16:22.518626",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_E3.xls",
@@ -10,31 +10,31 @@
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 12777,
-    "new_file_matches": 354,
-    "combined_unique": 13131,
+    "new_file_matches": 366,
+    "combined_unique": 13143,
     "state_building_matches": 12777,
-    "new_output_matches": 354
+    "new_output_matches": 366
   },
   "overview": {
-    "total_new_matches": 354,
-    "played_matches": 354,
+    "total_new_matches": 366,
+    "played_matches": 366,
     "future_fixtures": 0,
     "total_teams": 24,
     "date_range": {
       "start": "2025-08-02",
-      "end": "2026-02-07"
+      "end": "2026-02-18"
     },
     "seasons": {
-      "2025/2026": 354
+      "2025/2026": 366
     }
   },
   "outcome_distribution": {
-    "home_wins": 147,
-    "home_win_pct": 41.5,
-    "draws": 89,
-    "draw_pct": 25.1,
-    "away_wins": 118,
-    "away_win_pct": 33.3
+    "home_wins": 150,
+    "home_win_pct": 41.0,
+    "draws": 93,
+    "draw_pct": 25.4,
+    "away_wins": 123,
+    "away_win_pct": 33.6
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,11 +45,11 @@
     "top_10": [
       {
         "team": "Stockport",
-        "elo": 1659.7
+        "elo": 1659.8
       },
       {
         "team": "Portsmouth",
-        "elo": 1646.3
+        "elo": 1646.2
       },
       {
         "team": "Burton",
@@ -57,19 +57,19 @@
       },
       {
         "team": "Luton",
-        "elo": 1637.9
-      },
-      {
-        "team": "Bromley",
-        "elo": 1634.5
+        "elo": 1638.1
       },
       {
         "team": "Oxford",
-        "elo": 1633.9
+        "elo": 1633.8
       },
       {
         "team": "Mansfield",
         "elo": 1632.7
+      },
+      {
+        "team": "Bromley",
+        "elo": 1628.0
       },
       {
         "team": "Peterboro",
@@ -77,17 +77,17 @@
       },
       {
         "team": "Doncaster",
-        "elo": 1617.7
+        "elo": 1617.6
       },
       {
         "team": "Plymouth",
-        "elo": 1615.0
+        "elo": 1615.2
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 13131,
+    "combined_matches_processed": 13143,
     "teams_in_state": 76,
-    "hfa": 43.5
+    "hfa": 39.8
   }
 }

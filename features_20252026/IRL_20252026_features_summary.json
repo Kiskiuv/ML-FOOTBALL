@@ -1,6 +1,6 @@
 {
   "league": "IRL",
-  "generated_at": "2026-02-21T13:18:40.181333",
+  "generated_at": "2026-02-25T19:17:07.367063",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_IRL.xls",
@@ -10,35 +10,35 @@
   "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 2367,
-    "new_file_matches": 2563,
-    "combined_unique": 3384,
+    "new_file_matches": 2566,
+    "combined_unique": 3387,
     "state_building_matches": 3204,
-    "new_output_matches": 180
+    "new_output_matches": 183
   },
   "overview": {
-    "total_new_matches": 180,
-    "played_matches": 180,
+    "total_new_matches": 183,
+    "played_matches": 183,
     "future_fixtures": 0,
-    "total_teams": 10,
+    "total_teams": 11,
     "date_range": {
       "start": "2025-02-14",
-      "end": "2025-11-01"
+      "end": "2026-02-14"
     },
     "seasons": {
       "2024/2025": 114,
-      "2025/2026": 66
+      "2025/2026": 69
     }
   },
   "outcome_distribution": {
-    "home_wins": 77,
-    "home_win_pct": 42.8,
-    "draws": 52,
-    "draw_pct": 28.9,
-    "away_wins": 51,
-    "away_win_pct": 28.3
+    "home_wins": 78,
+    "home_win_pct": 42.6,
+    "draws": 53,
+    "draw_pct": 29.0,
+    "away_wins": 52,
+    "away_win_pct": 28.4
   },
   "data_coverage": {
-    "odds_coverage_pct": 100.0,
+    "odds_coverage_pct": 98.4,
     "features_computed": 57,
     "null_values_remaining": 0
   },
@@ -46,11 +46,11 @@
     "top_10": [
       {
         "team": "Shamrock Rovers",
-        "elo": 1730.4
+        "elo": 1730.3
       },
       {
         "team": "Derry City",
-        "elo": 1717.6
+        "elo": 1710.8
       },
       {
         "team": "Shelbourne",
@@ -62,33 +62,33 @@
       },
       {
         "team": "Bohemians",
-        "elo": 1634.8
+        "elo": 1655.8
       },
       {
         "team": "Drogheda",
-        "elo": 1592.3
+        "elo": 1601.7
       },
       {
         "team": "Sligo Rovers",
-        "elo": 1587.2
+        "elo": 1566.2
       },
       {
         "team": "Galway",
-        "elo": 1565.4
+        "elo": 1565.6
       },
       {
         "team": "Waterford",
-        "elo": 1534.3
+        "elo": 1525.0
       },
       {
-        "team": "Mervue",
-        "elo": 1498.0
+        "team": "Dundalk",
+        "elo": 1500.2
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 3384,
+    "combined_matches_processed": 3387,
     "teams_in_state": 23,
-    "hfa": 63.7
+    "hfa": 62.3
   }
 }

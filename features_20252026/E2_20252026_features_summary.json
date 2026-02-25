@@ -1,6 +1,6 @@
 {
   "league": "E2",
-  "generated_at": "2026-02-21T13:18:03.010049",
+  "generated_at": "2026-02-25T19:16:10.998040",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_E2.xls",
@@ -10,31 +10,31 @@
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 13220,
-    "new_file_matches": 354,
-    "combined_unique": 13574,
+    "new_file_matches": 366,
+    "combined_unique": 13586,
     "state_building_matches": 13220,
-    "new_output_matches": 354
+    "new_output_matches": 366
   },
   "overview": {
-    "total_new_matches": 354,
-    "played_matches": 354,
+    "total_new_matches": 366,
+    "played_matches": 366,
     "future_fixtures": 0,
     "total_teams": 24,
     "date_range": {
       "start": "2025-08-01",
-      "end": "2026-02-07"
+      "end": "2026-02-18"
     },
     "seasons": {
-      "2025/2026": 354
+      "2025/2026": 366
     }
   },
   "outcome_distribution": {
-    "home_wins": 169,
-    "home_win_pct": 47.7,
-    "draws": 84,
-    "draw_pct": 23.7,
-    "away_wins": 101,
-    "away_win_pct": 28.5
+    "home_wins": 178,
+    "home_win_pct": 48.6,
+    "draws": 86,
+    "draw_pct": 23.5,
+    "away_wins": 102,
+    "away_win_pct": 27.9
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,11 +45,11 @@
     "top_10": [
       {
         "team": "Ipswich",
-        "elo": 1729.8
+        "elo": 1729.6
       },
       {
         "team": "Southampton",
-        "elo": 1706.6
+        "elo": 1706.7
       },
       {
         "team": "Wolves",
@@ -57,7 +57,7 @@
       },
       {
         "team": "Birmingham",
-        "elo": 1696.6
+        "elo": 1696.5
       },
       {
         "team": "Bristol City",
@@ -65,19 +65,19 @@
       },
       {
         "team": "Sheffield Weds",
-        "elo": 1683.5
+        "elo": 1683.3
       },
       {
         "team": "Sheffield United",
-        "elo": 1679.3
+        "elo": 1679.4
       },
       {
         "team": "Hull",
-        "elo": 1673.2
+        "elo": 1673.4
       },
       {
         "team": "Cardiff",
-        "elo": 1665.0
+        "elo": 1669.7
       },
       {
         "team": "Portsmouth",
@@ -86,8 +86,8 @@
     ]
   },
   "state_info": {
-    "combined_matches_processed": 13574,
+    "combined_matches_processed": 13586,
     "teams_in_state": 83,
-    "hfa": 65.1
+    "hfa": 69.7
   }
 }

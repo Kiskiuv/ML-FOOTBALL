@@ -1,6 +1,6 @@
 {
   "league": "POL",
-  "generated_at": "2026-02-21T13:18:56.611070",
+  "generated_at": "2026-02-25T19:17:36.339899",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_POL.xls",
@@ -10,35 +10,35 @@
   "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 3567,
-    "new_file_matches": 3936,
-    "combined_unique": 5179,
+    "new_file_matches": 3945,
+    "combined_unique": 5188,
     "state_building_matches": 4873,
-    "new_output_matches": 306
+    "new_output_matches": 315
   },
   "overview": {
-    "total_new_matches": 306,
-    "played_matches": 306,
+    "total_new_matches": 315,
+    "played_matches": 315,
     "future_fixtures": 0,
     "total_teams": 21,
     "date_range": {
       "start": "2024-12-09",
-      "end": "2025-12-14"
+      "end": "2026-02-16"
     },
     "seasons": {
       "2024/2025": 146,
-      "2025/2026": 160
+      "2025/2026": 169
     }
   },
   "outcome_distribution": {
-    "home_wins": 141,
-    "home_win_pct": 46.1,
-    "draws": 82,
-    "draw_pct": 26.8,
-    "away_wins": 83,
-    "away_win_pct": 27.1
+    "home_wins": 143,
+    "home_win_pct": 45.4,
+    "draws": 86,
+    "draw_pct": 27.3,
+    "away_wins": 86,
+    "away_win_pct": 27.3
   },
   "data_coverage": {
-    "odds_coverage_pct": 100.0,
+    "odds_coverage_pct": 97.1,
     "features_computed": 57,
     "null_values_remaining": 0
   },
@@ -46,49 +46,49 @@
     "top_10": [
       {
         "team": "Lech Poznan",
-        "elo": 1661.9
+        "elo": 1671.0
       },
       {
         "team": "Rakow",
-        "elo": 1661.8
+        "elo": 1661.4
       },
       {
         "team": "Jagiellonia",
-        "elo": 1658.4
-      },
-      {
-        "team": "Cracovia",
-        "elo": 1586.6
-      },
-      {
-        "team": "Gornik Zabrze",
-        "elo": 1586.4
+        "elo": 1658.5
       },
       {
         "team": "Pogon Szczecin",
-        "elo": 1584.8
+        "elo": 1589.6
+      },
+      {
+        "team": "Cracovia",
+        "elo": 1586.4
+      },
+      {
+        "team": "Gornik Zabrze",
+        "elo": 1584.4
       },
       {
         "team": "Legia",
-        "elo": 1573.3
+        "elo": 1574.7
       },
       {
-        "team": "Radomiak Radom",
-        "elo": 1567.1
+        "team": "Korona Kielce",
+        "elo": 1568.1
       },
       {
         "team": "Zaglebie",
-        "elo": 1566.5
+        "elo": 1566.9
       },
       {
         "team": "Piast Gliwice",
-        "elo": 1561.1
+        "elo": 1551.9
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 5179,
+    "combined_matches_processed": 5188,
     "teams_in_state": 35,
-    "hfa": 80.4
+    "hfa": 77.8
   }
 }

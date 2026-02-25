@@ -1,6 +1,6 @@
 {
   "league": "I1",
-  "generated_at": "2026-02-21T13:18:33.747374",
+  "generated_at": "2026-02-25T19:16:56.737491",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_I1.xls",
@@ -10,31 +10,31 @@
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 9012,
-    "new_file_matches": 239,
-    "combined_unique": 9251,
+    "new_file_matches": 241,
+    "combined_unique": 9253,
     "state_building_matches": 9012,
-    "new_output_matches": 239
+    "new_output_matches": 241
   },
   "overview": {
-    "total_new_matches": 239,
-    "played_matches": 239,
+    "total_new_matches": 241,
+    "played_matches": 241,
     "future_fixtures": 0,
-    "total_teams": 20,
+    "total_teams": 22,
     "date_range": {
       "start": "2025-08-23",
-      "end": "2026-02-09"
+      "end": "2026-02-19"
     },
     "seasons": {
-      "2025/2026": 239
+      "2025/2026": 241
     }
   },
   "outcome_distribution": {
     "home_wins": 91,
-    "home_win_pct": 38.1,
-    "draws": 68,
-    "draw_pct": 28.5,
-    "away_wins": 80,
-    "away_win_pct": 33.5
+    "home_win_pct": 37.8,
+    "draws": 69,
+    "draw_pct": 28.6,
+    "away_wins": 81,
+    "away_win_pct": 33.6
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,15 +45,15 @@
     "top_10": [
       {
         "team": "Inter",
-        "elo": 1900.1
+        "elo": 1900.0
       },
       {
         "team": "Milan",
-        "elo": 1799.2
+        "elo": 1795.3
       },
       {
         "team": "Napoli",
-        "elo": 1792.4
+        "elo": 1792.5
       },
       {
         "team": "Juventus",
@@ -61,33 +61,33 @@
       },
       {
         "team": "Roma",
-        "elo": 1749.2
+        "elo": 1749.1
       },
       {
         "team": "Atalanta",
-        "elo": 1740.4
+        "elo": 1740.5
       },
       {
         "team": "Como",
-        "elo": 1685.2
+        "elo": 1689.4
       },
       {
         "team": "Lazio",
-        "elo": 1660.8
+        "elo": 1660.6
       },
       {
         "team": "Bologna",
-        "elo": 1624.0
+        "elo": 1624.1
       },
       {
         "team": "Fiorentina",
-        "elo": 1598.8
+        "elo": 1598.7
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 9251,
-    "teams_in_state": 50,
-    "hfa": 35.7
+    "combined_matches_processed": 9253,
+    "teams_in_state": 52,
+    "hfa": 35.4
   }
 }

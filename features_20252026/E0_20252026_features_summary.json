@@ -1,40 +1,40 @@
 {
   "league": "E0",
-  "generated_at": "2026-02-21T13:17:47.439798",
+  "generated_at": "2026-02-25T19:15:48.045847",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
-  "historical_source": "Matches__E0.xls",
+  "historical_source": "Matches_E0.xls",
   "new_season_source": "E0_20252026.xlsx",
   "cutoff_date": "2025-05-25",
   "column_remapping_applied": false,
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 9410,
-    "new_file_matches": 250,
-    "combined_unique": 9660,
+    "new_file_matches": 251,
+    "combined_unique": 9661,
     "state_building_matches": 9410,
-    "new_output_matches": 250
+    "new_output_matches": 251
   },
   "overview": {
-    "total_new_matches": 250,
-    "played_matches": 250,
+    "total_new_matches": 251,
+    "played_matches": 251,
     "future_fixtures": 0,
     "total_teams": 20,
     "date_range": {
       "start": "2025-08-15",
-      "end": "2026-02-08"
+      "end": "2026-02-18"
     },
     "seasons": {
-      "2025/2026": 250
+      "2025/2026": 251
     }
   },
   "outcome_distribution": {
     "home_wins": 110,
-    "home_win_pct": 44.0,
-    "draws": 65,
-    "draw_pct": 26.0,
+    "home_win_pct": 43.8,
+    "draws": 66,
+    "draw_pct": 26.3,
     "away_wins": 75,
-    "away_win_pct": 30.0
+    "away_win_pct": 29.9
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,7 +45,7 @@
     "top_10": [
       {
         "team": "Arsenal",
-        "elo": 1847.5
+        "elo": 1839.5
       },
       {
         "team": "Man City",
@@ -53,7 +53,7 @@
       },
       {
         "team": "Liverpool",
-        "elo": 1749.4
+        "elo": 1749.3
       },
       {
         "team": "Aston Villa",
@@ -61,33 +61,33 @@
       },
       {
         "team": "Chelsea",
-        "elo": 1719.6
+        "elo": 1719.7
       },
       {
         "team": "Man United",
-        "elo": 1657.6
+        "elo": 1657.7
       },
       {
         "team": "Brentford",
-        "elo": 1647.1
+        "elo": 1647.4
       },
       {
         "team": "Newcastle",
-        "elo": 1637.5
+        "elo": 1637.3
       },
       {
         "team": "Bournemouth",
-        "elo": 1625.0
+        "elo": 1625.2
       },
       {
-        "team": "Everton",
-        "elo": 1620.5
+        "team": "Brighton",
+        "elo": 1620.4
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 9660,
+    "combined_matches_processed": 9661,
     "teams_in_state": 47,
-    "hfa": 53.9
+    "hfa": 54.4
   }
 }

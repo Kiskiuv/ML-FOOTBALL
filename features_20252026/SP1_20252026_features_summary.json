@@ -1,6 +1,6 @@
 {
   "league": "SP1",
-  "generated_at": "2026-02-21T13:19:14.672907",
+  "generated_at": "2026-02-25T19:18:02.734063",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_SP1.xls",
@@ -10,31 +10,31 @@
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 9008,
-    "new_file_matches": 228,
-    "combined_unique": 9236,
+    "new_file_matches": 229,
+    "combined_unique": 9237,
     "state_building_matches": 9008,
-    "new_output_matches": 228
+    "new_output_matches": 229
   },
   "overview": {
-    "total_new_matches": 228,
-    "played_matches": 228,
+    "total_new_matches": 229,
+    "played_matches": 229,
     "future_fixtures": 0,
     "total_teams": 20,
     "date_range": {
       "start": "2025-08-15",
-      "end": "2026-02-09"
+      "end": "2026-02-18"
     },
     "seasons": {
-      "2025/2026": 228
+      "2025/2026": 229
     }
   },
   "outcome_distribution": {
     "home_wins": 108,
-    "home_win_pct": 47.4,
+    "home_win_pct": 47.2,
     "draws": 57,
-    "draw_pct": 25.0,
-    "away_wins": 63,
-    "away_win_pct": 27.6
+    "draw_pct": 24.9,
+    "away_wins": 64,
+    "away_win_pct": 27.9
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,19 +45,19 @@
     "top_10": [
       {
         "team": "Barcelona",
-        "elo": 1891.8
+        "elo": 1891.9
       },
       {
         "team": "Real Madrid",
-        "elo": 1868.0
+        "elo": 1867.9
       },
       {
         "team": "Ath Madrid",
-        "elo": 1757.4
+        "elo": 1757.6
       },
       {
         "team": "Villarreal",
-        "elo": 1724.7
+        "elo": 1730.5
       },
       {
         "team": "Betis",
@@ -69,7 +69,7 @@
       },
       {
         "team": "Celta",
-        "elo": 1600.8
+        "elo": 1601.0
       },
       {
         "team": "Sociedad",
@@ -77,7 +77,7 @@
       },
       {
         "team": "Osasuna",
-        "elo": 1580.8
+        "elo": 1580.7
       },
       {
         "team": "Valencia",
@@ -86,8 +86,8 @@
     ]
   },
   "state_info": {
-    "combined_matches_processed": 9236,
+    "combined_matches_processed": 9237,
     "teams_in_state": 41,
-    "hfa": 75.3
+    "hfa": 74.9
   }
 }

@@ -1,6 +1,6 @@
 {
   "league": "D1",
-  "generated_at": "2026-02-21T13:17:37.007266",
+  "generated_at": "2026-02-25T19:15:31.578453",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_D1.xls",
@@ -10,31 +10,31 @@
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 7522,
-    "new_file_matches": 208,
-    "combined_unique": 7730,
+    "new_file_matches": 214,
+    "combined_unique": 7736,
     "state_building_matches": 7522,
-    "new_output_matches": 208
+    "new_output_matches": 214
   },
   "overview": {
-    "total_new_matches": 208,
-    "played_matches": 208,
+    "total_new_matches": 214,
+    "played_matches": 214,
     "future_fixtures": 0,
     "total_teams": 58,
     "date_range": {
       "start": "2025-08-22",
-      "end": "2026-02-09"
+      "end": "2026-02-15"
     },
     "seasons": {
-      "2025/2026": 208
+      "2025/2026": 214
     }
   },
   "outcome_distribution": {
-    "home_wins": 95,
-    "home_win_pct": 45.7,
-    "draws": 50,
-    "draw_pct": 24.0,
+    "home_wins": 98,
+    "home_win_pct": 45.8,
+    "draws": 53,
+    "draw_pct": 24.8,
     "away_wins": 63,
-    "away_win_pct": 30.3
+    "away_win_pct": 29.4
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,7 +45,7 @@
     "top_10": [
       {
         "team": "Bayern Munich",
-        "elo": 1916.9
+        "elo": 1916.8
       },
       {
         "team": "Dortmund",
@@ -53,7 +53,7 @@
       },
       {
         "team": "Leverkusen",
-        "elo": 1759.1
+        "elo": 1759.0
       },
       {
         "team": "Stuttgart",
@@ -86,8 +86,8 @@
     ]
   },
   "state_info": {
-    "combined_matches_processed": 7730,
+    "combined_matches_processed": 7736,
     "teams_in_state": 80,
-    "hfa": 52.6
+    "hfa": 52.5
   }
 }

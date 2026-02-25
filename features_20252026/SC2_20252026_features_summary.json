@@ -1,6 +1,6 @@
 {
   "league": "SC2",
-  "generated_at": "2026-02-21T13:19:07.487224",
+  "generated_at": "2026-02-25T19:17:54.928805",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_SC2.xls",
@@ -10,31 +10,31 @@
   "closing_odds_only": false,
   "data_combination": {
     "historical_matches": 4092,
-    "new_file_matches": 113,
-    "combined_unique": 4205,
+    "new_file_matches": 115,
+    "combined_unique": 4207,
     "state_building_matches": 4092,
-    "new_output_matches": 113
+    "new_output_matches": 115
   },
   "overview": {
-    "total_new_matches": 113,
-    "played_matches": 113,
+    "total_new_matches": 115,
+    "played_matches": 115,
     "future_fixtures": 0,
     "total_teams": 10,
     "date_range": {
       "start": "2025-08-02",
-      "end": "2026-02-07"
+      "end": "2026-02-17"
     },
     "seasons": {
-      "2025/2026": 113
+      "2025/2026": 115
     }
   },
   "outcome_distribution": {
-    "home_wins": 49,
-    "home_win_pct": 43.4,
+    "home_wins": 51,
+    "home_win_pct": 44.3,
     "draws": 26,
-    "draw_pct": 23.0,
+    "draw_pct": 22.6,
     "away_wins": 38,
-    "away_win_pct": 33.6
+    "away_win_pct": 33.0
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -61,33 +61,33 @@
       },
       {
         "team": "Livingston",
-        "elo": 1699.2
+        "elo": 1699.3
       },
       {
         "team": "Airdrie Utd",
-        "elo": 1631.3
+        "elo": 1631.2
       },
       {
         "team": "Hamilton",
-        "elo": 1627.3
+        "elo": 1630.2
       },
       {
         "team": "Inverness C",
-        "elo": 1621.4
+        "elo": 1621.3
       },
       {
         "team": "Morton",
-        "elo": 1613.8
+        "elo": 1613.5
       },
       {
         "team": "Ayr",
-        "elo": 1610.1
+        "elo": 1609.9
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 4205,
+    "combined_matches_processed": 4207,
     "teams_in_state": 36,
-    "hfa": 38.5
+    "hfa": 40.4
   }
 }
