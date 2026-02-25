@@ -25,6 +25,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
+from platt import fit_platt_scaler, apply_platt
 
 
 # =============================================================================
@@ -270,18 +271,42 @@ def build_instance(fixture, season_df: pd.DataFrame, league: str) -> dict:
 # PREDICTION ENGINE
 # =============================================================================
 
+def _predict_raw_probs(model_data, X, features):
+    """Get raw probabilities from model artifact (handles Ensemble and single-model)."""
+    model = model_data['model']
+    model_type = model_data.get('model_type', '')
+    scaler = model_data.get('scaler', None)
+
+    if model_type == 'Ensemble':
+        lr_model = model_data['lr_model']
+        lr_scaler = model_data.get('lr_scaler')
+        w = model_data.get('ensemble_weight', 0.5)
+        rf_probs = model.predict_proba(X)[:, 1]
+        X_scaled = lr_scaler.transform(X) if lr_scaler is not None else X
+        lr_probs = lr_model.predict_proba(X_scaled)[:, 1]
+        return w * rf_probs + (1 - w) * lr_probs
+    else:
+        if scaler is not None:
+            X = scaler.transform(X)
+        return model.predict_proba(X)[:, 1]
+
+
 def predict_market(league: str, market: str, strat: dict,
                    fixtures_df: pd.DataFrame, season_df: pd.DataFrame,
                    model_data: dict) -> pd.DataFrame:
     """
     Run prediction for one league-market using saved model.
     Returns DataFrame with one row per fixture and bet decision.
+
+    Platt calibration priority: artifact scaler > season-based scaler > no calibration.
+    Raw probs used for percentile threshold (preserves validated strategy behavior).
+    Calibrated probs used for Edge calculation and display.
     """
     model = model_data['model']
     features = model_data.get('features', None)
-    scaler = model_data.get('scaler', None)
     medians = model_data.get('imputation_medians', {})
     pct_thresholds = model_data.get('pct_thresholds', {})
+    model_type = model_data.get('model_type', '')
 
     if features is None:
         if hasattr(model, 'feature_names_in_'):
@@ -289,7 +314,7 @@ def predict_market(league: str, market: str, strat: dict,
         else:
             raise ValueError(f"No features found in model for {league} {market}")
 
-    # Build feature matrix
+    # Build feature matrix for fixtures
     X_df = pd.DataFrame()
     for f in features:
         if f in fixtures_df.columns:
@@ -298,52 +323,47 @@ def predict_market(league: str, market: str, strat: dict,
             X_df[f] = medians[f]
         else:
             X_df[f] = 0
-
     for f in features:
         X_df[f] = X_df[f].fillna(medians.get(f, 0))
-
     X = X_df.values
 
-    # Predict probabilities — handle Ensemble and single-model artifacts
-    model_type = model_data.get('model_type', '')
-    if model_type == 'Ensemble':
-        lr_model = model_data['lr_model']
-        lr_scaler = model_data.get('lr_scaler')
-        w = model_data.get('ensemble_weight', 0.5)
-        rf_probs = model.predict_proba(X)[:, 1]
-        X_scaled = lr_scaler.transform(X) if lr_scaler is not None else X
-        lr_probs = lr_model.predict_proba(X_scaled)[:, 1]
-        probs = w * rf_probs + (1 - w) * lr_probs
-    else:
-        if scaler is not None:
-            X = scaler.transform(X)
-        probs = model.predict_proba(X)[:, 1]
+    # Raw probabilities for fixtures
+    probs = _predict_raw_probs(model_data, X, features)
 
-    # Get percentile threshold
+    # --- Always compute season predictions (needed for threshold fallback + Platt) ---
+    target_col = f"target_{market.lower()}"
+    X_hist = pd.DataFrame()
+    for f in features:
+        if f in season_df.columns:
+            X_hist[f] = season_df[f].fillna(medians.get(f, 0))
+        else:
+            X_hist[f] = medians.get(f, 0)
+    X_hist_vals = X_hist.values
+    season_probs = _predict_raw_probs(model_data, X_hist_vals, features)
+
+    # Get percentile threshold (uses raw probs — preserves validated strategy)
     pct = strat['pct']
     if pct in pct_thresholds:
         threshold = pct_thresholds[pct]
         threshold_src = "saved"
     else:
-        # Compute from historical season data
-        X_hist = pd.DataFrame()
-        for f in features:
-            if f in season_df.columns:
-                X_hist[f] = season_df[f].fillna(medians.get(f, 0))
-            else:
-                X_hist[f] = medians.get(f, 0)
-        X_hist_vals = X_hist.values
-        if model_type == 'Ensemble':
-            rf_hist = model.predict_proba(X_hist_vals)[:, 1]
-            X_hist_sc = lr_scaler.transform(X_hist_vals) if lr_scaler is not None else X_hist_vals
-            lr_hist = lr_model.predict_proba(X_hist_sc)[:, 1]
-            train_probs = w * rf_hist + (1 - w) * lr_hist
-        else:
-            if scaler is not None:
-                X_hist_vals = scaler.transform(X_hist_vals)
-            train_probs = model.predict_proba(X_hist_vals)[:, 1]
-        threshold = np.percentile(train_probs, pct)
+        threshold = np.percentile(season_probs, pct)
         threshold_src = "historical"
+
+    # --- Platt calibration ---
+    # Priority: artifact scaler > season-based scaler > no calibration
+    platt_model = model_data.get('platt_scaler', None)
+    platt_src = 'none'
+
+    if platt_model is not None:
+        platt_src = 'artifact'
+    elif target_col in season_df.columns:
+        season_labels = season_df[target_col].values
+        platt_model = fit_platt_scaler(season_probs, season_labels)
+        if platt_model is not None:
+            platt_src = 'season'
+
+    cal_probs = apply_platt(platt_model, probs)
 
     # Build results
     odds_col = ODDS_COL[market]
@@ -356,18 +376,22 @@ def predict_market(league: str, market: str, strat: dict,
     result['Strategy'] = strat['name']
     result['Model'] = model_type or strat['model_type']
     result['Prob'] = probs
+    result['Cal_Prob'] = cal_probs
+    result['Platt_Src'] = platt_src
     result['Threshold'] = threshold
     result['Threshold_Src'] = threshold_src
     result['Odds'] = fixtures_df[odds_col]
     result['Implied_Prob'] = 1 / result['Odds']
-    result['Edge'] = result['Prob'] - result['Implied_Prob']
+    result['Raw_Edge'] = result['Prob'] - result['Implied_Prob']
+    result['Edge'] = result['Cal_Prob'] - result['Implied_Prob']
 
-    # Validity check
+    # Validity check (on raw probs — same as before)
     result['Prob_Valid'] = (probs > 0.01) & (probs < 0.99)
 
-    # BET criteria (all must pass)
+    # BET criteria — both Pass_Prob and Pass_Edge use RAW values
+    # (preserves validated strategy behavior; calibrated edge is for display/staking)
     result['Pass_Prob'] = result['Prob'] >= threshold
-    result['Pass_Edge'] = result['Edge'] >= strat['edge']
+    result['Pass_Edge'] = result['Raw_Edge'] >= strat['edge']
     result['Pass_Odds'] = result['Odds'] >= strat['min_odds']
     result['Pass_Valid'] = result['Prob_Valid']
 
@@ -382,7 +406,7 @@ def predict_market(league: str, market: str, strat: dict,
     strategy_tier = strat.get('tier', 'MONITOR')
     result['Tier'] = strategy_tier
 
-    # Staking — only DEPLOY tier gets real stakes
+    # Staking — uses calibrated Edge
     result['Stake'] = 0.0
     result['Stake_Tier'] = ''
     for idx in result.index:
@@ -532,9 +556,12 @@ Examples:
                     bets = preds[preds['BET']]
                     for _, b in bets.iterrows():
                         stake_str = f"{b['Stake']:.2f}u" if b['Stake'] > 0 else "PAPER"
+                        platt_tag = f"[{b['Platt_Src']}]" if b.get('Platt_Src', 'none') != 'none' else ""
                         print(f"         -> {b['HomeTeam']} vs {b['AwayTeam']}  "
-                              f"odds={b['Odds']:.2f}  prob={b['Prob']:.1%}  "
-                              f"edge={b['Edge']:+.1%}  stake={stake_str}")
+                              f"odds={b['Odds']:.2f}  raw={b['Prob']:.1%}  "
+                              f"cal={b['Cal_Prob']:.1%}  "
+                              f"edge={b['Edge']:+.1%} (raw={b['Raw_Edge']:+.1%})  "
+                              f"stake={stake_str} {platt_tag}")
 
                 all_results.append(preds)
 
@@ -558,7 +585,8 @@ Examples:
         'MatchDate', 'MatchTime', 'League', 'HomeTeam', 'AwayTeam',
         'Market', 'Strategy', 'Model', 'Tier',
         'OddHome', 'OddDraw', 'OddAway', 'Odds',
-        'Prob', 'Threshold', 'Implied_Prob', 'Edge',
+        'Prob', 'Cal_Prob', 'Platt_Src', 'Threshold', 'Implied_Prob',
+        'Edge', 'Raw_Edge',
         'Pass_Prob', 'Pass_Edge', 'Pass_Odds', 'Pass_Valid',
         'BET', 'Stake', 'Stake_Tier',
         'HomeElo', 'AwayElo', 'elo_diff', 'form_diff_5',
@@ -606,16 +634,20 @@ Examples:
         print(f"   DEPLOY stake: {total_stake:.2f}u")
         if len(deploy_bets) > 0:
             print(f"   DEPLOY avg odds: {deploy_bets['Odds'].mean():.2f}")
-            print(f"   DEPLOY avg edge: {deploy_bets['Edge'].mean():+.1%}")
+            print(f"   DEPLOY avg edge (cal): {deploy_bets['Edge'].mean():+.1%}")
+            if 'Raw_Edge' in deploy_bets.columns:
+                print(f"   DEPLOY avg edge (raw): {deploy_bets['Raw_Edge'].mean():+.1%}")
 
-        print(f"\n   {'Date':<12} {'Lg':<4} {'Mkt':<5} {'Home':<16} {'Away':<16} {'Odds':>5} {'Prob':>6} {'Edge':>6} {'Stake':>6} {'Tier':<12}")
-        print(f"   {'-' * 100}")
+        print(f"\n   {'Date':<12} {'Lg':<4} {'Mkt':<5} {'Home':<16} {'Away':<16} "
+              f"{'Odds':>5} {'Raw':>6} {'Cal':>6} {'Edge':>6} {'RawE':>6} {'Stake':>6} {'Tier':<12}")
+        print(f"   {'-' * 110}")
         for _, b in bets_df.iterrows():
             tier_label = b.get('Tier', '?')
             stake_str = f"{b['Stake']:.2f}u" if b['Stake'] > 0 else "PAPER"
             print(f"   {str(b['MatchDate']):<12} {b['League']:<4} {b['Market']:<5} "
                   f"{str(b['HomeTeam'])[:15]:<16} {str(b['AwayTeam'])[:15]:<16} "
-                  f"{b['Odds']:>5.2f} {b['Prob']:>5.1%} {b['Edge']:>+5.1%} "
+                  f"{b['Odds']:>5.2f} {b['Prob']:>5.1%} {b.get('Cal_Prob', b['Prob']):>5.1%} "
+                  f"{b['Edge']:>+5.1%} {b.get('Raw_Edge', b['Edge']):>+5.1%} "
                   f"{stake_str:>6} {tier_label:<12}")
     else:
         print("\n   No bets found for these fixtures.")

@@ -53,6 +53,7 @@ import warnings
 import argparse
 import json
 import joblib
+from platt import fit_platt_scaler
 
 warnings.filterwarnings("ignore")
 
@@ -1019,23 +1020,39 @@ def export_final_model(
     market: str,
     best_model_type: str,
     config: Config = CONFIG,
-    verbose: bool = True
+    verbose: bool = True,
+    platt_calibration_data: dict = None
 ) -> str:
-    """Train and export final model using BASIC+ features."""
+    """
+    Train and export final model using BASIC+ features.
+
+    platt_calibration_data: optional dict with 'probs' and 'labels' arrays
+        (out-of-sample predictions from last eval season) for Platt scaling.
+    """
     target = f"target_{market}"
     features = get_available_features(df, config)
-    
+
     if len(features) < 5:
         return None
-    
+
     X_df = df[features].copy()
     medians = X_df.median()
     X = X_df.fillna(medians).values
     y = df[target].values
-    
+
     output_dir = Path(config.OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
     model_path = output_dir / f"model_{league_code}_{market}.joblib"
+
+    # Fit Platt scaler on out-of-sample calibration data (if provided)
+    platt_scaler = None
+    if platt_calibration_data is not None:
+        cal_probs = platt_calibration_data.get('probs')
+        cal_labels = platt_calibration_data.get('labels')
+        if cal_probs is not None and cal_labels is not None:
+            platt_scaler = fit_platt_scaler(cal_probs, cal_labels)
+            if platt_scaler is not None and verbose:
+                print(f"    Platt scaler fitted on {len(cal_probs)} OOS samples")
 
     if best_model_type == ENSEMBLE_KEY:
         # Train both base models
@@ -1076,6 +1093,7 @@ def export_final_model(
             "imputation_medians": medians.to_dict(),
             "pct_thresholds": pct_thresholds,
             "scaler": None,
+            "platt_scaler": platt_scaler,
             "feature_importance": importance,
             "config": {
                 "model_type": ENSEMBLE_KEY,
@@ -1119,6 +1137,7 @@ def export_final_model(
             "imputation_medians": medians.to_dict(),
             "pct_thresholds": pct_thresholds,
             "scaler": scaler,
+            "platt_scaler": platt_scaler,
             "feature_importance": importance,
             "config": {
                 "model_type": best_model_type,
@@ -1128,10 +1147,11 @@ def export_final_model(
             },
             "created": datetime.now().isoformat()
         }, model_path)
-    
+
     if verbose:
-        print(f"  Saved: {model_path.name} ({best_model_type}+BASIC+, {len(features)} feats, AUC={metrics.get('auc', 0):.3f})")
-    
+        platt_tag = " +Platt" if platt_scaler is not None else ""
+        print(f"  Saved: {model_path.name} ({best_model_type}+BASIC+{platt_tag}, {len(features)} feats, AUC={metrics.get('auc', 0):.3f})")
+
     return str(model_path)
 
 
@@ -1329,9 +1349,38 @@ def analyze_league(
             }
             all_strategy_rows.append(row)
         
-        # Export model
+        # Export model (with Platt calibration from last eval season OOS probs)
         if config.EXPORT_MODELS:
-            export_final_model(df, league_code, market, best_model, config, verbose)
+            platt_cal_data = None
+            last_eval = max(config.EVAL_SEASONS)
+            train_cal = df[df["SeasonYear"] < last_eval].copy()
+            test_cal = df[df["SeasonYear"] == last_eval].copy()
+            target_col = f"target_{market}"
+
+            if len(train_cal) >= config.MIN_TRAIN_MATCHES and len(test_cal) >= config.MIN_TEST_MATCHES:
+                cal_features = get_available_features(train_cal, config)
+                if len(cal_features) >= 5:
+                    try:
+                        if best_model == ENSEMBLE_KEY:
+                            # Train both models on all-but-last, predict last season
+                            rf_test, rf_train, _, _, _ = train_and_evaluate(
+                                "RandomForest", train_cal, test_cal, cal_features, target_col, config)
+                            lr_test, lr_train, _, _, _ = train_and_evaluate(
+                                "LogisticRegression", train_cal, test_cal, cal_features, target_col, config)
+                            cal_probs = ENSEMBLE_WEIGHT * rf_test + (1 - ENSEMBLE_WEIGHT) * lr_test
+                        else:
+                            cal_probs, _, _, _, _ = train_and_evaluate(
+                                best_model, train_cal, test_cal, cal_features, target_col, config)
+                        platt_cal_data = {
+                            'probs': cal_probs,
+                            'labels': test_cal[target_col].values
+                        }
+                    except Exception as e:
+                        if verbose:
+                            print(f"    Platt calibration data failed: {e}")
+
+            export_final_model(df, league_code, market, best_model, config, verbose,
+                               platt_calibration_data=platt_cal_data)
         
         if verbose:
             print(f"    Best model: {best_model}{' (via RF->LR fallback)' if fallback_used else ''}")
