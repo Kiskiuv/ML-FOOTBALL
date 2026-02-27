@@ -8,15 +8,20 @@ Machine learning system for identifying profitable football (soccer) betting opp
 
 ## Architecture
 
-### Protocol V4 Lean (Active — 21 features, RF+LR+Ensemble)
-- Training: `scripts/protocol_lean_v4_no_odds.py`
+### Protocol V5 Anti-Cherry-Pick (Active — 21 features, RF+LR+Ensemble)
+- Training: `scripts/protocol_lean_v4_no_odds.py` (Protocol V3.0 internally)
 - Prediction: `scripts/predict_fixtures_1402.py`
 - Feature engineering: `scripts/feature_engineering_v4_lean.py` (historical) / `scripts/incremental_features.py` (current season)
-- 14 hardcoded hybrid-selected strategies (NO odds leakage)
+- Comparison: `scripts/compare_hist_vs_season.py` (historical vs live validation)
+- 11 hybrid-selected strategies (NO odds leakage, NO cherry-picking)
+- Only 3 strategies per market (STRICT/SELECTIVE/STANDARD at pct 95/90/85)
+- All strategies require edge >= 0.00 and min_odds >= 1.90
+- FDR q=0.05, ~342 total tests (38 leagues x 9 strategies)
 - Features: BASIC+ tier only (ELO, form, schedule, momentum, H2H)
 - Models: RandomForest + LogisticRegression + Ensemble (0.5/0.5 blend)
 - Model selection: 3-way by avg test AUC (RF vs LR vs Ensemble)
-- Backtest 2024/25: 89 bets, +16.51u, +18.6% ROI
+- Historical (7-season walk-forward): 813 bets, +189.21u, +23.3% ROI
+- 2025/26 season to date: 106 bets, +9.98u, +9.4% ROI
 
 ### Protocol V3.4 (Legacy — archived)
 - All V3.4 scripts moved to `archive/`
@@ -31,8 +36,10 @@ ml-football-betting/
 │   ├── incremental_features.py         # Step 2: Build features (current season)
 │   ├── feature_engineering_pipeline.py  # Feature engineering (used by incremental_features)
 │   ├── feature_engineering_v4_lean.py   # V4 Lean feature engineering (historical, 21 features)
-│   ├── protocol_lean_v4_no_odds.py     # Training: V4 Lean (RF+LR+Ensemble)
-│   ├── predict_fixtures_1402.py        # Prediction: V4 Lean strategies
+│   ├── protocol_lean_v4_no_odds.py     # Training: V5 anti-cherry-pick (RF+LR+Ensemble)
+│   ├── predict_fixtures_1402.py        # Prediction: V5 strategies
+│   ├── backtest_season.py             # Backtest V5 strategies on 2025/26 season
+│   ├── compare_hist_vs_season.py      # Compare historical vs live performance
 │   └── bet_tracker_v2.py              # Track bet results and P&L
 ├── data/                               # Historical data (Matches_*.xls, 38 leagues)
 ├── 20252026_season/                    # Current season raw files (*_20252026.xlsx/csv)
@@ -65,30 +72,35 @@ python scripts/protocol_lean_v4_no_odds.py --batch --data-dir ./features --all -
 python scripts/predict_fixtures_1402.py --fixtures ./new_fixtures/fixtures.csv --models-dir ./models --season-dir ./features_20252026 --output ./predictions/predictions_DDMM.csv --eu-format
 ```
 
-## V4 Lean Strategies (14 active)
+## V5 Strategies (11 active — anti-cherry-pick)
+
+All strategies: edge >= 0.00, pct in {85, 90, 95}, min_odds >= 1.90.
 
 ```
-League  Market  Strategy          Model                PCT  Edge   MinOdds  p-value
-MEX     AWAY    CONSERVATIVE      LogisticRegression   88   0.00   2.5      0.0056 (FDR✅)
-FIN     AWAY    SELECTIVE         LogisticRegression   85  -0.01   2.3      0.0078 (FDR✅)
-D2      AWAY    CONSERVATIVE      RandomForest         88   0.00   2.5      0.0495
-F1      HOME    UPSET             LogisticRegression   85  -0.01   2.0      0.0587
-I1      DRAW    CONSERVATIVE      RandomForest         90   0.00   3.0      0.0612
-F2      HOME    ULTRA_CONS        RandomForest         90   0.02   2.5      0.0613
-SP2     DRAW    SELECTIVE         LogisticRegression   88  -0.01   3.0      0.0637
-NOR     HOME    STANDARD          LogisticRegression   80  -0.02   1.9      0.0640
-G1      DRAW    LONGSHOT_STRICT   LogisticRegression   92   0.00   3.2      0.0677
-F2      AWAY    ULTRA_CONS        LogisticRegression   90   0.02   2.8      0.0697
-D1      AWAY    SELECTIVE         LogisticRegression   85  -0.01   2.3      0.0736
-ARG     HOME    ULTRA_CONS        LogisticRegression   90   0.02   2.5      0.0880
-N1      AWAY    STANDARD_HIGH     LogisticRegression   82   0.00   2.2      0.0888
-SWE     HOME    SELECTIVE         LogisticRegression   82  -0.01   2.0      0.0926
+League  Market  Strategy   Model                PCT  Edge  MinOdds  p-value    Tier         Hist ROI
+MEX     AWAY    SELECTIVE  LogisticRegression   90   0.00  2.3      0.0099     DEPLOY       +28.1%
+SC0     HOME    STANDARD   RandomForest         85   0.00  1.9      0.0460     DEPLOY       +67.8%
+POL     DRAW    STRICT     LogisticRegression   95   0.00  3.0      0.0225     PAPER_TRADE  +40.1%
+SP2     DRAW    STRICT     Ensemble             95   0.00  3.0      0.0262     PAPER_TRADE  +34.5%
+N1      DRAW    STRICT     Ensemble             95   0.00  3.0      0.0328     PAPER_TRADE  +38.1%
+RUS     AWAY    SELECTIVE  Ensemble             90   0.00  2.3      0.0345     PAPER_TRADE  +52.5%
+FIN     AWAY    STANDARD   LogisticRegression   85   0.00  1.9      0.0378     PAPER_TRADE  +24.6%
+F1      HOME    SELECTIVE  LogisticRegression   90   0.00  2.0      0.0574     MONITOR      +44.8%
+G1      DRAW    STRICT     Ensemble             95   0.00  3.0      0.0603     MONITOR      +23.8%
+I1      DRAW    SELECTIVE  RandomForest         90   0.00  2.5      0.0612     MONITOR      +22.0%
+B1      DRAW    STRICT     LogisticRegression   95   0.00  3.0      0.0791     MONITOR      +22.5%
+```
+
+### Strategy Search Space (per league)
+```
+DRAW:    STRICT (pct95, min3.0) | SELECTIVE (pct90, min2.5) | STANDARD (pct85, min2.0)
+HOME:    STRICT (pct95, min2.5) | SELECTIVE (pct90, min2.0) | STANDARD (pct85, min1.9)
+AWAY:    STRICT (pct95, min2.8) | SELECTIVE (pct90, min2.3) | STANDARD (pct85, min1.9)
 ```
 
 ## Staking Rules
 
-Base stake by edge:
-- Edge < 0%: 0.80u (LOW)
+Base stake by edge (DEPLOY tier only; PAPER_TRADE/MONITOR = 0u tracking):
 - Edge 0-5%: 1.25u (MED)
 - Edge > 5%: 1.85u (HIGH)
 
@@ -127,7 +139,8 @@ Single-model artifact:
     "features": list_of_feature_names,
     "scaler": StandardScaler_or_None,  # Critical for LogisticRegression
     "imputation_medians": dict,
-    "pct_thresholds": {80: 0.32, 85: 0.35, ...},
+    "pct_thresholds": {85: 0.32, 90: 0.38, 95: 0.45},
+    "platt_scaler": CalibratedClassifierCV_or_None,
 }
 ```
 
@@ -142,7 +155,8 @@ Ensemble artifact (RF+LR blend):
     "scaler": None,                 # Ensemble handles scaling internally
     "features": list_of_feature_names,
     "imputation_medians": dict,
-    "pct_thresholds": {80: 0.32, 85: 0.35, ...},
+    "pct_thresholds": {85: 0.32, 90: 0.38, 95: 0.45},
+    "platt_scaler": CalibratedClassifierCV_or_None,
 }
 ```
 
@@ -187,7 +201,7 @@ Ensemble artifact (RF+LR blend):
 - All dates in dd/mm/yyyy format
 - Feature engineering MUST be chronological — no future data leakage
 - Walk-forward validation: train on past, test on each season sequentially
-- FDR correction (Benjamini-Hochberg, q=0.10) for multiple testing
+- FDR correction (Benjamini-Hochberg, q=0.05) for multiple testing
 
 ## Testing Priorities
 
@@ -209,14 +223,20 @@ python scripts/feature_engineering_v4_lean.py --all --data-dir ./data --output-d
 # Feature engineering — current season
 python scripts/incremental_features.py --all --historical ./data --new-season ./20252026_season --output ./features_20252026
 
-# Train V4 Lean — single league
+# Train V5 — single league
 python scripts/protocol_lean_v4_no_odds.py --analyze --data features/Matches_SP1_features.csv --output ./models
 
-# Train V4 Lean — all leagues
+# Train V5 — all leagues
 python scripts/protocol_lean_v4_no_odds.py --batch --data-dir ./features --all --output ./models
 
 # Predict fixtures
 python scripts/predict_fixtures_1402.py --fixtures ./new_fixtures/fixtures.csv --models-dir ./models --season-dir ./features_20252026 --output ./predictions/predictions_DDMM.csv --eu-format
+
+# Compare historical vs live performance
+python scripts/compare_hist_vs_season.py
+
+# Backtest 2025/26 season
+python scripts/backtest_season.py --models-dir ./models --season-dir ./features_20252026
 
 # Track bets
 python scripts/bet_tracker_v2.py --input tracking/bets.csv --results predictions/
@@ -234,6 +254,6 @@ pip install pandas numpy scikit-learn joblib tqdm openpyxl xlrd
 2. **NEVER append new season data to historical training sets** — keep temporal boundaries clean
 3. **ALWAYS rebuild team states from scratch** when updating features (ELO is sequential)
 4. **ALWAYS check FDR-corrected p-values** before deploying a new strategy
-5. **Negative edge bets still get stakes** (0.80u) if strategy passed FDR validation — bookmaker margin means -2% edge might be +3% vs true probability
+5. **All strategies require edge >= 0.00** — no negative-edge bets in V5
 6. **LogisticRegression models NEED the scaler** — prediction without scaling gives garbage
 7. **Ensemble artifacts** contain both RF and LR models — predict script handles blending automatically
