@@ -1,10 +1,10 @@
 {
   "league": "N1",
-  "timestamp": "2026-02-22T21:05:39.685539",
+  "timestamp": "2026-02-27T17:32:12.154930",
   "version": "LEAN_V2.0",
   "config": {
     "two_layer_selection": "hybrid",
-    "fdr_q": 0.1,
+    "fdr_q": 0.05,
     "models": [
       "RandomForest",
       "LogisticRegression"
@@ -17,189 +17,30 @@
   },
   "markets": {
     "HOME": {
-      "best": {
-        "name": "STANDARD",
-        "market": "HOME",
-        "n_bets": 1,
-        "n_wins": 1,
-        "profit": 0.9,
-        "roi": 90.0,
-        "avg_odds": 1.9,
-        "p_value": 0.5237,
-        "profitable_seasons": 1,
-        "total_seasons": 1,
-        "fdr_pass": false,
-        "model_metrics": {
-          "train": {
-            "auc": 0.7430379832303162,
-            "brier": 0.20492355607314877,
-            "auc_std": 0.0009628127057836633
-          },
-          "test": {
-            "auc": 0.7410337229983753,
-            "brier": 0.20462997089250257,
-            "auc_std": 0.023568167088249707
-          },
-          "n_seasons": 7,
-          "model_type": "Ensemble",
-          "feature_tier": "BASIC+",
-          "n_features": 21
-        },
-        "strategy_params": {
-          "pct": 80,
-          "edge": -0.02,
-          "min_odds": 1.9
-        },
-        "risk_metrics": {}
-      },
-      "best_model": "Ensemble",
-      "best_feature_tier": "BASIC+",
-      "model_comparison": {
-        "RandomForest": {
-          "train_auc_mean": 0.7598,
-          "test_auc_mean": 0.7402,
-          "auc_gap": 0.0197,
-          "n_seasons": 7
-        },
-        "LogisticRegression": {
-          "train_auc_mean": 0.7257,
-          "test_auc_mean": 0.7408,
-          "auc_gap": -0.0151,
-          "n_seasons": 7
-        },
-        "Ensemble": {
-          "train_auc_mean": 0.743,
-          "test_auc_mean": 0.741,
-          "auc_gap": 0.002,
-          "n_seasons": 7
-        }
-      },
-      "all": [
-        {
-          "name": "STANDARD",
-          "market": "HOME",
-          "n_bets": 1,
-          "n_wins": 1,
-          "profit": 0.9,
-          "roi": 90.0,
-          "avg_odds": 1.9,
-          "p_value": 0.5237,
-          "profitable_seasons": 1,
-          "total_seasons": 1,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.7430379832303162,
-              "brier": 0.20492355607314877,
-              "auc_std": 0.0009628127057836633
-            },
-            "test": {
-              "auc": 0.7410337229983753,
-              "brier": 0.20462997089250257,
-              "auc_std": 0.023568167088249707
-            },
-            "n_seasons": 7,
-            "model_type": "Ensemble",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 80,
-            "edge": -0.02,
-            "min_odds": 1.9
-          },
-          "risk_metrics": {}
-        },
-        {
-          "name": "FAVORITE",
-          "market": "HOME",
-          "n_bets": 22,
-          "n_wins": 10,
-          "profit": -3.01,
-          "roi": -13.68,
-          "avg_odds": 1.945,
-          "p_value": 0.7476,
-          "profitable_seasons": 2,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.7430379832303162,
-              "brier": 0.20492355607314877,
-              "auc_std": 0.0009628127057836633
-            },
-            "test": {
-              "auc": 0.7410337229983753,
-              "brier": 0.20462997089250257,
-              "auc_std": 0.023568167088249707
-            },
-            "n_seasons": 7,
-            "model_type": "Ensemble",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 75,
-            "edge": 0.0,
-            "min_odds": 1.8
-          },
-          "risk_metrics": {
-            "max_drawdown": 5.99,
-            "volatility": 0.9472034741741623,
-            "sharpe_ratio": -0.14444434120923105,
-            "max_win_streak": 3,
-            "max_loss_streak": 5,
-            "avg_odds": 1.9454545454545455,
-            "median_odds": 1.8849999999999998
-          }
-        }
-      ],
-      "selections": {
-        "simple": "FAVORITE",
-        "strict": null,
-        "fdr": null,
-        "ensemble": "FAVORITE",
-        "hybrid": "__SKIP__",
-        "hybrid_fallback": false
-      },
-      "two_layer": {
-        "bets": 1,
-        "profit": 0.9,
-        "roi": 90.0,
-        "details": [
-          {
-            "season": 2018,
-            "strategy": "STANDARD",
-            "method": "DEFAULT",
-            "bets": 1,
-            "roi": 90.0
-          }
-        ]
-      },
-      "recommendation": "SKIP"
+      "best": null
     },
     "DRAW": {
       "best": {
-        "name": "MODERATE_HIGH",
+        "name": "STRICT",
         "market": "DRAW",
-        "n_bets": 159,
-        "n_wins": 51,
-        "profit": 34.56,
-        "roi": 21.74,
-        "avg_odds": 3.829,
-        "p_value": 0.052,
-        "profitable_seasons": 6,
+        "n_bets": 66,
+        "n_wins": 25,
+        "profit": 25.14,
+        "roi": 38.09,
+        "avg_odds": 3.668,
+        "p_value": 0.0328,
+        "profitable_seasons": 5,
         "total_seasons": 7,
         "fdr_pass": false,
         "model_metrics": {
           "train": {
             "auc": 0.6361918871105002,
-            "brier": 0.17275542203197142,
+            "brier": 0.1727554220319714,
             "auc_std": 0.004785271446140778
           },
           "test": {
             "auc": 0.5719245409866595,
-            "brier": 0.17484255393127443,
+            "brier": 0.17484255393127437,
             "auc_std": 0.030742494197096754
           },
           "n_seasons": 7,
@@ -208,18 +49,18 @@
           "n_features": 21
         },
         "strategy_params": {
-          "pct": 85,
+          "pct": 95,
           "edge": 0.0,
-          "min_odds": 2.8
+          "min_odds": 3.0
         },
         "risk_metrics": {
-          "max_drawdown": 12.950000000000003,
-          "volatility": 1.7784253698181474,
-          "sharpe_ratio": 0.12221962993491468,
-          "max_win_streak": 5,
-          "max_loss_streak": 8,
-          "avg_odds": 3.8286163522012577,
-          "median_odds": 3.75
+          "max_drawdown": 9.0,
+          "volatility": 1.7729685150537502,
+          "sharpe_ratio": 0.21484255793315263,
+          "max_win_streak": 4,
+          "max_loss_streak": 9,
+          "avg_odds": 3.6683333333333326,
+          "median_odds": 3.64
         }
       },
       "best_model": "Ensemble",
@@ -246,26 +87,26 @@
       },
       "all": [
         {
-          "name": "LONGSHOT_STRICT",
+          "name": "STRICT",
           "market": "DRAW",
-          "n_bets": 102,
-          "n_wins": 32,
-          "profit": 16.79,
-          "roi": 16.46,
-          "avg_odds": 3.736,
-          "p_value": 0.1562,
-          "profitable_seasons": 4,
+          "n_bets": 66,
+          "n_wins": 25,
+          "profit": 25.14,
+          "roi": 38.09,
+          "avg_odds": 3.668,
+          "p_value": 0.0328,
+          "profitable_seasons": 5,
           "total_seasons": 7,
           "fdr_pass": false,
           "model_metrics": {
             "train": {
               "auc": 0.6361918871105002,
-              "brier": 0.17275542203197142,
+              "brier": 0.1727554220319714,
               "auc_std": 0.004785271446140778
             },
             "test": {
               "auc": 0.5719245409866595,
-              "brier": 0.17484255393127443,
+              "brier": 0.17484255393127437,
               "auc_std": 0.030742494197096754
             },
             "n_seasons": 7,
@@ -274,65 +115,22 @@
             "n_features": 21
           },
           "strategy_params": {
-            "pct": 92,
+            "pct": 95,
             "edge": 0.0,
-            "min_odds": 3.2
+            "min_odds": 3.0
           },
           "risk_metrics": {
-            "max_drawdown": 9.37,
-            "volatility": 1.7297357111786529,
-            "sharpe_ratio": 0.09516358023567084,
-            "max_win_streak": 5,
+            "max_drawdown": 9.0,
+            "volatility": 1.7729685150537502,
+            "sharpe_ratio": 0.21484255793315263,
+            "max_win_streak": 4,
             "max_loss_streak": 9,
-            "avg_odds": 3.7358823529411764,
-            "median_odds": 3.66
+            "avg_odds": 3.6683333333333326,
+            "median_odds": 3.64
           }
         },
         {
-          "name": "LONGSHOT",
-          "market": "DRAW",
-          "n_bets": 156,
-          "n_wins": 46,
-          "profit": 13.08,
-          "roi": 8.38,
-          "avg_odds": 3.674,
-          "p_value": 0.2594,
-          "profitable_seasons": 4,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.6361918871105002,
-              "brier": 0.17275542203197142,
-              "auc_std": 0.004785271446140778
-            },
-            "test": {
-              "auc": 0.5719245409866595,
-              "brier": 0.17484255393127443,
-              "auc_std": 0.030742494197096754
-            },
-            "n_seasons": 7,
-            "model_type": "Ensemble",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 90,
-            "edge": -0.02,
-            "min_odds": 2.8
-          },
-          "risk_metrics": {
-            "max_drawdown": 15.160000000000002,
-            "volatility": 1.6842355267790472,
-            "sharpe_ratio": 0.04978291486731803,
-            "max_win_streak": 5,
-            "max_loss_streak": 12,
-            "avg_odds": 3.6741025641025638,
-            "median_odds": 3.6
-          }
-        },
-        {
-          "name": "CONSERVATIVE",
+          "name": "SELECTIVE",
           "market": "DRAW",
           "n_bets": 117,
           "n_wins": 36,
@@ -346,12 +144,12 @@
           "model_metrics": {
             "train": {
               "auc": 0.6361918871105002,
-              "brier": 0.17275542203197142,
+              "brier": 0.1727554220319714,
               "auc_std": 0.004785271446140778
             },
             "test": {
               "auc": 0.5719245409866595,
-              "brier": 0.17484255393127443,
+              "brier": 0.17484255393127437,
               "auc_std": 0.030742494197096754
             },
             "n_seasons": 7,
@@ -362,7 +160,7 @@
           "strategy_params": {
             "pct": 90,
             "edge": 0.0,
-            "min_odds": 3.0
+            "min_odds": 2.5
           },
           "risk_metrics": {
             "max_drawdown": 10.91,
@@ -375,50 +173,7 @@
           }
         },
         {
-          "name": "SELECTIVE",
-          "market": "DRAW",
-          "n_bets": 175,
-          "n_wins": 50,
-          "profit": 11.88,
-          "roi": 6.79,
-          "avg_odds": 3.732,
-          "p_value": 0.2902,
-          "profitable_seasons": 4,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.6361918871105002,
-              "brier": 0.17275542203197142,
-              "auc_std": 0.004785271446140778
-            },
-            "test": {
-              "auc": 0.5719245409866595,
-              "brier": 0.17484255393127443,
-              "auc_std": 0.030742494197096754
-            },
-            "n_seasons": 7,
-            "model_type": "Ensemble",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 88,
-            "edge": -0.01,
-            "min_odds": 3.0
-          },
-          "risk_metrics": {
-            "max_drawdown": 17.78,
-            "volatility": 1.6954482217552564,
-            "sharpe_ratio": 0.04003998082314414,
-            "max_win_streak": 5,
-            "max_loss_streak": 9,
-            "avg_odds": 3.7317142857142853,
-            "median_odds": 3.66
-          }
-        },
-        {
-          "name": "MODERATE_HIGH",
+          "name": "STANDARD",
           "market": "DRAW",
           "n_bets": 159,
           "n_wins": 51,
@@ -432,12 +187,12 @@
           "model_metrics": {
             "train": {
               "auc": 0.6361918871105002,
-              "brier": 0.17275542203197142,
+              "brier": 0.1727554220319714,
               "auc_std": 0.004785271446140778
             },
             "test": {
               "auc": 0.5719245409866595,
-              "brier": 0.17484255393127443,
+              "brier": 0.17484255393127437,
               "auc_std": 0.030742494197096754
             },
             "n_seasons": 7,
@@ -448,7 +203,7 @@
           "strategy_params": {
             "pct": 85,
             "edge": 0.0,
-            "min_odds": 2.8
+            "min_odds": 2.0
           },
           "risk_metrics": {
             "max_drawdown": 12.950000000000003,
@@ -459,150 +214,64 @@
             "avg_odds": 3.8286163522012577,
             "median_odds": 3.75
           }
-        },
-        {
-          "name": "MODERATE",
-          "market": "DRAW",
-          "n_bets": 240,
-          "n_wins": 71,
-          "profit": 22.71,
-          "roi": 9.46,
-          "avg_odds": 3.707,
-          "p_value": 0.1832,
-          "profitable_seasons": 4,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.6361918871105002,
-              "brier": 0.17275542203197142,
-              "auc_std": 0.004785271446140778
-            },
-            "test": {
-              "auc": 0.5719245409866595,
-              "brier": 0.17484255393127443,
-              "auc_std": 0.030742494197096754
-            },
-            "n_seasons": 7,
-            "model_type": "Ensemble",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 85,
-            "edge": -0.02,
-            "min_odds": 3.0
-          },
-          "risk_metrics": {
-            "max_drawdown": 19.950000000000003,
-            "volatility": 1.6958321043197837,
-            "sharpe_ratio": 0.055798566237165975,
-            "max_win_streak": 8,
-            "max_loss_streak": 13,
-            "avg_odds": 3.707125,
-            "median_odds": 3.63
-          }
-        },
-        {
-          "name": "BALANCED",
-          "market": "DRAW",
-          "n_bets": 321,
-          "n_wins": 89,
-          "profit": 10.52,
-          "roi": 3.28,
-          "avg_odds": 3.729,
-          "p_value": 0.3555,
-          "profitable_seasons": 4,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.6361918871105002,
-              "brier": 0.17275542203197142,
-              "auc_std": 0.004785271446140778
-            },
-            "test": {
-              "auc": 0.5719245409866595,
-              "brier": 0.17484255393127443,
-              "auc_std": 0.030742494197096754
-            },
-            "n_seasons": 7,
-            "model_type": "Ensemble",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 80,
-            "edge": -0.02,
-            "min_odds": 2.8
-          },
-          "risk_metrics": {
-            "max_drawdown": 19.349999999999998,
-            "volatility": 1.674188167421396,
-            "sharpe_ratio": 0.019575210425873846,
-            "max_win_streak": 5,
-            "max_loss_streak": 13,
-            "avg_odds": 3.7290342679127724,
-            "median_odds": 3.65
-          }
         }
       ],
       "selections": {
-        "simple": "MODERATE_HIGH",
-        "strict": "MODERATE_HIGH",
+        "simple": "STRICT",
+        "strict": "STANDARD",
         "fdr": null,
-        "ensemble": "MODERATE_HIGH",
-        "hybrid": "MODERATE_HIGH",
+        "ensemble": "STRICT",
+        "hybrid": "STRICT",
         "hybrid_fallback": false
       },
       "two_layer": {
-        "bets": 116,
-        "profit": 1.02,
-        "roi": 0.9,
+        "bets": 52,
+        "profit": -2.72,
+        "roi": -5.2,
         "details": [
           {
             "season": 2018,
-            "strategy": "MODERATE",
+            "strategy": "SELECTIVE",
             "method": "DEFAULT",
-            "bets": 38,
-            "roi": -32.8
+            "bets": 18,
+            "roi": -59.2
           },
           {
             "season": 2019,
-            "strategy": "MODERATE",
+            "strategy": "SELECTIVE",
             "method": "DEFAULT",
-            "bets": 31,
-            "roi": 35.7
+            "bets": 18,
+            "roi": 31.2
           },
           {
             "season": 2023,
-            "strategy": "MODERATE_HIGH",
+            "strategy": "STRICT",
             "method": "HYBRID",
-            "bets": 27,
-            "roi": 0.3
+            "bets": 9,
+            "roi": 26.4
           },
           {
             "season": 2024,
-            "strategy": "MODERATE_HIGH",
+            "strategy": "STRICT",
             "method": "HYBRID",
-            "bets": 20,
-            "roi": 11.6
+            "bets": 7,
+            "roi": -1.0
           }
         ]
       },
-      "recommendation": "MONITOR"
+      "recommendation": "PAPER_TRADE"
     },
     "AWAY": {
       "best": {
-        "name": "STANDARD_HIGH",
+        "name": "STANDARD",
         "market": "AWAY",
-        "n_bets": 28,
-        "n_wins": 15,
-        "profit": 8.72,
-        "roi": 31.14,
-        "avg_odds": 2.457,
-        "p_value": 0.0888,
-        "profitable_seasons": 5,
+        "n_bets": 34,
+        "n_wins": 16,
+        "profit": 0.25,
+        "roi": 0.74,
+        "avg_odds": 2.153,
+        "p_value": 0.4808,
+        "profitable_seasons": 3,
         "total_seasons": 7,
         "fdr_pass": false,
         "model_metrics": {
@@ -622,18 +291,18 @@
           "n_features": 21
         },
         "strategy_params": {
-          "pct": 82,
+          "pct": 85,
           "edge": 0.0,
-          "min_odds": 2.2
+          "min_odds": 1.9
         },
         "risk_metrics": {
-          "max_drawdown": 5.0,
-          "volatility": 1.2357927307883745,
-          "sharpe_ratio": 0.2520071235812299,
-          "max_win_streak": 5,
-          "max_loss_streak": 5,
-          "avg_odds": 2.457142857142857,
-          "median_odds": 2.38
+          "max_drawdown": 5.700000000000002,
+          "volatility": 1.0773996713862106,
+          "sharpe_ratio": 0.0068247108030115465,
+          "max_win_streak": 6,
+          "max_loss_streak": 3,
+          "avg_odds": 2.152647058823529,
+          "median_odds": 2.08
         }
       },
       "best_model": "LogisticRegression",
@@ -662,14 +331,49 @@
         {
           "name": "SELECTIVE",
           "market": "AWAY",
-          "n_bets": 7,
-          "n_wins": 2,
-          "profit": -1.92,
-          "roi": -27.43,
-          "avg_odds": 2.519,
-          "p_value": 0.6642,
-          "profitable_seasons": 2,
-          "total_seasons": 5,
+          "n_bets": 1,
+          "n_wins": 0,
+          "profit": -1.0,
+          "roi": -100.0,
+          "avg_odds": 2.42,
+          "p_value": 1.0,
+          "profitable_seasons": 0,
+          "total_seasons": 1,
+          "fdr_pass": false,
+          "model_metrics": {
+            "train": {
+              "auc": 0.73394351834664,
+              "brier": 0.17723409321735745,
+              "auc_std": 0.0018323052974509335
+            },
+            "test": {
+              "auc": 0.7424651107510888,
+              "brier": 0.18048017676442998,
+              "auc_std": 0.03347396997583819
+            },
+            "n_seasons": 7,
+            "model_type": "LogisticRegression",
+            "feature_tier": "BASIC+",
+            "n_features": 21
+          },
+          "strategy_params": {
+            "pct": 90,
+            "edge": 0.0,
+            "min_odds": 2.3
+          },
+          "risk_metrics": {}
+        },
+        {
+          "name": "STANDARD",
+          "market": "AWAY",
+          "n_bets": 34,
+          "n_wins": 16,
+          "profit": 0.25,
+          "roi": 0.74,
+          "avg_odds": 2.153,
+          "p_value": 0.4808,
+          "profitable_seasons": 3,
+          "total_seasons": 7,
           "fdr_pass": false,
           "model_metrics": {
             "train": {
@@ -689,244 +393,43 @@
           },
           "strategy_params": {
             "pct": 85,
-            "edge": -0.01,
-            "min_odds": 2.3
-          },
-          "risk_metrics": {
-            "max_drawdown": 3.0,
-            "volatility": 1.1514817428346975,
-            "sharpe_ratio": -0.23820239964072948,
-            "max_win_streak": 2,
-            "max_loss_streak": 3,
-            "avg_odds": 2.5185714285714282,
-            "median_odds": 2.55
-          }
-        },
-        {
-          "name": "STANDARD_HIGH",
-          "market": "AWAY",
-          "n_bets": 28,
-          "n_wins": 15,
-          "profit": 8.72,
-          "roi": 31.14,
-          "avg_odds": 2.457,
-          "p_value": 0.0888,
-          "profitable_seasons": 5,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.73394351834664,
-              "brier": 0.17723409321735745,
-              "auc_std": 0.0018323052974509335
-            },
-            "test": {
-              "auc": 0.7424651107510888,
-              "brier": 0.18048017676442998,
-              "auc_std": 0.03347396997583819
-            },
-            "n_seasons": 7,
-            "model_type": "LogisticRegression",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 82,
             "edge": 0.0,
-            "min_odds": 2.2
+            "min_odds": 1.9
           },
           "risk_metrics": {
-            "max_drawdown": 5.0,
-            "volatility": 1.2357927307883745,
-            "sharpe_ratio": 0.2520071235812299,
-            "max_win_streak": 5,
-            "max_loss_streak": 5,
-            "avg_odds": 2.457142857142857,
-            "median_odds": 2.38
-          }
-        },
-        {
-          "name": "STANDARD",
-          "market": "AWAY",
-          "n_bets": 63,
-          "n_wins": 30,
-          "profit": 6.25,
-          "roi": 9.92,
-          "avg_odds": 2.334,
-          "p_value": 0.2483,
-          "profitable_seasons": 4,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.73394351834664,
-              "brier": 0.17723409321735745,
-              "auc_std": 0.0018323052974509335
-            },
-            "test": {
-              "auc": 0.7424651107510888,
-              "brier": 0.18048017676442998,
-              "auc_std": 0.03347396997583819
-            },
-            "n_seasons": 7,
-            "model_type": "LogisticRegression",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 80,
-            "edge": -0.02,
-            "min_odds": 2.0
-          },
-          "risk_metrics": {
-            "max_drawdown": 6.58,
-            "volatility": 1.1660478652639745,
-            "sharpe_ratio": 0.08507913968342153,
-            "max_win_streak": 7,
-            "max_loss_streak": 5,
-            "avg_odds": 2.333809523809524,
-            "median_odds": 2.27
-          }
-        },
-        {
-          "name": "VALUE",
-          "market": "AWAY",
-          "n_bets": 15,
-          "n_wins": 5,
-          "profit": -1.07,
-          "roi": -7.13,
-          "avg_odds": 2.745,
-          "p_value": 0.5386,
-          "profitable_seasons": 3,
-          "total_seasons": 5,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.73394351834664,
-              "brier": 0.17723409321735745,
-              "auc_std": 0.0018323052974509335
-            },
-            "test": {
-              "auc": 0.7424651107510888,
-              "brier": 0.18048017676442998,
-              "auc_std": 0.03347396997583819
-            },
-            "n_seasons": 7,
-            "model_type": "LogisticRegression",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 80,
-            "edge": -0.02,
-            "min_odds": 2.5
-          },
-          "risk_metrics": {
-            "max_drawdown": 4.0,
-            "volatility": 1.3166263284960122,
-            "sharpe_ratio": -0.05417887504560061,
-            "max_win_streak": 2,
-            "max_loss_streak": 4,
-            "avg_odds": 2.7446666666666664,
-            "median_odds": 2.72
-          }
-        },
-        {
-          "name": "BALANCED",
-          "market": "AWAY",
-          "n_bets": 57,
-          "n_wins": 26,
-          "profit": 7.73,
-          "roi": 13.56,
-          "avg_odds": 2.536,
-          "p_value": 0.2041,
-          "profitable_seasons": 3,
-          "total_seasons": 7,
-          "fdr_pass": false,
-          "model_metrics": {
-            "train": {
-              "auc": 0.73394351834664,
-              "brier": 0.17723409321735745,
-              "auc_std": 0.0018323052974509335
-            },
-            "test": {
-              "auc": 0.7424651107510888,
-              "brier": 0.18048017676442998,
-              "auc_std": 0.03347396997583819
-            },
-            "n_seasons": 7,
-            "model_type": "LogisticRegression",
-            "feature_tier": "BASIC+",
-            "n_features": 21
-          },
-          "strategy_params": {
-            "pct": 78,
-            "edge": -0.02,
-            "min_odds": 2.2
-          },
-          "risk_metrics": {
-            "max_drawdown": 7.0,
-            "volatility": 1.2541678131983238,
-            "sharpe_ratio": 0.10813069324581237,
+            "max_drawdown": 5.700000000000002,
+            "volatility": 1.0773996713862106,
+            "sharpe_ratio": 0.0068247108030115465,
             "max_win_streak": 6,
-            "max_loss_streak": 7,
-            "avg_odds": 2.535614035087719,
-            "median_odds": 2.47
+            "max_loss_streak": 3,
+            "avg_odds": 2.152647058823529,
+            "median_odds": 2.08
           }
         }
       ],
       "selections": {
-        "simple": "STANDARD_HIGH",
+        "simple": "STANDARD",
         "strict": null,
         "fdr": null,
-        "ensemble": "STANDARD_HIGH",
-        "hybrid": "STANDARD_HIGH",
+        "ensemble": "STANDARD",
+        "hybrid": "__SKIP__",
         "hybrid_fallback": false
       },
       "two_layer": {
-        "bets": 17,
-        "profit": -1.49,
-        "roi": -8.8,
-        "details": [
-          {
-            "season": 2018,
-            "strategy": "VALUE",
-            "method": "DEFAULT",
-            "bets": 3,
-            "roi": -100.0
-          },
-          {
-            "season": 2019,
-            "strategy": "VALUE",
-            "method": "DEFAULT",
-            "bets": 2,
-            "roi": 38.0
-          },
-          {
-            "season": 2023,
-            "strategy": "STANDARD_HIGH",
-            "method": "HYBRID",
-            "bets": 4,
-            "roi": 81.7
-          },
-          {
-            "season": 2024,
-            "strategy": "STANDARD_HIGH",
-            "method": "HYBRID",
-            "bets": 8,
-            "roi": -31.5
-          }
-        ]
+        "bets": 0,
+        "profit": 0,
+        "roi": 0,
+        "details": []
       },
-      "recommendation": "MONITOR"
+      "recommendation": "SKIP"
     }
   },
   "recommendation": {
-    "status": "MONITOR",
+    "status": "PAPER_TRADE",
     "market": "DRAW",
-    "strategy": "MODERATE_HIGH",
-    "roi": 21.7,
-    "p_value": 0.052,
+    "strategy": "STRICT",
+    "roi": 38.1,
+    "p_value": 0.0328,
     "fdr_pass": false,
     "model": "Ensemble",
     "feature_tier": "BASIC+"

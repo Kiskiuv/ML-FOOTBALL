@@ -229,7 +229,7 @@ def detect_and_remap_columns(df: pd.DataFrame, verbose: bool = True) -> Tuple[pd
     CLOSING_PATTERNS = ['CH', 'CD', 'CA', 'C>2.5', 'C<2.5', 'CAHH', 'CAHA']
     closing_cols = [c for c in cols if any(c.endswith(p) for p in CLOSING_PATTERNS)]
     has_closing_odds = len(closing_cols) > 0
-    has_opening_odds = any(c in cols for c in ['AvgH', 'AvgD', 'AvgA', 'OddHome', 'OddDraw', 'OddAway'])
+    has_opening_odds = any(c in cols and df[c].notna().any() for c in ['AvgH', 'AvgD', 'AvgA', 'OddHome', 'OddDraw', 'OddAway'])
 
     if not is_new_format and not has_closing_odds:
         return df, False, False
@@ -255,9 +255,21 @@ def detect_and_remap_columns(df: pd.DataFrame, verbose: bool = True) -> Tuple[pd
     used_closing = False
     if has_closing_odds:
         if has_opening_odds:
+            # Fill any NaN opening odds from closing odds before dropping
+            for closing_col, opening_col in CLOSING_TO_OPENING_MAP.items():
+                if closing_col in df.columns and opening_col in df.columns:
+                    n_filled = df[opening_col].isna().sum()
+                    if n_filled > 0:
+                        df[opening_col] = df[opening_col].fillna(df[closing_col])
+                        if verbose and n_filled > 0:
+                            print(f"  Filled {n_filled} NaN in {opening_col} from {closing_col}")
+                            used_closing = True
             df = df.drop(columns=[c for c in closing_cols if c in df.columns], errors='ignore')
             if verbose:
-                print(f"  Dropped {len(closing_cols)} closing odds columns (pre-match available)")
+                if used_closing:
+                    print(f"  Dropped {len(closing_cols)} closing odds columns (after filling gaps)")
+                else:
+                    print(f"  Dropped {len(closing_cols)} closing odds columns (pre-match available)")
         else:
             closing_remap = {k: v for k, v in CLOSING_TO_OPENING_MAP.items() if k in df.columns}
             if closing_remap:

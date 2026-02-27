@@ -1,40 +1,40 @@
 {
   "league": "E1",
-  "generated_at": "2026-02-25T19:15:58.903186",
+  "generated_at": "2026-02-27T16:57:01.487525",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_E1.xls",
   "new_season_source": "E1_20252026.xlsx",
   "cutoff_date": "2025-05-03",
   "column_remapping_applied": false,
-  "closing_odds_only": false,
+  "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 13606,
-    "new_file_matches": 372,
-    "combined_unique": 13978,
+    "new_file_matches": 384,
+    "combined_unique": 13990,
     "state_building_matches": 13606,
-    "new_output_matches": 372
+    "new_output_matches": 384
   },
   "overview": {
-    "total_new_matches": 372,
-    "played_matches": 372,
+    "total_new_matches": 384,
+    "played_matches": 384,
     "future_fixtures": 0,
     "total_teams": 24,
     "date_range": {
       "start": "2025-08-08",
-      "end": "2026-02-17"
+      "end": "2026-02-25"
     },
     "seasons": {
-      "2025/2026": 372
+      "2025/2026": 384
     }
   },
   "outcome_distribution": {
-    "home_wins": 159,
-    "home_win_pct": 42.7,
-    "draws": 98,
+    "home_wins": 165,
+    "home_win_pct": 43.0,
+    "draws": 101,
     "draw_pct": 26.3,
-    "away_wins": 115,
-    "away_win_pct": 30.9
+    "away_wins": 118,
+    "away_win_pct": 30.7
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -45,11 +45,11 @@
     "top_10": [
       {
         "team": "Burnley",
-        "elo": 1803.7
+        "elo": 1803.6
       },
       {
         "team": "Leeds",
-        "elo": 1767.8
+        "elo": 1767.6
       },
       {
         "team": "Newcastle",
@@ -72,22 +72,22 @@
         "elo": 1671.7
       },
       {
+        "team": "Ipswich",
+        "elo": 1669.1
+      },
+      {
         "team": "Brighton",
-        "elo": 1661.6
+        "elo": 1661.7
       },
       {
         "team": "Wolves",
         "elo": 1660.5
-      },
-      {
-        "team": "Ipswich",
-        "elo": 1658.8
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 13978,
+    "combined_matches_processed": 13990,
     "teams_in_state": 65,
-    "hfa": 60.1
+    "hfa": 61.4
   }
 }

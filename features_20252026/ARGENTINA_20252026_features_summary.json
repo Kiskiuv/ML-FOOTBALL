@@ -1,41 +1,41 @@
 {
-  "league": "ARGENTINA",
-  "generated_at": "2026-02-25T19:15:10.083768",
+  "league": NaN,
+  "generated_at": "2026-02-27T16:56:40.685616",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_ARGENTINA.xls",
   "new_season_source": "ARG_20252026.xlsx",
   "cutoff_date": "2024-12-08",
-  "column_remapping_applied": true,
+  "column_remapping_applied": false,
   "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 5330,
-    "new_file_matches": 6026,
-    "combined_unique": 8018,
+    "new_file_matches": 6039,
+    "combined_unique": 8031,
     "state_building_matches": 7443,
-    "new_output_matches": 575
+    "new_output_matches": 588
   },
   "overview": {
-    "total_new_matches": 575,
-    "played_matches": 575,
+    "total_new_matches": 588,
+    "played_matches": 588,
     "future_fixtures": 0,
     "total_teams": 32,
     "date_range": {
       "start": "2024-12-09",
-      "end": "2026-02-16"
+      "end": "2026-02-26"
     },
     "seasons": {
       "2024/2025": 275,
-      "2025/2026": 300
+      "2025/2026": 313
     }
   },
   "outcome_distribution": {
-    "home_wins": 236,
+    "home_wins": 241,
     "home_win_pct": 41.0,
-    "draws": 183,
-    "draw_pct": 31.8,
-    "away_wins": 156,
-    "away_win_pct": 27.1
+    "draws": 188,
+    "draw_pct": 32.0,
+    "away_wins": 159,
+    "away_win_pct": 27.0
   },
   "data_coverage": {
     "odds_coverage_pct": 97.4,
@@ -46,31 +46,31 @@
     "top_10": [
       {
         "team": "Boca Juniors",
-        "elo": 1666.0
-      },
-      {
-        "team": "River Plate",
-        "elo": 1647.2
+        "elo": 1666.1
       },
       {
         "team": "Rosario Central",
-        "elo": 1646.7
+        "elo": 1655.3
+      },
+      {
+        "team": "River Plate",
+        "elo": 1651.1
       },
       {
         "team": "Argentinos Jrs",
-        "elo": 1621.8
-      },
-      {
-        "team": "Racing Club",
-        "elo": 1614.7
+        "elo": 1621.7
       },
       {
         "team": "Independiente",
-        "elo": 1611.5
+        "elo": 1611.0
+      },
+      {
+        "team": "Racing Club",
+        "elo": 1609.7
       },
       {
         "team": "Estudiantes L.P.",
-        "elo": 1587.8
+        "elo": 1599.8
       },
       {
         "team": "Lanus",
@@ -78,17 +78,17 @@
       },
       {
         "team": "Velez Sarsfield",
-        "elo": 1577.8
+        "elo": 1575.0
       },
       {
         "team": "Dep. Riestra",
-        "elo": 1558.0
+        "elo": 1560.9
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 8018,
+    "combined_matches_processed": 8031,
     "teams_in_state": 45,
-    "hfa": 59.5
+    "hfa": 57.0
   }
 }

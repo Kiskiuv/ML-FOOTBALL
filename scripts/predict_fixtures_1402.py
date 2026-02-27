@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-PROTOCOL V4 — FIXTURE PREDICTOR
+PROTOCOL V5 — FIXTURE PREDICTOR
 ================================
-Reads a fixtures CSV (all leagues together), applies the 14 hybrid-selected
+Reads a fixtures CSV (all leagues together), applies the 11 anti-cherry-pick
 strategies (NO odds leakage — 21 features), and outputs a CSV with BET / NO BET.
 
 Usage:
@@ -29,30 +29,28 @@ from platt import fit_platt_scaler, apply_platt
 
 
 # =============================================================================
-# V4 HYBRID-SELECTED STRATEGIES (14 active — NO odds leakage)
+# V5 ANTI-CHERRY-PICK STRATEGIES (11 active — NO odds leakage)
 # Trained with 21 features (ELO, form, schedule, momentum, H2H only)
-# Backtest 2024/25: 89 bets, +16.51u, +18.6% ROI
+# Protocol V3.0: 3 strategies/market, pct in {85,90,95}, edge>=0, min_odds>=1.9
+# FDR q=0.05, ~342 total tests (38 leagues × 9 strategies)
 # =============================================================================
 
 V3_STRATEGIES = [
     # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi, tier)
-    # DEPLOY — FDR-pass or strong p-value, real stakes
-    ("MEX", "AWAY",  "CONSERVATIVE",    "LogisticRegression", 88,  0.00, 2.5,  0.0056, True,  34.1, "DEPLOY"),
-    ("FIN", "AWAY",  "SELECTIVE",        "LogisticRegression", 85, -0.01, 2.3,  0.0078, True,  44.2, "DEPLOY"),
-    ("D2",  "AWAY",  "CONSERVATIVE",    "RandomForest",       88,  0.00, 2.5,  0.0495, False, 34.1, "DEPLOY"),
-    # PAPER_TRADE — p < 0.07, tracked at stake=0
-    ("F1",  "HOME",  "UPSET",           "LogisticRegression", 85, -0.01, 2.0,  0.0587, False, 30.2, "PAPER_TRADE"),
-    ("I1",  "DRAW",  "CONSERVATIVE",    "RandomForest",       90,  0.00, 3.0,  0.0612, False, 22.0, "PAPER_TRADE"),
-    ("F2",  "HOME",  "ULTRA_CONS",      "RandomForest",       90,  0.02, 2.5,  0.0613, False, 77.8, "PAPER_TRADE"),
-    ("SP2", "DRAW",  "SELECTIVE",        "LogisticRegression", 88, -0.01, 3.0,  0.0637, False, 17.4, "PAPER_TRADE"),
-    ("NOR", "HOME",  "STANDARD",        "LogisticRegression", 80, -0.02, 1.9,  0.0640, False, 26.0, "PAPER_TRADE"),
-    ("G1",  "DRAW",  "LONGSHOT_STRICT", "LogisticRegression", 92,  0.00, 3.2,  0.0677, False, 30.4, "PAPER_TRADE"),
-    ("F2",  "AWAY",  "ULTRA_CONS",      "LogisticRegression", 90,  0.02, 2.8,  0.0697, False, 35.2, "PAPER_TRADE"),
-    # MONITOR — p < 0.10, tracked at stake=0
-    ("D1",  "AWAY",  "SELECTIVE",        "LogisticRegression", 85, -0.01, 2.3,  0.0736, False, 27.1, "MONITOR"),
-    ("ARG", "HOME",  "ULTRA_CONS",      "LogisticRegression", 90,  0.02, 2.5,  0.0880, False, 71.8, "MONITOR"),
-    ("N1",  "AWAY",  "STANDARD_HIGH",   "LogisticRegression", 82,  0.00, 2.2,  0.0888, False, 31.1, "MONITOR"),
-    ("SWE", "HOME",  "SELECTIVE",        "LogisticRegression", 82, -0.01, 2.0,  0.0926, False, 27.6, "MONITOR"),
+    # DEPLOY — FDR-pass, real stakes
+    ("MEX", "AWAY",  "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
+    ("SC0", "HOME",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0460, True,  67.8, "DEPLOY"),
+    # PAPER_TRADE — p < 0.05, FDR-fail
+    ("POL", "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
+    ("SP2", "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
+    ("N1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0328, False, 38.1, "PAPER_TRADE"),
+    ("RUS", "AWAY",  "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
+    ("FIN", "AWAY",  "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
+    # MONITOR — p < 0.10
+    ("F1",  "HOME",  "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
+    ("G1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
+    ("I1",  "DRAW",  "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
+    ("B1",  "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
 ]
 
 # Quick lookup: (league, market) → strategy dict

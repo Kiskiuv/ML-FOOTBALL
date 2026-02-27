@@ -1,13 +1,13 @@
 {
   "league": "I1",
-  "generated_at": "2026-02-25T19:16:56.737491",
+  "generated_at": "2026-02-27T16:57:22.214835",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_I1.xls",
   "new_season_source": "I1_20252026.xlsx",
   "cutoff_date": "2025-05-25",
   "column_remapping_applied": false,
-  "closing_odds_only": false,
+  "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 9012,
     "new_file_matches": 241,

@@ -1,41 +1,41 @@
 {
-  "league": "BRASIL",
-  "generated_at": "2026-02-25T19:15:23.070652",
+  "league": NaN,
+  "generated_at": "2026-02-27T16:56:47.804514",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_BRASIL.xls",
   "new_season_source": "BRA_20252026.xlsx",
   "cutoff_date": "2024-12-07",
-  "column_remapping_applied": true,
+  "column_remapping_applied": false,
   "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 4850,
-    "new_file_matches": 5330,
-    "combined_unique": 7083,
+    "new_file_matches": 5337,
+    "combined_unique": 7090,
     "state_building_matches": 6683,
-    "new_output_matches": 400
+    "new_output_matches": 407
   },
   "overview": {
-    "total_new_matches": 400,
-    "played_matches": 400,
+    "total_new_matches": 407,
+    "played_matches": 407,
     "future_fixtures": 0,
     "total_teams": 27,
     "date_range": {
       "start": "2024-12-08",
-      "end": "2026-01-30"
+      "end": "2026-02-26"
     },
     "seasons": {
       "2024/2025": 126,
-      "2025/2026": 274
+      "2025/2026": 281
     }
   },
   "outcome_distribution": {
-    "home_wins": 202,
-    "home_win_pct": 50.5,
-    "draws": 101,
-    "draw_pct": 25.2,
-    "away_wins": 97,
-    "away_win_pct": 24.2
+    "home_wins": 205,
+    "home_win_pct": 50.4,
+    "draws": 104,
+    "draw_pct": 25.6,
+    "away_wins": 98,
+    "away_win_pct": 24.1
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -46,49 +46,49 @@
     "top_10": [
       {
         "team": "Flamengo RJ",
-        "elo": 1743.3
+        "elo": 1743.4
       },
       {
         "team": "Palmeiras",
-        "elo": 1723.9
+        "elo": 1729.4
       },
       {
         "team": "Botafogo RJ",
-        "elo": 1708.6
-      },
-      {
-        "team": "Fluminense",
-        "elo": 1648.0
+        "elo": 1708.4
       },
       {
         "team": "Mirassol",
         "elo": 1647.6
       },
       {
+        "team": "Fluminense",
+        "elo": 1642.7
+      },
+      {
         "team": "Cruzeiro",
-        "elo": 1642.4
+        "elo": 1637.3
       },
       {
         "team": "Bahia",
-        "elo": 1590.0
+        "elo": 1589.7
       },
       {
         "team": "Sao Paulo",
-        "elo": 1580.5
+        "elo": 1588.6
+      },
+      {
+        "team": "Gremio",
+        "elo": 1564.0
       },
       {
         "team": "Fortaleza",
-        "elo": 1560.7
-      },
-      {
-        "team": "Atletico-MG",
-        "elo": 1558.0
+        "elo": 1560.4
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 7083,
+    "combined_matches_processed": 7090,
     "teams_in_state": 38,
-    "hfa": 102.4
+    "hfa": 101.8
   }
 }

@@ -1,41 +1,41 @@
 {
-  "league": "SUI",
-  "generated_at": "2026-02-25T19:18:13.277286",
+  "league": NaN,
+  "generated_at": "2026-02-27T16:57:57.807468",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_SUI.xls",
   "new_season_source": "SWZ_20252026.csv",
   "cutoff_date": "2024-12-05",
-  "column_remapping_applied": true,
+  "column_remapping_applied": false,
   "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 2273,
-    "new_file_matches": 2585,
-    "combined_unique": 3433,
+    "new_file_matches": 2586,
+    "combined_unique": 3434,
     "state_building_matches": 3163,
-    "new_output_matches": 270
+    "new_output_matches": 271
   },
   "overview": {
-    "total_new_matches": 270,
-    "played_matches": 270,
+    "total_new_matches": 271,
+    "played_matches": 271,
     "future_fixtures": 0,
     "total_teams": 13,
     "date_range": {
       "start": "2024-12-07",
-      "end": "2026-02-18"
+      "end": "2026-02-25"
     },
     "seasons": {
       "2024/2025": 132,
-      "2025/2026": 138
+      "2025/2026": 139
     }
   },
   "outcome_distribution": {
     "home_wins": 115,
-    "home_win_pct": 42.6,
+    "home_win_pct": 42.4,
     "draws": 70,
-    "draw_pct": 25.9,
-    "away_wins": 85,
-    "away_win_pct": 31.5
+    "draw_pct": 25.8,
+    "away_wins": 86,
+    "away_win_pct": 31.7
   },
   "data_coverage": {
     "odds_coverage_pct": 97.4,
@@ -46,11 +46,11 @@
     "top_10": [
       {
         "team": "Basel",
-        "elo": 1649.4
+        "elo": 1648.9
       },
       {
         "team": "Thun",
-        "elo": 1623.6
+        "elo": 1633.3
       },
       {
         "team": "Lugano",
@@ -58,37 +58,37 @@
       },
       {
         "team": "St. Gallen",
-        "elo": 1587.6
+        "elo": 1587.4
       },
       {
         "team": "Young Boys",
-        "elo": 1580.5
+        "elo": 1580.4
       },
       {
         "team": "Servette",
-        "elo": 1551.7
+        "elo": 1551.4
       },
       {
         "team": "Lausanne",
-        "elo": 1538.5
+        "elo": 1539.4
       },
       {
         "team": "Luzern",
-        "elo": 1513.6
+        "elo": 1513.8
       },
       {
         "team": "Sion",
-        "elo": 1510.0
+        "elo": 1510.5
       },
       {
         "team": "Schaffhausen",
-        "elo": 1488.8
+        "elo": 1489.0
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 3433,
+    "combined_matches_processed": 3434,
     "teams_in_state": 18,
-    "hfa": 60.1
+    "hfa": 54.4
   }
 }

@@ -1,40 +1,40 @@
 {
   "league": "SC3",
-  "generated_at": "2026-02-25T19:17:57.390474",
+  "generated_at": "2026-02-27T16:57:49.017643",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_SC3.xls",
   "new_season_source": "SC3_20252026.xlsx",
   "cutoff_date": "2025-05-03",
   "column_remapping_applied": false,
-  "closing_odds_only": false,
+  "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 4010,
-    "new_file_matches": 112,
-    "combined_unique": 4122,
+    "new_file_matches": 115,
+    "combined_unique": 4125,
     "state_building_matches": 4010,
-    "new_output_matches": 112
+    "new_output_matches": 115
   },
   "overview": {
-    "total_new_matches": 112,
-    "played_matches": 112,
+    "total_new_matches": 115,
+    "played_matches": 115,
     "future_fixtures": 0,
     "total_teams": 10,
     "date_range": {
       "start": "2025-08-02",
-      "end": "2026-02-17"
+      "end": "2026-02-24"
     },
     "seasons": {
-      "2025/2026": 112
+      "2025/2026": 115
     }
   },
   "outcome_distribution": {
-    "home_wins": 33,
-    "home_win_pct": 29.5,
-    "draws": 35,
-    "draw_pct": 31.2,
+    "home_wins": 35,
+    "home_win_pct": 30.4,
+    "draws": 36,
+    "draw_pct": 31.3,
     "away_wins": 44,
-    "away_win_pct": 39.3
+    "away_win_pct": 38.3
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -49,15 +49,15 @@
       },
       {
         "team": "Rangers",
-        "elo": 1642.0
+        "elo": 1641.9
       },
       {
         "team": "Cove Rangers",
-        "elo": 1629.7
+        "elo": 1629.9
       },
       {
         "team": "Kelty Hearts",
-        "elo": 1613.5
+        "elo": 1613.4
       },
       {
         "team": "Livingston",
@@ -65,29 +65,29 @@
       },
       {
         "team": "Queens Park",
-        "elo": 1588.7
+        "elo": 1588.8
       },
       {
         "team": "Alloa",
-        "elo": 1578.4
+        "elo": 1578.5
       },
       {
         "team": "Montrose",
-        "elo": 1571.9
+        "elo": 1572.0
       },
       {
         "team": "Spartans",
-        "elo": 1563.1
+        "elo": 1562.8
       },
       {
         "team": "East Fife",
-        "elo": 1561.8
+        "elo": 1561.7
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 4122,
+    "combined_matches_processed": 4125,
     "teams_in_state": 29,
-    "hfa": 35.2
+    "hfa": 37.7
   }
 }

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-BACKTEST V4 STRATEGIES — 2025/26 SEASON
+BACKTEST V5 STRATEGIES — 2025/26 SEASON
 ========================================
-Runs the 16 new V4 strategies against all played matches this season
+Runs the 11 V5 strategies against all played matches this season
 using pre-computed features from incremental_features.py.
 Tracks wins, losses, P&L per strategy and overall.
 
@@ -21,30 +21,25 @@ from typing import Dict, Optional, Tuple
 
 
 # =============================================================================
-# V4 STRATEGIES (16 active)
+# V5 STRATEGIES (11 active — anti-cherry-pick, edge>=0, pct in {85,90,95})
 # =============================================================================
 
 V4_STRATEGIES = [
     # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi, tier)
-    # DEPLOY — FDR-pass or strong p-value, real stakes
-    ("MEX", "AWAY",  "VALUE",            "Ensemble",             80, -0.02, 2.5,  0.0108, True,  24.8, "DEPLOY"),
-    ("FIN", "AWAY",  "SELECTIVE",         "LogisticRegression",   85, -0.01, 2.3,  0.0078, True,  44.2, "DEPLOY"),
-    ("G1",  "DRAW",  "MODERATE",          "Ensemble",             85, -0.02, 3.0,  0.0300, False, 19.2, "DEPLOY"),
-    # PAPER_TRADE — p < 0.07, tracked at stake=0
-    ("F2",  "AWAY",  "ULTRA_CONS",        "Ensemble",             90,  0.02, 2.8,  0.0431, False, 47.3, "PAPER_TRADE"),
-    ("RUS", "AWAY",  "ULTRA_CONS",        "Ensemble",             90,  0.02, 2.8,  0.0500, False, 75.0, "PAPER_TRADE"),
-    ("SP2", "DRAW",  "CONSERVATIVE",      "Ensemble",             90,  0.00, 3.0,  0.0507, False, 20.3, "PAPER_TRADE"),
-    ("N1",  "DRAW",  "MODERATE_HIGH",     "Ensemble",             85,  0.00, 2.8,  0.0520, False, 21.7, "PAPER_TRADE"),
-    ("F1",  "HOME",  "UPSET",            "LogisticRegression",   85, -0.01, 2.0,  0.0587, False, 30.2, "PAPER_TRADE"),
-    ("AUT", "DRAW",  "LONGSHOT_STRICT",   "Ensemble",             92,  0.00, 3.2,  0.0597, False, 31.1, "PAPER_TRADE"),
-    ("I1",  "DRAW",  "CONSERVATIVE",     "RandomForest",         90,  0.00, 3.0,  0.0612, False, 22.0, "PAPER_TRADE"),
-    # MONITOR — p < 0.10, tracked at stake=0
-    ("F2",  "HOME",  "ULTRA_CONS",       "RandomForest",         90,  0.02, 2.5,  0.0613, False, 77.8, "MONITOR"),
-    ("NOR", "HOME",  "STANDARD",         "LogisticRegression",   80, -0.02, 1.9,  0.0640, False, 26.0, "MONITOR"),
-    ("D1",  "AWAY",  "SELECTIVE",         "LogisticRegression",   85, -0.01, 2.3,  0.0736, False, 27.1, "MONITOR"),
-    ("ARG", "HOME",  "ULTRA_CONS",       "LogisticRegression",   90,  0.02, 2.5,  0.0880, False, 71.8, "MONITOR"),
-    ("N1",  "AWAY",  "STANDARD_HIGH",    "LogisticRegression",   82,  0.00, 2.2,  0.0888, False, 31.1, "MONITOR"),
-    ("SWE", "HOME",  "SELECTIVE",         "LogisticRegression",   82, -0.01, 2.0,  0.0926, False, 27.6, "MONITOR"),
+    # DEPLOY — FDR-pass, real stakes
+    ("MEX", "AWAY",  "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
+    ("SC0", "HOME",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0460, True,  67.8, "DEPLOY"),
+    # PAPER_TRADE — p < 0.05, FDR-fail
+    ("POL", "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
+    ("SP2", "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
+    ("N1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0328, False, 38.1, "PAPER_TRADE"),
+    ("RUS", "AWAY",  "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
+    ("FIN", "AWAY",  "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
+    # MONITOR — p < 0.10
+    ("F1",  "HOME",  "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
+    ("G1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
+    ("I1",  "DRAW",  "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
+    ("B1",  "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
 ]
 
 TIER_ORDER = {"DEPLOY": 0, "PAPER_TRADE": 1, "MONITOR": 2}
@@ -53,7 +48,7 @@ ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway"}
 RESULT_MAP = {"HOME": "H", "DRAW": "D", "AWAY": "A"}
 
 # Season file name overrides (league code -> filename prefix)
-SEASON_FILE_MAP = {"MEX": "MEXICO", "ARG": "ARGENTINA"}
+SEASON_FILE_MAP = {"MEX": "MEXICO"}
 
 
 def get_stake(edge: float) -> Tuple[float, str]:
@@ -178,19 +173,14 @@ def backtest_strategy(strat_tuple, season_df, model_data):
     for idx in result.index:
         if result.loc[idx, 'BET']:
             stake, stake_tier = get_stake(result.loc[idx, 'Edge'])
-            if tier == 'DEPLOY':
-                result.loc[idx, 'Stake'] = stake
-                result.loc[idx, 'Stake_Tier'] = stake_tier
-                if result.loc[idx, 'Win']:
-                    result.loc[idx, 'Profit'] = stake * (result.loc[idx, 'Odds'] - 1)
-                    result.loc[idx, 'Result'] = 'WIN'
-                else:
-                    result.loc[idx, 'Profit'] = -stake
-                    result.loc[idx, 'Result'] = 'LOSS'
+            result.loc[idx, 'Stake'] = stake
+            result.loc[idx, 'Stake_Tier'] = stake_tier
+            if result.loc[idx, 'Win']:
+                result.loc[idx, 'Profit'] = stake * (result.loc[idx, 'Odds'] - 1)
+                result.loc[idx, 'Result'] = 'WIN'
             else:
-                result.loc[idx, 'Stake'] = 0.0
-                result.loc[idx, 'Stake_Tier'] = f'{stake_tier}(PAPER)'
-                result.loc[idx, 'Result'] = 'WIN' if result.loc[idx, 'Win'] else 'LOSS'
+                result.loc[idx, 'Profit'] = -stake
+                result.loc[idx, 'Result'] = 'LOSS'
 
     result['p_value'] = p_val
     result['FDR'] = 'YES' if fdr else 'NO'
@@ -309,11 +299,8 @@ def main():
         stk = tb['Stake'].sum()
         roi = prf / stk * 100 if stk > 0 else 0
         ao = tb['Odds'].mean()
-        if tier_name == 'DEPLOY':
-            print(f"   {tier_name:<12}: {len(tb)} bets, {w}W/{l}L ({wr:.0f}%), "
-                  f"staked={stk:.2f}u, profit={prf:+.2f}u, ROI={roi:+.1f}%, avgOdds={ao:.2f}")
-        else:
-            print(f"   {tier_name:<12}: {len(tb)} bets, {w}W/{l}L ({wr:.0f}%), avgOdds={ao:.2f} (PAPER)")
+        print(f"   {tier_name:<12}: {len(tb)} bets, {w}W/{l}L ({wr:.0f}%), "
+              f"staked={stk:.2f}u, profit={prf:+.2f}u, ROI={roi:+.1f}%, avgOdds={ao:.2f}")
 
     # =========================================================================
     # BY STRATEGY
@@ -338,13 +325,9 @@ def main():
         roi = prf / stk * 100 if stk > 0 else 0
         ao = sb['Odds'].mean()
         ae = sb['Edge'].mean()
-        if tier == 'DEPLOY':
-            status = "+++" if prf > 0 else "---"
-            print(f"   {league:<5} {market:<5} {name:<18} {tier:<12} {len(sb):>4} {w:>3} {l:>3} {wr:>5.1f} "
-                  f"{stk:>7.2f} {prf:>+8.2f} {roi:>+7.1f} {ao:>7.2f} {ae:>+8.1%} {status}")
-        else:
-            print(f"   {league:<5} {market:<5} {name:<18} {tier:<12} {len(sb):>4} {w:>3} {l:>3} {wr:>5.1f} "
-                  f"{'PAPER':>7} {'PAPER':>8} {'':>7} {ao:>7.2f} {ae:>+8.1%}")
+        status = "+++" if prf > 0 else "---"
+        print(f"   {league:<5} {market:<5} {name:<18} {tier:<12} {len(sb):>4} {w:>3} {l:>3} {wr:>5.1f} "
+              f"{stk:>7.2f} {prf:>+8.2f} {roi:>+7.1f} {ao:>7.2f} {ae:>+8.1%} {status}")
 
     # =========================================================================
     # MONTHLY BREAKDOWN

@@ -1,40 +1,40 @@
 {
   "league": "SC1",
-  "generated_at": "2026-02-25T19:17:51.030163",
+  "generated_at": "2026-02-27T16:57:46.549663",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_SC1.xls",
   "new_season_source": "SC1_20252026.xlsx",
   "cutoff_date": "2025-05-02",
   "column_remapping_applied": false,
-  "closing_odds_only": false,
+  "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 4094,
-    "new_file_matches": 117,
-    "combined_unique": 4211,
+    "new_file_matches": 119,
+    "combined_unique": 4213,
     "state_building_matches": 4094,
-    "new_output_matches": 117
+    "new_output_matches": 119
   },
   "overview": {
-    "total_new_matches": 117,
-    "played_matches": 117,
+    "total_new_matches": 119,
+    "played_matches": 119,
     "future_fixtures": 0,
     "total_teams": 10,
     "date_range": {
       "start": "2025-08-01",
-      "end": "2026-02-17"
+      "end": "2026-02-24"
     },
     "seasons": {
-      "2025/2026": 117
+      "2025/2026": 119
     }
   },
   "outcome_distribution": {
     "home_wins": 42,
-    "home_win_pct": 35.9,
-    "draws": 40,
-    "draw_pct": 34.2,
+    "home_win_pct": 35.3,
+    "draws": 42,
+    "draw_pct": 35.3,
     "away_wins": 35,
-    "away_win_pct": 29.9
+    "away_win_pct": 29.4
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -49,23 +49,23 @@
       },
       {
         "team": "Dundee United",
-        "elo": 1698.0
+        "elo": 1697.8
       },
       {
         "team": "Rangers",
-        "elo": 1661.6
+        "elo": 1661.5
       },
       {
         "team": "St Johnstone",
-        "elo": 1660.2
+        "elo": 1654.3
       },
       {
         "team": "Hibernian",
-        "elo": 1649.5
+        "elo": 1649.4
       },
       {
         "team": "Dundee",
-        "elo": 1625.8
+        "elo": 1625.7
       },
       {
         "team": "Livingston",
@@ -73,21 +73,21 @@
       },
       {
         "team": "Falkirk",
-        "elo": 1602.0
+        "elo": 1602.1
       },
       {
         "team": "St Mirren",
-        "elo": 1599.9
+        "elo": 1600.0
       },
       {
         "team": "Kilmarnock",
-        "elo": 1591.0
+        "elo": 1590.8
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 4211,
+    "combined_matches_processed": 4213,
     "teams_in_state": 33,
-    "hfa": 38.8
+    "hfa": 39.6
   }
 }

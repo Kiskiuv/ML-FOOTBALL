@@ -1,40 +1,40 @@
 {
   "league": "SC0",
-  "generated_at": "2026-02-25T19:17:47.205250",
+  "generated_at": "2026-02-27T16:57:45.304550",
   "protocol_version": "3.4.3",
   "mode": "incremental_v2_date_cutoff",
   "historical_source": "Matches_SC0.xls",
   "new_season_source": "SC0_20252026.xlsx",
   "cutoff_date": "2025-05-18",
   "column_remapping_applied": false,
-  "closing_odds_only": false,
+  "closing_odds_only": true,
   "data_combination": {
     "historical_matches": 5124,
-    "new_file_matches": 147,
-    "combined_unique": 5271,
+    "new_file_matches": 148,
+    "combined_unique": 5272,
     "state_building_matches": 5124,
-    "new_output_matches": 147
+    "new_output_matches": 148
   },
   "overview": {
-    "total_new_matches": 147,
-    "played_matches": 147,
+    "total_new_matches": 148,
+    "played_matches": 148,
     "future_fixtures": 0,
     "total_teams": 12,
     "date_range": {
       "start": "2025-08-02",
-      "end": "2026-02-04"
+      "end": "2026-02-24"
     },
     "seasons": {
-      "2025/2026": 147
+      "2025/2026": 148
     }
   },
   "outcome_distribution": {
     "home_wins": 62,
-    "home_win_pct": 42.2,
-    "draws": 43,
-    "draw_pct": 29.3,
+    "home_win_pct": 41.9,
+    "draws": 44,
+    "draw_pct": 29.7,
     "away_wins": 42,
-    "away_win_pct": 28.6
+    "away_win_pct": 28.4
   },
   "data_coverage": {
     "odds_coverage_pct": 100.0,
@@ -57,7 +57,7 @@
       },
       {
         "team": "Hibernian",
-        "elo": 1626.5
+        "elo": 1626.4
       },
       {
         "team": "Motherwell",
@@ -69,25 +69,25 @@
       },
       {
         "team": "Aberdeen",
-        "elo": 1487.4
+        "elo": 1489.1
       },
       {
         "team": "St Mirren",
-        "elo": 1485.5
+        "elo": 1485.6
       },
       {
         "team": "Dundee United",
-        "elo": 1478.9
+        "elo": 1477.0
       },
       {
         "team": "Inverness C",
-        "elo": 1466.3
+        "elo": 1466.4
       }
     ]
   },
   "state_info": {
-    "combined_matches_processed": 5271,
+    "combined_matches_processed": 5272,
     "teams_in_state": 19,
-    "hfa": 72.7
+    "hfa": 72.5
   }
 }

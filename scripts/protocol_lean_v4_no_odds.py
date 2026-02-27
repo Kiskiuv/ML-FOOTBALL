@@ -1,38 +1,28 @@
 #!/usr/bin/env python3
 """
 ================================================================================
-PROTOCOL LEAN V2.0 — HYBRID SELECTION + RANDOMFOREST
+PROTOCOL LEAN V3.0 — ANTI-CHERRY-PICK + HYBRID SELECTION + RANDOMFOREST
 ================================================================================
 
-Stripped-down protocol with drastically reduced search space:
+Stripped-down protocol with minimal search space to reduce cherry-picking:
   - 2 base models + ensemble: RandomForest, LogisticRegression, RF+LR blend (0.5/0.5)
   - 1 feature tier: BASIC+ (21 features)
   - 7 evaluation seasons (2018/19 through 2024/25)
-  - ~8 strategies × 3 markets = ~24 strategy evaluations (pct >= 75 only)
+  - 3 strategies × 3 markets = 9 strategy evaluations per league
   - Model selection: 3-way (RF vs LR vs Ensemble, by avg test AUC)
-  - TOTAL: ~72 combinations per league (vs 810 in V3.4.5 = 11× reduction)
+  - TOTAL: ~27 combinations per league (vs 72 in V2.0 = 2.7× reduction)
+  - Only 3 percentile thresholds: 85, 90, 95 (no fine-grained pct)
+  - All strategies require edge >= 0.00 (positive EV only)
+  - All strategies require min_odds >= 1.90
 
 Strategy selection: HYBRID (default)
-  - Only strategies with pct >= 80 AND p < 0.10 AND auc_gap < 0.15
+  - Only strategies with pct >= 85 AND p < 0.05 AND auc_gap < 0.15
   - Picks lowest p-value among qualifying strategies
   - Non-qualifying markets get __SKIP__ (zero bets)
+  - FDR correction at q=0.05 (was 0.10 in V2.0)
 
-Changes from V1.0:
-  - XGBoost/GradientBoosting replaced with RandomForest (lower overfitting)
-  - Removed high-volume strategies: MAX_VOLUME (65), VOLUME (70), AGGRESSIVE (70)
-  - Added hybrid selection method (default)
-  - Removed GPU code (RandomForest + LR are CPU-only)
-
-WHY RANDOMFOREST:
-  XGBoost (via sklearn GradientBoosting fallback) showed 0.35-0.44 AUC gap
-  (train ~0.95 vs test ~0.53). Boosting memorizes training data. RandomForest
-  uses bagging (independent trees on random subsets) with natural regularization
-  via averaging — typical AUC gap 0.02-0.08 on football data.
-
-WHY HYBRID:
-  sel_simple favored high-volume strategies (41% picks were pct 65-75) that
-  showed -9% to -11% live ROI. Hybrid enforces pct >= 80 floor and requires
-  p < 0.10 statistical significance, only deploying strategies with evidence.
+With ~342 total tests (38 leagues × 9 strategies), FDR correction is much
+more powerful than with ~2,736 tests in the old setup.
 
 Author: Marc | February 2026
 """
@@ -104,7 +94,7 @@ class Config:
     MC_SEED: int = 42
     
     # FDR
-    FDR_Q: float = 0.10
+    FDR_Q: float = 0.05
     
     # Rolling validation
     LOOKBACK_SIMPLE: int = 4
@@ -113,8 +103,8 @@ class Config:
     MIN_HISTORY_SEASONS: int = 2
     
     # Hybrid selection thresholds
-    HYBRID_MIN_PCT: int = 80        # minimum percentile threshold
-    HYBRID_MAX_P: float = 0.10      # maximum p-value
+    HYBRID_MIN_PCT: int = 85        # minimum percentile threshold
+    HYBRID_MAX_P: float = 0.05      # maximum p-value
     HYBRID_MAX_AUC_GAP: float = 0.15  # maximum train-test AUC gap
     
     # Export
@@ -154,46 +144,30 @@ ENSEMBLE_WEIGHT = 0.5  # RF weight; LR weight = 1 - this
 
 
 # =============================================================================
-# STRATEGIES (FROZEN — identical to V3.4.5)
+# STRATEGIES (V3.0 — 3 per market, edge >= 0, min_odds >= 1.90)
 # =============================================================================
 
 DRAW_STRATEGIES = [
-    {"name": "LONGSHOT_STRICT", "pct": 92, "edge": 0.00, "min_odds": 3.2},
-    {"name": "LONGSHOT", "pct": 90, "edge": -0.02, "min_odds": 2.8},
-    {"name": "CONSERVATIVE", "pct": 90, "edge": 0.00, "min_odds": 3.0},
-    {"name": "SELECTIVE", "pct": 88, "edge": -0.01, "min_odds": 3.0},
-    {"name": "MODERATE_HIGH", "pct": 85, "edge": 0.00, "min_odds": 2.8},
-    {"name": "MODERATE", "pct": 85, "edge": -0.02, "min_odds": 3.0},
-    {"name": "BALANCED", "pct": 80, "edge": -0.02, "min_odds": 2.8},
-    # REMOVED: VOLUME (75), AGGRESSIVE (70), MAX_VOLUME (65) — live ROI -9% to -11%
+    {"name": "STRICT",    "pct": 95, "edge": 0.00, "min_odds": 3.0},
+    {"name": "SELECTIVE", "pct": 90, "edge": 0.00, "min_odds": 2.5},
+    {"name": "STANDARD",  "pct": 85, "edge": 0.00, "min_odds": 2.0},
 ]
 
 HOME_STRATEGIES = [
-    {"name": "ULTRA_CONS", "pct": 90, "edge": 0.02, "min_odds": 2.5},
-    {"name": "CONSERVATIVE", "pct": 88, "edge": 0.00, "min_odds": 2.3},
-    {"name": "UPSET_HIGH", "pct": 85, "edge": 0.00, "min_odds": 2.2},
-    {"name": "UPSET", "pct": 85, "edge": -0.01, "min_odds": 2.0},
-    {"name": "SELECTIVE", "pct": 82, "edge": -0.01, "min_odds": 2.0},
-    {"name": "STANDARD", "pct": 80, "edge": -0.02, "min_odds": 1.9},
-    {"name": "VALUE", "pct": 80, "edge": -0.02, "min_odds": 2.0},
-    {"name": "FAVORITE", "pct": 75, "edge": 0.00, "min_odds": 1.8},
-    # REMOVED: VOLUME (70), MAX_VOLUME (65) — live ROI -9% to -11%
+    {"name": "STRICT",    "pct": 95, "edge": 0.00, "min_odds": 2.5},
+    {"name": "SELECTIVE", "pct": 90, "edge": 0.00, "min_odds": 2.0},
+    {"name": "STANDARD",  "pct": 85, "edge": 0.00, "min_odds": 1.9},
 ]
 
 AWAY_STRATEGIES = [
-    {"name": "ULTRA_CONS", "pct": 90, "edge": 0.02, "min_odds": 2.8},
-    {"name": "CONSERVATIVE", "pct": 88, "edge": 0.00, "min_odds": 2.5},
-    {"name": "SELECTIVE", "pct": 85, "edge": -0.01, "min_odds": 2.3},
-    {"name": "STANDARD_HIGH", "pct": 82, "edge": 0.00, "min_odds": 2.2},
-    {"name": "STANDARD", "pct": 80, "edge": -0.02, "min_odds": 2.0},
-    {"name": "VALUE", "pct": 80, "edge": -0.02, "min_odds": 2.5},
-    {"name": "BALANCED", "pct": 78, "edge": -0.02, "min_odds": 2.2},
-    # REMOVED: VOLUME (75), AGGRESSIVE (70), MAX_VOLUME (65) — live ROI -9% to -11%
+    {"name": "STRICT",    "pct": 95, "edge": 0.00, "min_odds": 2.8},
+    {"name": "SELECTIVE", "pct": 90, "edge": 0.00, "min_odds": 2.3},
+    {"name": "STANDARD",  "pct": 85, "edge": 0.00, "min_odds": 1.9},
 ]
 
 MARKET_STRATEGIES = {"HOME": HOME_STRATEGIES, "DRAW": DRAW_STRATEGIES, "AWAY": AWAY_STRATEGIES}
 MARKET_ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway"}
-DEFAULT_STRATEGY_IDX = 5
+DEFAULT_STRATEGY_IDX = 1
 
 
 # =============================================================================
@@ -836,7 +810,7 @@ def run_walk_forward(
         for model_key, probs_data in season_probs.items():
             pct_thresholds = {
                 pct: np.percentile(probs_data["train"], pct)
-                for pct in [75, 78, 80, 82, 85, 88, 90, 92]
+                for pct in [85, 90, 95]
             }
             test_copy = test_df.copy()
             test_copy["prob"] = probs_data["test"]
@@ -937,7 +911,7 @@ def run_walk_forward(
         
         pct_thresholds = {
             pct: np.percentile(train_probs, pct)
-            for pct in [75, 78, 80, 82, 85, 88, 90, 92]
+            for pct in [85, 90, 95]
         }
         
         test_df = test_df.copy()
@@ -1071,7 +1045,7 @@ def export_final_model(
 
         pct_thresholds = {
             pct: float(np.percentile(probs, pct))
-            for pct in [75, 78, 80, 82, 85, 88, 90, 92]
+            for pct in [85, 90, 95]
         }
         metrics = compute_ml_metrics(y, probs)
         importance = dict(zip(features, rf_model.feature_importances_.tolist()))
@@ -1115,7 +1089,7 @@ def export_final_model(
         probs = model.predict_proba(X)[:, 1]
         pct_thresholds = {
             pct: float(np.percentile(probs, pct))
-            for pct in [75, 78, 80, 82, 85, 88, 90, 92]
+            for pct in [85, 90, 95]
         }
         metrics = compute_ml_metrics(y, probs)
 
