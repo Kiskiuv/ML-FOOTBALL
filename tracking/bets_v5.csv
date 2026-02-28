@@ -1,3 +1,5 @@
 Date,League,Market,HomeTeam,AwayTeam,Strategy,Tier,Odds,Edge,Prob,Stake_EUR,Result,Profit_EUR,Notes
-27/02/2026,I1,DRAW,Parma,Cagliari,SELECTIVE,MONITOR,2.92,+1.9%,36.1%,7.00,,,BET signal
-27/02/2026,SP2,DRAW,Albacete,Almeria,STRICT,NEAR-MISS,3.30,-0.4%,31.2%,5.00,,,Near-miss manual bet
+27/02/2026,I1,DRAW,Parma,Cagliari,SELECTIVE,MONITOR,2.92,+1.9%,36.1%,7.00,W,+13.44,BET signal
+27/02/2026,SP2,DRAW,Albacete,Almeria,STRICT,NEAR-MISS,3.30,-0.4%,31.2%,5.00,W,+11.50,Near-miss manual bet
+28/02/2026,N1,DRAW,Nijmegen,For Sittard,STRICT,PAPER_TRADE,4.86,+30.6%,51.2%,12.00,,,BET signal
+28/02/2026,SP2,DRAW,Granada,Malaga,STRICT,NEAR-MISS,3.06,+3.0%,35.7%,5.00,,,Near-miss manual bet
