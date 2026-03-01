@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-V4 Lean Feature Engineering — 21 BASIC+ features from raw data.
+V4 Lean Feature Engineering — 26 BASIC+ features from raw data.
 
 Reads pre-processed Matches_*.xls/csv files from data/ and computes
-exactly the 21 features used by the V4 Lean protocol (RF + LR models).
+exactly the 26 features used by the V4 Lean protocol (RF + LR models).
 ELO is rebuilt from scratch per league. No odds leakage.
 
 Usage:
@@ -38,6 +38,10 @@ FEATURES = [
     "form_momentum_home", "form_momentum_away",
     # H2H (4)
     "h2h_home_wins", "h2h_away_wins", "h2h_draws", "h2h_home_goals_diff",
+    # Goals/Venue (5) — rolling 10-match venue-specific averages
+    "home_team_goals_scored_avg", "home_team_goals_conceded_avg",
+    "away_team_goals_scored_avg", "away_team_goals_conceded_avg",
+    "venue_ppg_diff",
 ]
 
 # ELO parameters (matching feature_engineering_pipeline.py)
@@ -58,6 +62,8 @@ CONTEXT_COLS = [
 # Per-league mutable state
 # ---------------------------------------------------------------------------
 
+VENUE_ROLLING_WINDOW = 10
+
 @dataclass
 class LeagueState:
     elo: Dict[str, float] = field(default_factory=dict)
@@ -65,6 +71,8 @@ class LeagueState:
     form: Dict[str, List[int]] = field(default_factory=dict)
     last_match_date: Dict[str, pd.Timestamp] = field(default_factory=dict)
     h2h: Dict[Tuple[str, str], List[dict]] = field(default_factory=dict)
+    home_matches: Dict[str, List[dict]] = field(default_factory=dict)
+    away_matches: Dict[str, List[dict]] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -72,7 +80,7 @@ class LeagueState:
 # ---------------------------------------------------------------------------
 
 class V4LeanFeatureEngineer:
-    """Computes 21 BASIC+ features from raw match data."""
+    """Computes 26 BASIC+ features from raw match data."""
 
     def __init__(self):
         self.state: Optional[LeagueState] = None
@@ -154,6 +162,21 @@ class V4LeanFeatureEngineer:
             "h2h_home_goals_diff": goals_diff,
         }
 
+    def _get_venue_stats(self, team: str, venue: str) -> dict:
+        """Get rolling stats for team at home or away (last VENUE_ROLLING_WINDOW matches)."""
+        matches = (self.state.home_matches if venue == "home" else self.state.away_matches).get(team, [])
+        matches = matches[-VENUE_ROLLING_WINDOW:]
+        if not matches:
+            if venue == "home":
+                return {"ppg": 1.5, "goals_scored": 1.3, "goals_conceded": 1.1}
+            else:
+                return {"ppg": 1.0, "goals_scored": 1.0, "goals_conceded": 1.4}
+        return {
+            "ppg": np.mean([m["points"] for m in matches]),
+            "goals_scored": np.mean([m["goals_for"] for m in matches]),
+            "goals_conceded": np.mean([m["goals_against"] for m in matches]),
+        }
+
     def _compute_features(self, row) -> dict:
         home, away = row["HomeTeam"], row["AwayTeam"]
         match_date = row["MatchDate"]
@@ -193,6 +216,10 @@ class V4LeanFeatureEngineer:
         # H2H (4)
         h2h = self._get_h2h(home, away)
 
+        # Goals/Venue (5)
+        home_stats = self._get_venue_stats(home, "home")
+        away_stats = self._get_venue_stats(away, "away")
+
         return {
             "HomeElo": round(home_elo, 1),
             "AwayElo": round(away_elo, 1),
@@ -212,6 +239,11 @@ class V4LeanFeatureEngineer:
             "form_momentum_home": mom_h,
             "form_momentum_away": mom_a,
             **h2h,
+            "home_team_goals_scored_avg": round(home_stats["goals_scored"], 3),
+            "home_team_goals_conceded_avg": round(home_stats["goals_conceded"], 3),
+            "away_team_goals_scored_avg": round(away_stats["goals_scored"], 3),
+            "away_team_goals_conceded_avg": round(away_stats["goals_conceded"], 3),
+            "venue_ppg_diff": round(home_stats["ppg"] - away_stats["ppg"], 3),
         }
 
     # --- State updates (mutate AFTER feature computation) -------------------
@@ -252,6 +284,14 @@ class V4LeanFeatureEngineer:
 
         self.state.form.setdefault(home, []).append(hp)
         self.state.form.setdefault(away, []).append(ap)
+
+        # Venue stats (goals + points per venue)
+        self.state.home_matches.setdefault(home, []).append(
+            {"goals_for": hg, "goals_against": ag, "points": hp}
+        )
+        self.state.away_matches.setdefault(away, []).append(
+            {"goals_for": ag, "goals_against": hg, "points": ap}
+        )
 
         key = tuple(sorted([home, away]))
         self.state.h2h.setdefault(key, []).append(
@@ -299,8 +339,24 @@ class V4LeanFeatureEngineer:
 
         feat_df = pd.DataFrame(feat_rows)
 
-        # Build output dataframe
-        ctx = df[["MatchDate", "HomeTeam", "AwayTeam", "FTHome", "FTAway"]].copy()
+        # Build output dataframe — include odds columns if available
+        ctx_cols = ["MatchDate", "HomeTeam", "AwayTeam", "FTHome", "FTAway"]
+        # Carry through odds for edge calculation (not used as model features)
+        odds_cols = ["OddHome", "OddDraw", "OddAway", "MaxHome", "MaxDraw", "MaxAway",
+                     "OddUnder25", "OddOver25", "MaxUnder25", "MaxOver25"]
+        # Map raw column names to standardized names
+        raw_odds_map = {"Avg>2.5": "OddOver25", "Avg<2.5": "OddUnder25",
+                        "Max>2.5": "MaxOver25", "Max<2.5": "MaxUnder25",
+                        "Over25": "OddOver25", "Under25": "OddUnder25",
+                        "AvgH": "OddHome", "AvgD": "OddDraw", "AvgA": "OddAway",
+                        "MaxH": "MaxHome", "MaxD": "MaxDraw", "MaxA": "MaxAway"}
+        for raw_name, std_name in raw_odds_map.items():
+            if raw_name in df.columns and std_name not in df.columns:
+                df[std_name] = df[raw_name]
+        for oc in odds_cols:
+            if oc in df.columns:
+                ctx_cols.append(oc)
+        ctx = df[ctx_cols].copy()
         ctx.insert(0, "Division", league_code)
 
         # Compute FTResult from scores (don't trust raw column)
@@ -314,6 +370,7 @@ class V4LeanFeatureEngineer:
         out["target_home"] = (out["FTResult"] == "H").astype(int)
         out["target_draw"] = (out["FTResult"] == "D").astype(int)
         out["target_away"] = (out["FTResult"] == "A").astype(int)
+        out["target_UNDER25"] = ((out["FTHome"] + out["FTAway"]) < 3).astype(int)
 
         output_dir.mkdir(parents=True, exist_ok=True)
         out_path = output_dir / f"{league_code}_features.csv"
@@ -345,7 +402,7 @@ class V4LeanFeatureEngineer:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="V4 Lean Feature Engineering (21 BASIC+ features)"
+        description="V4 Lean Feature Engineering (26 BASIC+ features)"
     )
     parser.add_argument("--all", action="store_true", help="Process all leagues")
     parser.add_argument("--league", type=str, help="Single league code (e.g. SP1)")

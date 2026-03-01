@@ -1,11 +1,11 @@
 {
   "league": "D2",
-  "generated_at": "2026-02-14T10:24:28.897166",
+  "generated_at": "2026-03-01T20:50:55.435348",
   "protocol_version": "3.4.3",
   "source_file": "Matches_D2.xls",
   "overview": {
     "total_matches": 7161,
-    "total_teams": 68,
+    "total_teams": 66,
     "date_range": {
       "start": "2000-08-11",
       "end": "2025-05-18"
@@ -30,19 +30,19 @@
     "top_10": [
       {
         "team": "Freiburg",
-        "elo": 1712.8
+        "elo": 1713.6
       },
       {
         "team": "St Pauli",
-        "elo": 1679.6
+        "elo": 1679.5
       },
       {
         "team": "MGladbach",
-        "elo": 1677.0
+        "elo": 1677.1
       },
       {
         "team": "Hamburg",
-        "elo": 1668.8
+        "elo": 1668.4
       },
       {
         "team": "Ein Frankfurt",
@@ -50,23 +50,23 @@
       },
       {
         "team": "Augsburg",
-        "elo": 1660.8
+        "elo": 1660.6
       },
       {
         "team": "Holstein Kiel",
-        "elo": 1654.6
+        "elo": 1654.5
       },
       {
         "team": "Heidenheim",
-        "elo": 1650.0
+        "elo": 1649.9
       },
       {
         "team": "FC Koln",
-        "elo": 1649.7
+        "elo": 1649.3
       },
       {
         "team": "Mainz",
-        "elo": 1642.5
+        "elo": 1643.2
       }
     ],
     "league_hfa": 53.4

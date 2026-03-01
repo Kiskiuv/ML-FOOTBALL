@@ -1,11 +1,11 @@
 {
   "league": "N1",
-  "generated_at": "2026-02-14T10:27:16.468794",
+  "generated_at": "2026-03-01T20:53:24.846921",
   "protocol_version": "3.4.3",
-  "source_file": "Matches__N1.xls",
+  "source_file": "Matches_N1.xls",
   "overview": {
     "total_matches": 7288,
-    "total_teams": 41,
+    "total_teams": 32,
     "date_range": {
       "start": "2000-08-18",
       "end": "2025-05-18"
@@ -30,43 +30,43 @@
     "top_10": [
       {
         "team": "PSV Eindhoven",
-        "elo": 1908.0
+        "elo": 1909.5
       },
       {
         "team": "Feyenoord",
-        "elo": 1840.5
+        "elo": 1842.0
       },
       {
         "team": "Ajax",
-        "elo": 1781.8
+        "elo": 1783.3
       },
       {
         "team": "AZ Alkmaar",
-        "elo": 1706.2
+        "elo": 1707.7
       },
       {
         "team": "Utrecht",
-        "elo": 1683.3
+        "elo": 1684.8
       },
       {
         "team": "Twente",
-        "elo": 1680.6
+        "elo": 1682.1
       },
       {
         "team": "Nijmegen",
-        "elo": 1594.8
+        "elo": 1596.3
       },
       {
         "team": "Sparta Rotterdam",
-        "elo": 1577.2
+        "elo": 1578.6
       },
       {
         "team": "Go Ahead Eagles",
-        "elo": 1574.3
+        "elo": 1575.8
       },
       {
         "team": "Zwolle",
-        "elo": 1539.5
+        "elo": 1541.0
       }
     ],
     "league_hfa": 72.1

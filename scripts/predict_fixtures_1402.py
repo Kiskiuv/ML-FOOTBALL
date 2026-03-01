@@ -32,25 +32,29 @@ from platt import fit_platt_scaler, apply_platt
 # V5 ANTI-CHERRY-PICK STRATEGIES (11 active — NO odds leakage)
 # Trained with 21 features (ELO, form, schedule, momentum, H2H only)
 # Protocol V3.0: 3 strategies/market, pct in {85,90,95}, edge>=0, min_odds>=1.9
-# FDR q=0.05, ~342 total tests (38 leagues × 9 strategies)
+# 4 markets: HOME, DRAW, AWAY, UNDER25
+# FDR q=0.05, ~456 total tests (38 leagues × 12 strategies)
+# NOTE: UNDER25 strategies will be added here after retraining results
 # =============================================================================
 
 V3_STRATEGIES = [
     # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi, tier)
     # DEPLOY — FDR-pass, real stakes
-    ("MEX", "AWAY",  "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
-    ("SC0", "HOME",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0460, True,  67.8, "DEPLOY"),
-    # PAPER_TRADE — p < 0.05, FDR-fail
-    ("POL", "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
-    ("SP2", "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
-    ("N1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0328, False, 38.1, "PAPER_TRADE"),
-    ("RUS", "AWAY",  "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
-    ("FIN", "AWAY",  "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
+    ("MEX", "AWAY",    "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
+    # PAPER_TRADE — p < 0.05, FDR-pass or near-pass
+    ("I2",  "UNDER25", "STANDARD",  "Ensemble",           85, 0.00, 1.9, 0.0134, True,  41.6, "PAPER_TRADE"),
+    ("POL", "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
+    ("SP2", "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
+    ("N1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0288, False, 40.8, "PAPER_TRADE"),
+    ("RUS", "AWAY",    "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
+    ("FIN", "AWAY",    "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
+    ("P1",  "UNDER25", "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0420, False, 48.6, "PAPER_TRADE"),
+    ("SC0", "HOME",    "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0460, True,  67.8, "PAPER_TRADE"),
     # MONITOR — p < 0.10
-    ("F1",  "HOME",  "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
-    ("G1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
-    ("I1",  "DRAW",  "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
-    ("B1",  "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
+    ("F1",  "HOME",    "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
+    ("G1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
+    ("I1",  "DRAW",    "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
+    ("B1",  "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
 ]
 
 # Quick lookup: (league, market) → strategy dict
@@ -65,22 +69,24 @@ for s in V3_STRATEGIES:
 
 ACTIVE_LEAGUES = sorted(set(s[0] for s in V3_STRATEGIES))
 
-ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway"}
-MAX_ODDS_COL = {"HOME": "MaxHome", "DRAW": "MaxDraw", "AWAY": "MaxAway"}
+ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25"}
+MAX_ODDS_COL = {"HOME": "MaxHome", "DRAW": "MaxDraw", "AWAY": "MaxAway", "UNDER25": "MaxUnder25"}
 
 
 # =============================================================================
 # STAKING (Protocol V3.4)
 # =============================================================================
 
-def get_stake(edge: float) -> Tuple[float, str]:
-    """Returns (stake, tier) based on edge."""
-    if edge < 0:
+def get_stake(edge: float, odds: float, bankroll: float = 100.0) -> Tuple[float, str]:
+    """Returns (stake, tier) using quarter-Kelly criterion."""
+    if edge <= 0:
         return 0.80, "LOW"
-    elif edge < 0.05:
-        return 1.25, "MED"
-    else:
-        return 1.85, "HIGH"
+    kelly = edge / (odds - 1)
+    quarter_kelly = 0.25 * kelly * bankroll
+    stake = min(quarter_kelly, 0.025 * bankroll)  # cap at 2.5% bankroll
+    stake = max(stake, 0.50)  # floor at 0.50u
+    tier = "HIGH" if stake > 1.5 else ("MED" if stake > 0.9 else "LOW")
+    return round(stake, 2), tier
 
 
 # =============================================================================
@@ -213,6 +219,12 @@ def build_instance(fixture, season_df: pd.DataFrame, league: str) -> dict:
     od = float(fixture.get('AvgD') or fixture.get('B365D') or 3.3)
     oa = float(fixture.get('AvgA') or fixture.get('B365A') or 2.8)
 
+    # Over/Under 2.5 odds
+    ou25_raw = fixture.get('Avg<2.5') or fixture.get('B365<2.5') or fixture.get('OddUnder25')
+    ou25 = float(ou25_raw) if ou25_raw is not None and str(ou25_raw).strip() != '' else np.nan
+    oo25_raw = fixture.get('Avg>2.5') or fixture.get('B365>2.5') or fixture.get('OddOver25')
+    oo25 = float(oo25_raw) if oo25_raw is not None and str(oo25_raw).strip() != '' else np.nan
+
     elo_diff = hf['elo'] - af['elo']
 
     return {
@@ -221,9 +233,12 @@ def build_instance(fixture, season_df: pd.DataFrame, league: str) -> dict:
         'HomeTeam': home_team, 'AwayTeam': away_team,
         # Odds (kept for edge calculation, NOT used as model features)
         'OddHome': oh, 'OddDraw': od, 'OddAway': oa,
+        'OddUnder25': ou25, 'OddOver25': oo25,
         'MaxHome': float(fixture.get('MaxH') or oh),
         'MaxDraw': float(fixture.get('MaxD') or od),
         'MaxAway': float(fixture.get('MaxA') or oa),
+        'MaxUnder25': float(fixture.get('Max<2.5') or ou25) if not np.isnan(ou25) else np.nan,
+        'MaxOver25': float(fixture.get('Max>2.5') or oo25) if not np.isnan(oo25) else np.nan,
         # ELO (5)
         'HomeElo': hf['elo'], 'AwayElo': af['elo'],
         'elo_diff': elo_diff, 'elo_sum': hf['elo'] + af['elo'],
@@ -329,7 +344,8 @@ def predict_market(league: str, market: str, strat: dict,
     probs = _predict_raw_probs(model_data, X, features)
 
     # --- Always compute season predictions (needed for threshold fallback + Platt) ---
-    target_col = f"target_{market.lower()}"
+    # Feature CSVs use lowercase (target_home/draw/away) but UNDER25 is uppercase
+    target_col = f"target_{market}" if market == "UNDER25" else f"target_{market.lower()}"
     X_hist = pd.DataFrame()
     for f in features:
         if f in season_df.columns:
@@ -349,17 +365,15 @@ def predict_market(league: str, market: str, strat: dict,
         threshold_src = "historical"
 
     # --- Platt calibration ---
-    # Priority: artifact scaler > season-based scaler > no calibration
+    # Only use artifact-based scaler (season-based removed: in-sample leakage)
     platt_model = model_data.get('platt_scaler', None)
     platt_src = 'none'
 
     if platt_model is not None:
         platt_src = 'artifact'
-    elif target_col in season_df.columns:
-        season_labels = season_df[target_col].values
-        platt_model = fit_platt_scaler(season_probs, season_labels)
-        if platt_model is not None:
-            platt_src = 'season'
+    else:
+        import logging
+        logging.warning(f"{league} {market}: No artifact Platt scaler — using raw probabilities")
 
     cal_probs = apply_platt(platt_model, probs)
 
@@ -409,7 +423,7 @@ def predict_market(league: str, market: str, strat: dict,
     result['Stake_Tier'] = ''
     for idx in result.index:
         if result.loc[idx, 'BET']:
-            stake, tier = get_stake(result.loc[idx, 'Edge'])
+            stake, tier = get_stake(result.loc[idx, 'Edge'], result.loc[idx, 'Odds'])
             if strategy_tier == 'DEPLOY':
                 result.loc[idx, 'Stake'] = stake
                 result.loc[idx, 'Stake_Tier'] = tier

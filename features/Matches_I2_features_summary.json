@@ -1,11 +1,11 @@
 {
   "league": "I2",
-  "generated_at": "2026-02-14T10:25:43.526952",
+  "generated_at": "2026-03-01T20:53:08.031261",
   "protocol_version": "3.4.3",
   "source_file": "Matches_I2.xls",
   "overview": {
     "total_matches": 9921,
-    "total_teams": 79,
+    "total_teams": 78,
     "date_range": {
       "start": "2000-09-01",
       "end": "2025-05-13"
@@ -42,7 +42,7 @@
       },
       {
         "team": "Lecce",
-        "elo": 1663.6
+        "elo": 1663.5
       },
       {
         "team": "Parma",
@@ -54,11 +54,11 @@
       },
       {
         "team": "Empoli",
-        "elo": 1651.5
+        "elo": 1651.4
       },
       {
         "team": "Atalanta",
-        "elo": 1638.9
+        "elo": 1638.8
       },
       {
         "team": "Torino",

@@ -13,10 +13,11 @@ Machine learning system for identifying profitable football (soccer) betting opp
 - Prediction: `scripts/predict_fixtures_1402.py`
 - Feature engineering: `scripts/feature_engineering_v4_lean.py` (historical) / `scripts/incremental_features.py` (current season)
 - Comparison: `scripts/compare_hist_vs_season.py` (historical vs live validation)
-- 11 hybrid-selected strategies (NO odds leakage, NO cherry-picking)
+- 13 hybrid-selected strategies (NO odds leakage, NO cherry-picking)
+- 4 markets: HOME, DRAW, AWAY, UNDER25 (Under 2.5 goals)
 - Only 3 strategies per market (STRICT/SELECTIVE/STANDARD at pct 95/90/85)
 - All strategies require edge >= 0.00 and min_odds >= 1.90
-- FDR q=0.05, ~342 total tests (38 leagues x 9 strategies)
+- FDR q=0.05, ~456 total tests (38 leagues x 12 strategies)
 - Features: BASIC+ tier only (ELO, form, schedule, momentum, H2H)
 - Models: RandomForest + LogisticRegression + Ensemble (0.5/0.5 blend)
 - Model selection: 3-way by avg test AUC (RF vs LR vs Ensemble)
@@ -72,23 +73,25 @@ python scripts/protocol_lean_v4_no_odds.py --batch --data-dir ./features --all -
 python scripts/predict_fixtures_1402.py --fixtures ./new_fixtures/fixtures.csv --models-dir ./models --season-dir ./features_20252026 --output ./predictions/predictions_DDMM.csv --eu-format
 ```
 
-## V5 Strategies (11 active — anti-cherry-pick)
+## V5 Strategies (13 active — anti-cherry-pick, 4 markets)
 
 All strategies: edge >= 0.00, pct in {85, 90, 95}, min_odds >= 1.90.
 
 ```
-League  Market  Strategy   Model                PCT  Edge  MinOdds  p-value    Tier         Hist ROI
-MEX     AWAY    SELECTIVE  LogisticRegression   90   0.00  2.3      0.0099     DEPLOY       +28.1%
-SC0     HOME    STANDARD   RandomForest         85   0.00  1.9      0.0460     DEPLOY       +67.8%
-POL     DRAW    STRICT     LogisticRegression   95   0.00  3.0      0.0225     PAPER_TRADE  +40.1%
-SP2     DRAW    STRICT     Ensemble             95   0.00  3.0      0.0262     PAPER_TRADE  +34.5%
-N1      DRAW    STRICT     Ensemble             95   0.00  3.0      0.0328     PAPER_TRADE  +38.1%
-RUS     AWAY    SELECTIVE  Ensemble             90   0.00  2.3      0.0345     PAPER_TRADE  +52.5%
-FIN     AWAY    STANDARD   LogisticRegression   85   0.00  1.9      0.0378     PAPER_TRADE  +24.6%
-F1      HOME    SELECTIVE  LogisticRegression   90   0.00  2.0      0.0574     MONITOR      +44.8%
-G1      DRAW    STRICT     Ensemble             95   0.00  3.0      0.0603     MONITOR      +23.8%
-I1      DRAW    SELECTIVE  RandomForest         90   0.00  2.5      0.0612     MONITOR      +22.0%
-B1      DRAW    STRICT     LogisticRegression   95   0.00  3.0      0.0791     MONITOR      +22.5%
+League  Market    Strategy   Model                PCT  Edge  MinOdds  p-value    Tier         Hist ROI
+MEX     AWAY      SELECTIVE  LogisticRegression   90   0.00  2.3      0.0099     DEPLOY       +28.1%
+I2      UNDER25   STANDARD   Ensemble             85   0.00  1.9      0.0134     PAPER_TRADE  +41.6%
+POL     DRAW      STRICT     LogisticRegression   95   0.00  3.0      0.0225     PAPER_TRADE  +40.1%
+SP2     DRAW      STRICT     Ensemble             95   0.00  3.0      0.0262     PAPER_TRADE  +34.5%
+N1      DRAW      STRICT     Ensemble             95   0.00  3.0      0.0288     PAPER_TRADE  +40.8%
+RUS     AWAY      SELECTIVE  Ensemble             90   0.00  2.3      0.0345     PAPER_TRADE  +52.5%
+FIN     AWAY      STANDARD   LogisticRegression   85   0.00  1.9      0.0378     PAPER_TRADE  +24.6%
+P1      UNDER25   STANDARD   LogisticRegression   85   0.00  1.9      0.0420     PAPER_TRADE  +48.6%
+SC0     HOME      STANDARD   RandomForest         85   0.00  1.9      0.0460     PAPER_TRADE  +67.8%
+F1      HOME      SELECTIVE  LogisticRegression   90   0.00  2.0      0.0574     MONITOR      +44.8%
+G1      DRAW      STRICT     Ensemble             95   0.00  3.0      0.0603     MONITOR      +23.8%
+I1      DRAW      SELECTIVE  RandomForest         90   0.00  2.5      0.0612     MONITOR      +22.0%
+B1      DRAW      STRICT     LogisticRegression   95   0.00  3.0      0.0791     MONITOR      +22.5%
 ```
 
 ### Strategy Search Space (per league)
@@ -96,13 +99,21 @@ B1      DRAW    STRICT     LogisticRegression   95   0.00  3.0      0.0791     M
 DRAW:    STRICT (pct95, min3.0) | SELECTIVE (pct90, min2.5) | STANDARD (pct85, min2.0)
 HOME:    STRICT (pct95, min2.5) | SELECTIVE (pct90, min2.0) | STANDARD (pct85, min1.9)
 AWAY:    STRICT (pct95, min2.8) | SELECTIVE (pct90, min2.3) | STANDARD (pct85, min1.9)
+UNDER25: STRICT (pct95, min2.3) | SELECTIVE (pct90, min2.0) | STANDARD (pct85, min1.9)
 ```
 
 ## Staking Rules
 
-Base stake by edge (DEPLOY tier only; PAPER_TRADE/MONITOR = 0u tracking):
-- Edge 0-5%: 1.25u (MED)
-- Edge > 5%: 1.85u (HIGH)
+Quarter-Kelly criterion (DEPLOY tier only; PAPER_TRADE/MONITOR = 0u tracking):
+```python
+kelly = edge / (odds - 1)
+stake = 0.25 * kelly * bankroll  # quarter-Kelly
+stake = min(stake, 0.025 * bankroll)  # cap at 2.5% bankroll
+stake = max(stake, 0.50)  # floor at 0.50u
+```
+- LOW: stake <= 0.9u
+- MED: 0.9u < stake <= 1.5u
+- HIGH: stake > 1.5u
 
 ## Bet Decision Criteria (ALL must pass)
 
@@ -248,6 +259,30 @@ python scripts/bet_tracker_v2.py --input tracking/bets.csv --results predictions
 pip install pandas numpy scikit-learn joblib tqdm openpyxl xlrd
 ```
 
+## Strategy Lifecycle Rules
+
+### Promotion (PAPER_TRADE → DEPLOY)
+- 50+ live bets accumulated
+- p < 0.10 on live data
+- Positive live ROI
+
+### Demotion (DEPLOY → PAPER_TRADE)
+- Trailing 30-bet Sharpe ratio < -0.3, OR
+- Cumulative loss exceeds 10u
+
+### Retirement
+- p > 0.15 after retraining on updated historical data
+
+### Drawdown Rules (automatic, no discretion)
+- **10u loss**: review strategy, check for market changes
+- **15u loss**: reduce stakes by 30%
+- **20u loss**: halt all betting for 2 weeks, run full diagnostics
+- **30u loss**: stop strategy permanently, require re-evaluation from scratch
+
+### Correlation Caps
+- Max 5u total draw exposure per match day
+- Max 3 correlated bets (same league or same market type) per match day
+
 ## Critical Rules
 
 1. **NEVER use closing odds as model features** — this is the #1 leakage source
@@ -257,3 +292,5 @@ pip install pandas numpy scikit-learn joblib tqdm openpyxl xlrd
 5. **All strategies require edge >= 0.00** — no negative-edge bets in V5
 6. **LogisticRegression models NEED the scaler** — prediction without scaling gives garbage
 7. **Ensemble artifacts** contain both RF and LR models — predict script handles blending automatically
+8. **Platt calibration** — only use artifact-based scaler, never season-based (in-sample leakage)
+9. **Quarter-Kelly staking** — never exceed 2.5% bankroll per bet

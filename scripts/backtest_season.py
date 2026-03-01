@@ -2,7 +2,7 @@
 """
 BACKTEST V5 STRATEGIES — 2025/26 SEASON
 ========================================
-Runs the 11 V5 strategies against all played matches this season
+Runs the 13 V5 strategies against all played matches this season
 using pre-computed features from incremental_features.py.
 Tracks wins, losses, P&L per strategy and overall.
 
@@ -21,43 +21,48 @@ from typing import Dict, Optional, Tuple
 
 
 # =============================================================================
-# V5 STRATEGIES (11 active — anti-cherry-pick, edge>=0, pct in {85,90,95})
+# V5 STRATEGIES (13 active — anti-cherry-pick, edge>=0, pct in {85,90,95})
 # =============================================================================
 
 V4_STRATEGIES = [
     # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi, tier)
     # DEPLOY — FDR-pass, real stakes
-    ("MEX", "AWAY",  "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
-    ("SC0", "HOME",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0460, True,  67.8, "DEPLOY"),
-    # PAPER_TRADE — p < 0.05, FDR-fail
-    ("POL", "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
-    ("SP2", "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
-    ("N1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0328, False, 38.1, "PAPER_TRADE"),
-    ("RUS", "AWAY",  "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
-    ("FIN", "AWAY",  "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
+    ("MEX", "AWAY",    "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
+    # PAPER_TRADE — p < 0.05, FDR-fail (unless noted)
+    ("I2",  "UNDER25", "STANDARD",  "Ensemble",           85, 0.00, 1.9, 0.0134, True,  41.6, "PAPER_TRADE"),
+    ("POL", "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
+    ("SP2", "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
+    ("N1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0288, False, 40.8, "PAPER_TRADE"),
+    ("RUS", "AWAY",    "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
+    ("FIN", "AWAY",    "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
+    ("P1",  "UNDER25", "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0420, False, 48.6, "PAPER_TRADE"),
+    ("SC0", "HOME",    "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0460, True,  67.8, "PAPER_TRADE"),
     # MONITOR — p < 0.10
-    ("F1",  "HOME",  "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
-    ("G1",  "DRAW",  "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
-    ("I1",  "DRAW",  "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
-    ("B1",  "DRAW",  "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
+    ("F1",  "HOME",    "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
+    ("G1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
+    ("I1",  "DRAW",    "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
+    ("B1",  "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
 ]
 
 TIER_ORDER = {"DEPLOY": 0, "PAPER_TRADE": 1, "MONITOR": 2}
 
-ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway"}
+ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25"}
 RESULT_MAP = {"HOME": "H", "DRAW": "D", "AWAY": "A"}
 
 # Season file name overrides (league code -> filename prefix)
 SEASON_FILE_MAP = {"MEX": "MEXICO"}
 
 
-def get_stake(edge: float) -> Tuple[float, str]:
-    if edge < 0:
+def get_stake(edge: float, odds: float = 3.0, bankroll: float = 100.0) -> Tuple[float, str]:
+    """Returns (stake, tier) using quarter-Kelly criterion."""
+    if edge <= 0:
         return 0.80, "LOW"
-    elif edge < 0.05:
-        return 1.25, "MED"
-    else:
-        return 1.85, "HIGH"
+    kelly = edge / (odds - 1)
+    quarter_kelly = 0.25 * kelly * bankroll
+    stake = min(quarter_kelly, 0.025 * bankroll)  # cap at 2.5% bankroll
+    stake = max(stake, 0.50)  # floor at 0.50u
+    tier = "HIGH" if stake > 1.5 else ("MED" if stake > 0.9 else "LOW")
+    return round(stake, 2), tier
 
 
 def load_csv(path: str) -> pd.DataFrame:
@@ -131,8 +136,9 @@ def backtest_strategy(strat_tuple, season_df, model_data):
 
     # Odds column
     odds_col = ODDS_COL[market]
-    odds = season_df[odds_col].values
-    implied_prob = 1.0 / odds
+    odds = season_df[odds_col].values if odds_col in season_df.columns else np.full(len(season_df), np.nan)
+    valid_odds = ~np.isnan(odds)
+    implied_prob = np.where(valid_odds, 1.0 / odds, np.nan)
     edge = probs - implied_prob
 
     # Bet criteria
@@ -140,11 +146,14 @@ def backtest_strategy(strat_tuple, season_df, model_data):
     pass_edge = edge >= min_edge
     pass_odds = odds >= min_odds
     pass_valid = (probs > 0.01) & (probs < 0.99)
-    is_bet = pass_prob & pass_edge & pass_odds & pass_valid
+    is_bet = valid_odds & pass_prob & pass_edge & pass_odds & pass_valid
 
     # Actual results
-    result_char = RESULT_MAP[market]
-    actual_win = (season_df['FTResult'] == result_char).values
+    if market == "UNDER25":
+        actual_win = ((season_df['FTHome'] + season_df['FTAway']) < 3).values
+    else:
+        result_char = RESULT_MAP[market]
+        actual_win = (season_df['FTResult'] == result_char).values
 
     # Build results dataframe
     result = season_df[['MatchDate', 'HomeTeam', 'AwayTeam']].copy()
@@ -172,7 +181,7 @@ def backtest_strategy(strat_tuple, season_df, model_data):
 
     for idx in result.index:
         if result.loc[idx, 'BET']:
-            stake, stake_tier = get_stake(result.loc[idx, 'Edge'])
+            stake, stake_tier = get_stake(result.loc[idx, 'Edge'], result.loc[idx, 'Odds'])
             result.loc[idx, 'Stake'] = stake
             result.loc[idx, 'Stake_Tier'] = stake_tier
             if result.loc[idx, 'Win']:

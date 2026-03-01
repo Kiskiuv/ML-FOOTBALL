@@ -8,9 +8,10 @@ Stripped-down protocol with minimal search space to reduce cherry-picking:
   - 2 base models + ensemble: RandomForest, LogisticRegression, RF+LR blend (0.5/0.5)
   - 1 feature tier: BASIC+ (21 features)
   - 7 evaluation seasons (2018/19 through 2024/25)
-  - 3 strategies × 3 markets = 9 strategy evaluations per league
+  - 3 strategies × 4 markets = 12 strategy evaluations per league
+  - Markets: HOME, DRAW, AWAY, UNDER25
   - Model selection: 3-way (RF vs LR vs Ensemble, by avg test AUC)
-  - TOTAL: ~27 combinations per league (vs 72 in V2.0 = 2.7× reduction)
+  - TOTAL: ~36 combinations per league (vs 72 in V2.0)
   - Only 3 percentile thresholds: 85, 90, 95 (no fine-grained pct)
   - All strategies require edge >= 0.00 (positive EV only)
   - All strategies require min_odds >= 1.90
@@ -21,7 +22,7 @@ Strategy selection: HYBRID (default)
   - Non-qualifying markets get __SKIP__ (zero bets)
   - FDR correction at q=0.05 (was 0.10 in V2.0)
 
-With ~342 total tests (38 leagues × 9 strategies), FDR correction is much
+With ~456 total tests (38 leagues × 12 strategies), FDR correction is much
 more powerful than with ~2,736 tests in the old setup.
 
 Author: Marc | February 2026
@@ -115,9 +116,9 @@ class Config:
     # Selection — default hybrid
     TWO_LAYER_SELECTION: str = "hybrid"
     
-    # BASIC+ features (26) — FROZEN
+    # BASIC+ features (21) — FROZEN
     FEATURES: List[str] = field(default_factory=list)
-    
+
     def __post_init__(self):
         self.FEATURES = [
             # ELO (5)
@@ -165,8 +166,14 @@ AWAY_STRATEGIES = [
     {"name": "STANDARD",  "pct": 85, "edge": 0.00, "min_odds": 1.9},
 ]
 
-MARKET_STRATEGIES = {"HOME": HOME_STRATEGIES, "DRAW": DRAW_STRATEGIES, "AWAY": AWAY_STRATEGIES}
-MARKET_ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway"}
+UNDER25_STRATEGIES = [
+    {"name": "STRICT",    "pct": 95, "edge": 0.00, "min_odds": 2.3},
+    {"name": "SELECTIVE", "pct": 90, "edge": 0.00, "min_odds": 2.0},
+    {"name": "STANDARD",  "pct": 85, "edge": 0.00, "min_odds": 1.9},
+]
+
+MARKET_STRATEGIES = {"HOME": HOME_STRATEGIES, "DRAW": DRAW_STRATEGIES, "AWAY": AWAY_STRATEGIES, "UNDER25": UNDER25_STRATEGIES}
+MARKET_ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25"}
 DEFAULT_STRATEGY_IDX = 1
 
 
@@ -190,13 +197,15 @@ def load_data(filepath: str, verbose: bool = True) -> pd.DataFrame:
     df["target_HOME"] = (df["FTResult"] == "H").astype(int)
     df["target_DRAW"] = (df["FTResult"] == "D").astype(int)
     df["target_AWAY"] = (df["FTResult"] == "A").astype(int)
-    
+    df["target_UNDER25"] = ((df["FTHome"] + df["FTAway"]) < 3).astype(int)
+
     mask = df["OddHome"].notna() & df["OddDraw"].notna() & df["OddAway"].notna()
     df_valid = df[mask].copy()
-    
+
     if verbose:
-        print(f"  Total: {len(df):,} | With odds: {len(df_valid):,}")
-    
+        n_u25 = df_valid["OddUnder25"].notna().sum() if "OddUnder25" in df_valid.columns else 0
+        print(f"  Total: {len(df):,} | With odds: {len(df_valid):,} | With U2.5 odds: {n_u25:,}")
+
     return df_valid
 
 
@@ -1177,7 +1186,7 @@ def analyze_league(
     best_overall = None
     best_pvalue = 1.0
     
-    for market in ["HOME", "DRAW", "AWAY"]:
+    for market in ["HOME", "DRAW", "AWAY", "UNDER25"]:
         if verbose:
             print(f"\n  {market}...")
         
@@ -1481,8 +1490,9 @@ def batch_analyze(
         n_skip = len(best_df[best_df["recommendation"] == "SKIP"])
         
         print(f"\n  DEPLOY: {n_deploy} | PAPER_TRADE: {n_paper} | MONITOR: {n_monitor} | SKIP: {n_skip}")
+        n_markets = len(MARKET_STRATEGIES)
         n_strats = max(len(s) for s in MARKET_STRATEGIES.values())
-        print(f"  Search space: {len(MODEL_TYPES)} models × 1 tier × {n_strats} strategies × 3 markets = {len(MODEL_TYPES) * n_strats * 3} combos/league")
+        print(f"  Search space: {len(MODEL_TYPES)} models × 1 tier × {n_strats} strategies × {n_markets} markets = {len(MODEL_TYPES) * n_strats * n_markets} combos/league")
     
     return all_results
 

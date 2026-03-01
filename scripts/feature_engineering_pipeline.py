@@ -190,10 +190,12 @@ class FeatureEngineeringPipeline:
             'B365A': 'B365Away',
             
             # Over/Under (pre-closing)
-            'Avg>2.5': 'AvgOver25',
-            'Avg<2.5': 'AvgUnder25',
+            'Avg>2.5': 'OddOver25',
+            'Avg<2.5': 'OddUnder25',
             'Max>2.5': 'MaxOver25',
             'Max<2.5': 'MaxUnder25',
+            'Over25': 'OddOver25',
+            'Under25': 'OddUnder25',
             
             # Asian Handicap (pre-closing)
             'AHh': 'HandiSize',
@@ -775,7 +777,8 @@ class FeatureEngineeringPipeline:
         # Select key columns to keep
         keep_cols = ['Division', 'MatchDate', 'MatchTime', 'HomeTeam', 'AwayTeam',
                      'FTHome', 'FTAway', 'FTResult', 'HTHome', 'HTAway', 'HTResult',
-                     'OddHome', 'OddDraw', 'OddAway', 'MaxHome', 'MaxDraw', 'MaxAway']
+                     'OddHome', 'OddDraw', 'OddAway', 'MaxHome', 'MaxDraw', 'MaxAway',
+                     'OddUnder25', 'OddOver25', 'MaxUnder25', 'MaxOver25']
         keep_cols = [c for c in keep_cols if c in df.columns]
         
         result_df = pd.concat([df[keep_cols].reset_index(drop=True), features_df], axis=1)
@@ -785,6 +788,8 @@ class FeatureEngineeringPipeline:
             result_df['target_home'] = (result_df['FTResult'] == 'H').astype(int)
             result_df['target_draw'] = (result_df['FTResult'] == 'D').astype(int)
             result_df['target_away'] = (result_df['FTResult'] == 'A').astype(int)
+        if 'FTHome' in result_df.columns and 'FTAway' in result_df.columns:
+            result_df['target_UNDER25'] = ((result_df['FTHome'] + result_df['FTAway']) < 3).astype(int)
         
         # Handle any remaining NaN in features (median imputation)
         feature_cols = [c for c in features_df.columns if c in result_df.columns]
