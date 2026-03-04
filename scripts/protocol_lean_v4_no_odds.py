@@ -8,10 +8,10 @@ Stripped-down protocol with minimal search space to reduce cherry-picking:
   - 2 base models + ensemble: RandomForest, LogisticRegression, RF+LR blend (0.5/0.5)
   - 1 feature tier: BASIC+ (21 features)
   - 7 evaluation seasons (2018/19 through 2024/25)
-  - 3 strategies × 4 markets = 12 strategy evaluations per league
-  - Markets: HOME, DRAW, AWAY, UNDER25
+  - 3 strategies × 5 markets = 15 strategy evaluations per league
+  - Markets: HOME, DRAW, AWAY, UNDER25, OVER25
   - Model selection: 3-way (RF vs LR vs Ensemble, by avg test AUC)
-  - TOTAL: ~36 combinations per league (vs 72 in V2.0)
+  - TOTAL: ~45 combinations per league (vs 72 in V2.0)
   - Only 3 percentile thresholds: 85, 90, 95 (no fine-grained pct)
   - All strategies require edge >= 0.00 (positive EV only)
   - All strategies require min_odds >= 1.90
@@ -22,7 +22,7 @@ Strategy selection: HYBRID (default)
   - Non-qualifying markets get __SKIP__ (zero bets)
   - FDR correction at q=0.05 (was 0.10 in V2.0)
 
-With ~456 total tests (38 leagues × 12 strategies), FDR correction is much
+With ~570 total tests (38 leagues × 15 strategies), FDR correction is much
 more powerful than with ~2,736 tests in the old setup.
 
 Author: Marc | February 2026
@@ -172,8 +172,14 @@ UNDER25_STRATEGIES = [
     {"name": "STANDARD",  "pct": 85, "edge": 0.00, "min_odds": 1.9},
 ]
 
-MARKET_STRATEGIES = {"HOME": HOME_STRATEGIES, "DRAW": DRAW_STRATEGIES, "AWAY": AWAY_STRATEGIES, "UNDER25": UNDER25_STRATEGIES}
-MARKET_ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25"}
+OVER25_STRATEGIES = [
+    {"name": "STRICT",    "pct": 95, "edge": 0.00, "min_odds": 2.3},
+    {"name": "SELECTIVE", "pct": 90, "edge": 0.00, "min_odds": 2.0},
+    {"name": "STANDARD",  "pct": 85, "edge": 0.00, "min_odds": 1.9},
+]
+
+MARKET_STRATEGIES = {"HOME": HOME_STRATEGIES, "DRAW": DRAW_STRATEGIES, "AWAY": AWAY_STRATEGIES, "UNDER25": UNDER25_STRATEGIES, "OVER25": OVER25_STRATEGIES}
+MARKET_ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25", "OVER25": "OddOver25"}
 DEFAULT_STRATEGY_IDX = 1
 
 
@@ -198,13 +204,15 @@ def load_data(filepath: str, verbose: bool = True) -> pd.DataFrame:
     df["target_DRAW"] = (df["FTResult"] == "D").astype(int)
     df["target_AWAY"] = (df["FTResult"] == "A").astype(int)
     df["target_UNDER25"] = ((df["FTHome"] + df["FTAway"]) < 3).astype(int)
+    df["target_OVER25"] = ((df["FTHome"] + df["FTAway"]) >= 3).astype(int)
 
     mask = df["OddHome"].notna() & df["OddDraw"].notna() & df["OddAway"].notna()
     df_valid = df[mask].copy()
 
     if verbose:
         n_u25 = df_valid["OddUnder25"].notna().sum() if "OddUnder25" in df_valid.columns else 0
-        print(f"  Total: {len(df):,} | With odds: {len(df_valid):,} | With U2.5 odds: {n_u25:,}")
+        n_o25 = df_valid["OddOver25"].notna().sum() if "OddOver25" in df_valid.columns else 0
+        print(f"  Total: {len(df):,} | With odds: {len(df_valid):,} | With U2.5 odds: {n_u25:,} | With O2.5 odds: {n_o25:,}")
 
     return df_valid
 
@@ -1186,7 +1194,7 @@ def analyze_league(
     best_overall = None
     best_pvalue = 1.0
     
-    for market in ["HOME", "DRAW", "AWAY", "UNDER25"]:
+    for market in ["HOME", "DRAW", "AWAY", "UNDER25", "OVER25"]:
         if verbose:
             print(f"\n  {market}...")
         

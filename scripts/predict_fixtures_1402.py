@@ -2,8 +2,8 @@
 """
 PROTOCOL V5 — FIXTURE PREDICTOR
 ================================
-Reads a fixtures CSV (all leagues together), applies the 11 anti-cherry-pick
-strategies (NO odds leakage — 21 features), and outputs a CSV with BET / NO BET.
+Reads a fixtures CSV (all leagues together), applies the anti-cherry-pick
+strategies (NO odds leakage — 21 features, 5 markets), and outputs a CSV with BET / NO BET.
 
 Usage:
     python predict_v3.py --fixtures fixtures.csv --models-dir ./models --season-dir ./seasons
@@ -29,12 +29,12 @@ from platt import fit_platt_scaler, apply_platt
 
 
 # =============================================================================
-# V5 ANTI-CHERRY-PICK STRATEGIES (11 active — NO odds leakage)
+# V5 ANTI-CHERRY-PICK STRATEGIES (active — NO odds leakage)
 # Trained with 21 features (ELO, form, schedule, momentum, H2H only)
 # Protocol V3.0: 3 strategies/market, pct in {85,90,95}, edge>=0, min_odds>=1.9
-# 4 markets: HOME, DRAW, AWAY, UNDER25
-# FDR q=0.05, ~456 total tests (38 leagues × 12 strategies)
-# NOTE: UNDER25 strategies will be added here after retraining results
+# 5 markets: HOME, DRAW, AWAY, UNDER25, OVER25
+# FDR q=0.05, ~570 total tests (38 leagues × 15 strategies)
+# NOTE: OVER25 strategies will be added here after retraining results
 # =============================================================================
 
 V3_STRATEGIES = [
@@ -42,9 +42,11 @@ V3_STRATEGIES = [
     # DEPLOY — FDR-pass, real stakes
     ("MEX", "AWAY",    "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
     # PAPER_TRADE — p < 0.05, FDR-pass or near-pass
+    ("SC3", "OVER25",  "STANDARD",  "Ensemble",           85, 0.00, 1.9, 0.0124, True,  64.2, "PAPER_TRADE"),
     ("I2",  "UNDER25", "STANDARD",  "Ensemble",           85, 0.00, 1.9, 0.0134, True,  41.6, "PAPER_TRADE"),
     ("POL", "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
     ("SP2", "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
+    ("E0",  "OVER25",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0264, False, 42.5, "PAPER_TRADE"),
     ("N1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0288, False, 40.8, "PAPER_TRADE"),
     ("RUS", "AWAY",    "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
     ("FIN", "AWAY",    "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
@@ -54,7 +56,9 @@ V3_STRATEGIES = [
     ("F1",  "HOME",    "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
     ("G1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
     ("I1",  "DRAW",    "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
+    ("G1",  "OVER25",  "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0637, False, 26.6, "MONITOR"),
     ("B1",  "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
+    ("D2",  "OVER25",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0932, False, 29.7, "MONITOR"),
 ]
 
 # Quick lookup: (league, market) → strategy dict
@@ -69,8 +73,8 @@ for s in V3_STRATEGIES:
 
 ACTIVE_LEAGUES = sorted(set(s[0] for s in V3_STRATEGIES))
 
-ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25"}
-MAX_ODDS_COL = {"HOME": "MaxHome", "DRAW": "MaxDraw", "AWAY": "MaxAway", "UNDER25": "MaxUnder25"}
+ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25", "OVER25": "OddOver25"}
+MAX_ODDS_COL = {"HOME": "MaxHome", "DRAW": "MaxDraw", "AWAY": "MaxAway", "UNDER25": "MaxUnder25", "OVER25": "MaxOver25"}
 
 
 # =============================================================================
@@ -344,8 +348,8 @@ def predict_market(league: str, market: str, strat: dict,
     probs = _predict_raw_probs(model_data, X, features)
 
     # --- Always compute season predictions (needed for threshold fallback + Platt) ---
-    # Feature CSVs use lowercase (target_home/draw/away) but UNDER25 is uppercase
-    target_col = f"target_{market}" if market == "UNDER25" else f"target_{market.lower()}"
+    # Feature CSVs use lowercase (target_home/draw/away) but UNDER25/OVER25 are uppercase
+    target_col = f"target_{market}" if market in ("UNDER25", "OVER25") else f"target_{market.lower()}"
     X_hist = pd.DataFrame()
     for f in features:
         if f in season_df.columns:

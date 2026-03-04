@@ -28,10 +28,12 @@ V4_STRATEGIES = [
     # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi, tier)
     # DEPLOY — FDR-pass, real stakes
     ("MEX", "AWAY",    "SELECTIVE",  "LogisticRegression", 90, 0.00, 2.3, 0.0099, True,  28.1, "DEPLOY"),
-    # PAPER_TRADE — p < 0.05, FDR-fail (unless noted)
+    # PAPER_TRADE — p < 0.05, FDR-pass or near-pass
+    ("SC3", "OVER25",  "STANDARD",  "Ensemble",           85, 0.00, 1.9, 0.0124, True,  64.2, "PAPER_TRADE"),
     ("I2",  "UNDER25", "STANDARD",  "Ensemble",           85, 0.00, 1.9, 0.0134, True,  41.6, "PAPER_TRADE"),
     ("POL", "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0225, False, 40.1, "PAPER_TRADE"),
     ("SP2", "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0262, False, 34.5, "PAPER_TRADE"),
+    ("E0",  "OVER25",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0264, False, 42.5, "PAPER_TRADE"),
     ("N1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0288, False, 40.8, "PAPER_TRADE"),
     ("RUS", "AWAY",    "SELECTIVE", "Ensemble",           90, 0.00, 2.3, 0.0345, False, 52.5, "PAPER_TRADE"),
     ("FIN", "AWAY",    "STANDARD",  "LogisticRegression", 85, 0.00, 1.9, 0.0378, False, 24.6, "PAPER_TRADE"),
@@ -41,16 +43,18 @@ V4_STRATEGIES = [
     ("F1",  "HOME",    "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0574, False, 44.8, "MONITOR"),
     ("G1",  "DRAW",    "STRICT",    "Ensemble",           95, 0.00, 3.0, 0.0603, False, 23.8, "MONITOR"),
     ("I1",  "DRAW",    "SELECTIVE", "RandomForest",       90, 0.00, 2.5, 0.0612, False, 22.0, "MONITOR"),
+    ("G1",  "OVER25",  "SELECTIVE", "LogisticRegression", 90, 0.00, 2.0, 0.0637, False, 26.6, "MONITOR"),
     ("B1",  "DRAW",    "STRICT",    "LogisticRegression", 95, 0.00, 3.0, 0.0791, False, 22.5, "MONITOR"),
+    ("D2",  "OVER25",  "STANDARD",  "RandomForest",       85, 0.00, 1.9, 0.0932, False, 29.7, "MONITOR"),
 ]
 
 TIER_ORDER = {"DEPLOY": 0, "PAPER_TRADE": 1, "MONITOR": 2}
 
-ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25"}
+ODDS_COL = {"HOME": "OddHome", "DRAW": "OddDraw", "AWAY": "OddAway", "UNDER25": "OddUnder25", "OVER25": "OddOver25"}
 RESULT_MAP = {"HOME": "H", "DRAW": "D", "AWAY": "A"}
 
 # Season file name overrides (league code -> filename prefix)
-SEASON_FILE_MAP = {"MEX": "MEXICO"}
+SEASON_FILE_MAP = {"MEX": "MEXICO", "G1": "GI"}
 
 
 def get_stake(edge: float, odds: float = 3.0, bankroll: float = 100.0) -> Tuple[float, str]:
@@ -151,6 +155,8 @@ def backtest_strategy(strat_tuple, season_df, model_data):
     # Actual results
     if market == "UNDER25":
         actual_win = ((season_df['FTHome'] + season_df['FTAway']) < 3).values
+    elif market == "OVER25":
+        actual_win = ((season_df['FTHome'] + season_df['FTAway']) >= 3).values
     else:
         result_char = RESULT_MAP[market]
         actual_win = (season_df['FTResult'] == result_char).values

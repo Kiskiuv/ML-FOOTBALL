@@ -14,10 +14,10 @@ Machine learning system for identifying profitable football (soccer) betting opp
 - Feature engineering: `scripts/feature_engineering_v4_lean.py` (historical) / `scripts/incremental_features.py` (current season)
 - Comparison: `scripts/compare_hist_vs_season.py` (historical vs live validation)
 - 13 hybrid-selected strategies (NO odds leakage, NO cherry-picking)
-- 4 markets: HOME, DRAW, AWAY, UNDER25 (Under 2.5 goals)
+- 5 markets: HOME, DRAW, AWAY, UNDER25 (Under 2.5 goals), OVER25 (Over 2.5 goals)
 - Only 3 strategies per market (STRICT/SELECTIVE/STANDARD at pct 95/90/85)
 - All strategies require edge >= 0.00 and min_odds >= 1.90
-- FDR q=0.05, ~456 total tests (38 leagues x 12 strategies)
+- FDR q=0.05, ~570 total tests (38 leagues x 15 strategies)
 - Features: BASIC+ tier only (ELO, form, schedule, momentum, H2H)
 - Models: RandomForest + LogisticRegression + Ensemble (0.5/0.5 blend)
 - Model selection: 3-way by avg test AUC (RF vs LR vs Ensemble)
@@ -73,16 +73,18 @@ python scripts/protocol_lean_v4_no_odds.py --batch --data-dir ./features --all -
 python scripts/predict_fixtures_1402.py --fixtures ./new_fixtures/fixtures.csv --models-dir ./models --season-dir ./features_20252026 --output ./predictions/predictions_DDMM.csv --eu-format
 ```
 
-## V5 Strategies (13 active — anti-cherry-pick, 4 markets)
+## V5 Strategies (17 active — anti-cherry-pick, 5 markets)
 
 All strategies: edge >= 0.00, pct in {85, 90, 95}, min_odds >= 1.90.
 
 ```
 League  Market    Strategy   Model                PCT  Edge  MinOdds  p-value    Tier         Hist ROI
 MEX     AWAY      SELECTIVE  LogisticRegression   90   0.00  2.3      0.0099     DEPLOY       +28.1%
+SC3     OVER25    STANDARD   Ensemble             85   0.00  1.9      0.0124     PAPER_TRADE  +64.2%
 I2      UNDER25   STANDARD   Ensemble             85   0.00  1.9      0.0134     PAPER_TRADE  +41.6%
 POL     DRAW      STRICT     LogisticRegression   95   0.00  3.0      0.0225     PAPER_TRADE  +40.1%
 SP2     DRAW      STRICT     Ensemble             95   0.00  3.0      0.0262     PAPER_TRADE  +34.5%
+E0      OVER25    STANDARD   RandomForest         85   0.00  1.9      0.0264     PAPER_TRADE  +42.5%
 N1      DRAW      STRICT     Ensemble             95   0.00  3.0      0.0288     PAPER_TRADE  +40.8%
 RUS     AWAY      SELECTIVE  Ensemble             90   0.00  2.3      0.0345     PAPER_TRADE  +52.5%
 FIN     AWAY      STANDARD   LogisticRegression   85   0.00  1.9      0.0378     PAPER_TRADE  +24.6%
@@ -91,7 +93,9 @@ SC0     HOME      STANDARD   RandomForest         85   0.00  1.9      0.0460    
 F1      HOME      SELECTIVE  LogisticRegression   90   0.00  2.0      0.0574     MONITOR      +44.8%
 G1      DRAW      STRICT     Ensemble             95   0.00  3.0      0.0603     MONITOR      +23.8%
 I1      DRAW      SELECTIVE  RandomForest         90   0.00  2.5      0.0612     MONITOR      +22.0%
+G1      OVER25    SELECTIVE  LogisticRegression   90   0.00  2.0      0.0637     MONITOR      +26.6%
 B1      DRAW      STRICT     LogisticRegression   95   0.00  3.0      0.0791     MONITOR      +22.5%
+D2      OVER25    STANDARD   RandomForest         85   0.00  1.9      0.0932     MONITOR      +29.7%
 ```
 
 ### Strategy Search Space (per league)
@@ -100,6 +104,7 @@ DRAW:    STRICT (pct95, min3.0) | SELECTIVE (pct90, min2.5) | STANDARD (pct85, m
 HOME:    STRICT (pct95, min2.5) | SELECTIVE (pct90, min2.0) | STANDARD (pct85, min1.9)
 AWAY:    STRICT (pct95, min2.8) | SELECTIVE (pct90, min2.3) | STANDARD (pct85, min1.9)
 UNDER25: STRICT (pct95, min2.3) | SELECTIVE (pct90, min2.0) | STANDARD (pct85, min1.9)
+OVER25:  STRICT (pct95, min2.3) | SELECTIVE (pct90, min2.0) | STANDARD (pct85, min1.9)
 ```
 
 ## Staking Rules

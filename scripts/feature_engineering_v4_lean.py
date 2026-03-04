@@ -371,6 +371,7 @@ class V4LeanFeatureEngineer:
         out["target_draw"] = (out["FTResult"] == "D").astype(int)
         out["target_away"] = (out["FTResult"] == "A").astype(int)
         out["target_UNDER25"] = ((out["FTHome"] + out["FTAway"]) < 3).astype(int)
+        out["target_OVER25"] = ((out["FTHome"] + out["FTAway"]) >= 3).astype(int)
 
         output_dir.mkdir(parents=True, exist_ok=True)
         out_path = output_dir / f"{league_code}_features.csv"

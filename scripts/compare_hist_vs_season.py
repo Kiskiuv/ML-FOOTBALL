@@ -17,7 +17,7 @@ FEATURES = [
     'h2h_home_wins', 'h2h_away_wins', 'h2h_draws', 'h2h_home_goals_diff'
 ]
 
-ODDS_COL = {'HOME': 'OddHome', 'DRAW': 'OddDraw', 'AWAY': 'OddAway', 'UNDER25': 'OddUnder25'}
+ODDS_COL = {'HOME': 'OddHome', 'DRAW': 'OddDraw', 'AWAY': 'OddAway', 'UNDER25': 'OddUnder25', 'OVER25': 'OddOver25'}
 RESULT_MAP = {'HOME': 'H', 'DRAW': 'D', 'AWAY': 'A'}
 
 FILE_MAP = {
@@ -26,18 +26,21 @@ FILE_MAP = {
     'RUS': 'Matches_RUS', 'F1': 'Matches_F1', 'G1': 'Matches_GI',
     'I1': 'Matches_I1', 'B1': 'Matches_BELGIUM',
     'I2': 'Matches_I2', 'P1': 'Matches_P1',
+    'SC3': 'Matches_SC3', 'E0': 'Matches_E0', 'D2': 'Matches_D2',
 }
 
-SEASON_FILE_MAP = {'MEX': 'MEXICO'}
+SEASON_FILE_MAP = {'MEX': 'MEXICO', 'G1': 'GI'}
 
 V4_STRATEGIES = [
     # (league, market, strategy_name, model_type, pct, edge, min_odds, p_value, fdr, hist_roi, tier)
     # DEPLOY — FDR-pass, real stakes
     ('MEX', 'AWAY',    'SELECTIVE',  'LogisticRegression', 90, 0.00, 2.3, 0.0099, True,  28.1, 'DEPLOY'),
-    # PAPER_TRADE — p < 0.05, FDR-fail (unless noted)
+    # PAPER_TRADE — p < 0.05, FDR-pass or near-pass
+    ('SC3', 'OVER25',  'STANDARD',  'Ensemble',           85, 0.00, 1.9, 0.0124, True,  64.2, 'PAPER_TRADE'),
     ('I2',  'UNDER25', 'STANDARD',  'Ensemble',           85, 0.00, 1.9, 0.0134, True,  41.6, 'PAPER_TRADE'),
     ('POL', 'DRAW',    'STRICT',    'LogisticRegression', 95, 0.00, 3.0, 0.0225, False, 40.1, 'PAPER_TRADE'),
     ('SP2', 'DRAW',    'STRICT',    'Ensemble',           95, 0.00, 3.0, 0.0262, False, 34.5, 'PAPER_TRADE'),
+    ('E0',  'OVER25',  'STANDARD',  'RandomForest',       85, 0.00, 1.9, 0.0264, False, 42.5, 'PAPER_TRADE'),
     ('N1',  'DRAW',    'STRICT',    'Ensemble',           95, 0.00, 3.0, 0.0288, False, 40.8, 'PAPER_TRADE'),
     ('RUS', 'AWAY',    'SELECTIVE', 'Ensemble',           90, 0.00, 2.3, 0.0345, False, 52.5, 'PAPER_TRADE'),
     ('FIN', 'AWAY',    'STANDARD',  'LogisticRegression', 85, 0.00, 1.9, 0.0378, False, 24.6, 'PAPER_TRADE'),
@@ -47,7 +50,9 @@ V4_STRATEGIES = [
     ('F1',  'HOME',    'SELECTIVE', 'LogisticRegression', 90, 0.00, 2.0, 0.0574, False, 44.8, 'MONITOR'),
     ('G1',  'DRAW',    'STRICT',    'Ensemble',           95, 0.00, 3.0, 0.0603, False, 23.8, 'MONITOR'),
     ('I1',  'DRAW',    'SELECTIVE', 'RandomForest',       90, 0.00, 2.5, 0.0612, False, 22.0, 'MONITOR'),
+    ('G1',  'OVER25',  'SELECTIVE', 'LogisticRegression', 90, 0.00, 2.0, 0.0637, False, 26.6, 'MONITOR'),
     ('B1',  'DRAW',    'STRICT',    'LogisticRegression', 95, 0.00, 3.0, 0.0791, False, 22.5, 'MONITOR'),
+    ('D2',  'OVER25',  'STANDARD',  'RandomForest',       85, 0.00, 1.9, 0.0932, False, 29.7, 'MONITOR'),
 ]
 
 
@@ -64,6 +69,10 @@ def walk_forward_hist(league, market, model_type_str, pct, min_edge, min_odds):
         target_col = 'target_UNDER25'
         if target_col not in df.columns:
             df[target_col] = ((df['FTHome'] + df['FTAway']) < 3).astype(int)
+    elif market == 'OVER25':
+        target_col = 'target_OVER25'
+        if target_col not in df.columns:
+            df[target_col] = ((df['FTHome'] + df['FTAway']) >= 3).astype(int)
     else:
         target_col = f'is_{market.lower()}'
         if target_col not in df.columns:
@@ -130,6 +139,8 @@ def walk_forward_hist(league, market, model_type_str, pct, min_edge, min_odds):
         edge = probs - implied
         if market == 'UNDER25':
             actual_win = ((test_v['FTHome'] + test_v['FTAway']) < 3).values
+        elif market == 'OVER25':
+            actual_win = ((test_v['FTHome'] + test_v['FTAway']) >= 3).values
         else:
             actual_win = (test_v['FTResult'] == RESULT_MAP[market]).values
 
@@ -205,6 +216,8 @@ def current_season(league, market, model_type_str, pct, min_edge, min_odds):
     edge = probs - implied
     if market == 'UNDER25':
         actual_win = ((df['FTHome'] + df['FTAway']) < 3).values
+    elif market == 'OVER25':
+        actual_win = ((df['FTHome'] + df['FTAway']) >= 3).values
     else:
         actual_win = (df['FTResult'] == RESULT_MAP[market]).values
 

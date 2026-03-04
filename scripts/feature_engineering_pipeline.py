@@ -790,6 +790,7 @@ class FeatureEngineeringPipeline:
             result_df['target_away'] = (result_df['FTResult'] == 'A').astype(int)
         if 'FTHome' in result_df.columns and 'FTAway' in result_df.columns:
             result_df['target_UNDER25'] = ((result_df['FTHome'] + result_df['FTAway']) < 3).astype(int)
+            result_df['target_OVER25'] = ((result_df['FTHome'] + result_df['FTAway']) >= 3).astype(int)
         
         # Handle any remaining NaN in features (median imputation)
         feature_cols = [c for c in features_df.columns if c in result_df.columns]
